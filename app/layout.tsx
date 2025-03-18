@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
+import QueryProvider from "@/providers/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,13 +29,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+		{/* Theme Provider will produce CSP errors, not getting a nonce */}
 		<ThemeProvider
 		attribute="class"
 		defaultTheme="system"
 		enableSystem
 		disableTransitionOnChange
 		>
+		<QueryProvider>
         	{children}
+		</QueryProvider>
 		</ThemeProvider>
       </body>
     </html>
