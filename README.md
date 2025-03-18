@@ -5,13 +5,14 @@ BSc Thesis: GeoQA UI, Department of Informatics & Telecommunications, National a
 
 ## Getting Started
 
-Make sure you have the latest node.js, docker, docker-compose and docker is up and running.
+Make sure you have the latest node.js, npm, docker, docker-compose and docker is up and running.
 Create a `.env` file at the root of your project:
 ```bash
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NLQ_API_URL=http://195.134.71.116:12347/nlq
 SPARQL_API_URL=http://195.134.71.116:12347/sparql
 
+# Add anything to these fields, needed in docker-compose.yml
 POSTGRES_USER=
 POSTGRES_PASSWORD=
 POSTGRES_DB=
@@ -43,5 +44,3 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Notes
 
 If viewing app in production mode, if strict csp is enabled in code, there will be some errors in the console from `ThemeProvider` and when interacting with it and from every `next/image` as it has inline width and height styles.
-
-
