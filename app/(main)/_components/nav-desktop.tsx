@@ -14,7 +14,7 @@ const NavDesktop = () => {
 
     return ( 
         <nav className={cn(
-            "h-20 w-full p-8 flex items-center justify-between fixed bg-inherit z-50",
+            "h-20 w-full p-8 flex items-center justify-between fixed backdrop-blur-xs bg-inherit z-50",
             y > 20 && "shadow-sm dark:shadow-neutral-700"
         )}>
             <Link href='/'>
@@ -31,8 +31,12 @@ const NavDesktop = () => {
                 <li>
                     <ThemeToggle />
                 </li>
-                <li>Dashboard</li>
-                <li>Legal</li>
+                <li className="text-white">
+                    Dashboard
+                </li>
+                <li className="text-white">
+                    Legal
+                </li>
                 <li>
                     <Button className='cursor-pointer'>
                         Log In

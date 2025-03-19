@@ -32,7 +32,7 @@ const NavMobile = () => {
 
     return ( 
         <nav className={cn(
-            "h-20 w-full p-10 flex items-center fixed bg-inherit z-50",
+            "h-20 w-full p-10 flex items-center fixed backdrop-blur-xs bg-inherit z-50",
             y > 20 && "shadow-sm dark:shadow-neutral-700"
         )}>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
