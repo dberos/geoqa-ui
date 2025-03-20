@@ -44,7 +44,7 @@ const NavMobile = () => {
                 <SheetContent className="size-full">
                     <SheetHeader className="mt-5 relative flex items-center justify-center">
                     <SheetTitle>
-                        <div className="absolute left-10 bottom-5">
+                        <div className="absolute left-12 bottom-6">
                             <ThemeToggle />
                         </div>
                         <Link href='/'>
@@ -81,7 +81,6 @@ const NavMobile = () => {
                             </AccordionItem>
                         </Accordion>
                     </div>
-                    
                 </SheetContent>
             </Sheet>
         </nav>

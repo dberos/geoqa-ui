@@ -14,13 +14,13 @@ const Hero = () => {
             bg-[url('/home_hero.jpg')] bg-cover bg-neutral-400 bg-blend-multiply`,
             !isMobile ? 'bg-center' : 'bg-right'
         )}>
-            <h1 className="text-6xl lg:text-7xl 4k:text-9xl font-bold text-white">
+            <h1 className="text-6xl lg:text-7xl 2k:text-8xl 4k:text-9xl font-bold text-white">
                 GeoQA
             </h1>
-            <h2 className="text-3xl lg:text-4xl 4k:text-5xl font-semibold text-white max-w-xs md:max-w-md lg:max-w-xl text-center">
+            <h2 className="text-3xl lg:text-4xl 2k:text-5xl font-semibold text-white max-w-xs md:max-w-md lg:max-w-xl 2k:max-w-2xl text-center">
                 AI powered QnA engine for geospatial data
             </h2>
-            <Button className=" cursor-pointer space-x-4">
+            <Button className="cursor-pointer space-x-4">
                 Get Started
                 <ArrowRight className="size-4" />
             </Button>
