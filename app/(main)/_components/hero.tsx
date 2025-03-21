@@ -11,7 +11,7 @@ const Hero = () => {
     return (
         <div className={cn(
             `h-screen w-full flex items-center justify-center flex-col gap-y-6 relative 
-            bg-[url('/home_hero.jpg')] bg-cover bg-neutral-400 bg-blend-multiply`,
+            bg-[url('/home_hero.jpg')] bg-cover bg-fixed bg-neutral-400 bg-blend-multiply`,
             !isMobile ? 'bg-center' : 'bg-right'
         )}>
             <h1 className="text-6xl lg:text-7xl 2k:text-8xl 4k:text-9xl font-bold text-white">

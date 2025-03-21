@@ -32,7 +32,7 @@ const Personas = () => {
                             Get started by posing any geographic question. Learn anything.
                             GeoQA is built on top of YAGO2geo knowledge graph, enriching it
                             with more known geospatial datasets. It aims to answer any
-                            geographic question, whilst allowing users to view and edit
+                            geographic question and allow users to view and edit
                             the query that brought the results.
                         </p>
                     </div>
