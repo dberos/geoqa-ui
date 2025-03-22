@@ -22,6 +22,7 @@ import {
 import { useMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { ThemeToggle } from "@/components/theme-toggle";
 import logo from "../../../public/GEOQA_logo.png"
+import { useNavbarStyle } from "@/hooks/use-navbar-style";
 
 const NavMobile = () => {
 
@@ -30,10 +31,15 @@ const NavMobile = () => {
     const isOpen = useMobileMenuStore((state) => state.isOpen);
     const setIsOpen = useMobileMenuStore((state) => state.setIsOpen);
 
+    const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarMobileId");
+
     return ( 
-        <nav className={cn(
-            "h-20 w-full p-10 flex items-center fixed backdrop-blur-xs bg-inherit z-50",
-            y > 20 && "shadow-sm dark:shadow-neutral-700"
+        <nav
+        id="mainNavbarMobileId"
+        className={cn(
+            "h-20 w-full p-10 flex items-center fixed z-50",
+            y > 20 && "shadow-sm dark:shadow-neutral-700",
+            isAboveHero ? "bg-inherit backdrop-blur-xs" : "bg-background backdrop-blur-none"
         )}>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>

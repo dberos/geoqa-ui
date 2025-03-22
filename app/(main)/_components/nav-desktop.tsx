@@ -8,15 +8,21 @@ import Link from "next/link";
 import { useWindowScroll } from "react-use";
 import logoNoLetters from "../../../public/GEOQA_logo_no_letters.png"
 import { LogIn } from "lucide-react";
+import { useNavbarStyle } from "@/hooks/use-navbar-style";
 
 const NavDesktop = () => {
     
     const { y } = useWindowScroll();
 
+    const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarDesktopId")
+
     return ( 
-        <nav className={cn(
-            "h-20 w-full p-8 flex items-center justify-between fixed backdrop-blur-xs bg-inherit z-50",
-            y > 20 && "shadow-sm dark:shadow-neutral-700"
+        <nav 
+        id="mainNavbarDesktopId" 
+        className={cn(
+            "h-20 w-full p-8 flex items-center justify-between fixed z-50",
+            y > 20 && "shadow-sm dark:shadow-neutral-700",
+            isAboveHero ? "bg-inherit backdrop-blur-xs" : "bg-background backdrop-blur-none"
         )}>
             <div className="flex items-center justify-center flex-row">
                 <Link href='/'>
@@ -32,7 +38,9 @@ const NavDesktop = () => {
                 <ul className="flex items-center space-x-10">
                     <li>
                         <Button variant="link" size="sm" className='cursor-pointer'>
+                            <Link href="/test">
                             Dashboard
+                            </Link>
                         </Button>
                     </li>
                     <li>

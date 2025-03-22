@@ -9,7 +9,9 @@ const Hero = () => {
     const isMobile = useMedia("(max-width: 1024px)", false);
 
     return (
-        <div className={cn(
+        <div
+        id='homeHeroId' 
+        className={cn(
             `h-screen w-full flex items-center justify-center flex-col gap-y-6 relative 
             bg-[url('/home_hero.jpg')] bg-cover bg-fixed bg-neutral-400 bg-blend-multiply`,
             !isMobile ? 'bg-center' : 'bg-right'
