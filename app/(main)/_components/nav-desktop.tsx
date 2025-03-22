@@ -50,9 +50,12 @@ const NavDesktop = () => {
             </div>
             <div className="flex items-center justify-center gap-x-6">
                 <ThemeToggle />
-                <Button className='cursor-pointer space-x-4'>
-                    Sign In
-                    <LogIn className="size-4" />
+                <Button className='cursor-pointer'>
+                    <Link href="/auth/sign-in" className="flex items-center justify-center gap-x-2">
+                        Sign In
+                        <LogIn className="size-4" />
+                    </Link>
+                    
                 </Button>
             </div>
             

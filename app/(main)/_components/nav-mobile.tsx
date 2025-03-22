@@ -70,7 +70,13 @@ const NavMobile = () => {
                             <AccordionItem value="account">
                                 <AccordionTrigger>Account</AccordionTrigger>
                                 <AccordionContent>
-                                    Links
+                                    <ul>
+                                        <li>
+                                            <Link href="/auth/sign-in">
+                                                Sign In
+                                            </Link>
+                                        </li>
+                                    </ul>
                                 </AccordionContent>
                             </AccordionItem>
                             <AccordionItem value="dashboard">
