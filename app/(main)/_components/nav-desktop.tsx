@@ -38,9 +38,7 @@ const NavDesktop = () => {
                 <ul className="flex items-center space-x-10">
                     <li>
                         <Button variant="link" size="sm" className='cursor-pointer'>
-                            <Link href="/test">
                             Dashboard
-                            </Link>
                         </Button>
                     </li>
                     <li>
