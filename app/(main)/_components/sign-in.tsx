@@ -1,10 +1,13 @@
+"use client";
+
 import Image from "next/image";
-import logo from "../../../public/GEOQA_logo_no_letters.png";
-import googleIcon from "../../../public/google.svg";
-import githubIcon from "../../../public/github.svg";
-import { Button } from "@/components/ui/button";
+import logo from "../../../public/logo.svg";
+import GitHubButton from "./github-button";
+import GoogleButton from "./google-button";
+import { useState } from "react";
 
 const SignIn = () => {
+    const [isDisabled, setIsDisabled] = useState(false);
     return ( 
         <div className="size-full grid grid-cols-1 grid-rows-[30%_70%]">
             <div className="flex items-center justify-center flex-col">
@@ -28,26 +31,8 @@ const SignIn = () => {
                         <div className="absolute w-full h-0.5 bg-muted-foreground dark:bg-muted bottom-0" />
                     </div>
                     <div className="flex items-center justify-center flex-col gap-y-4">
-                        <Button variant="ghost" className="w-5/6 h-10 lg:h-12 2k:h-14 lg:w-4/6 flex gap-x-4 border-2 border-muted-foreground dark:border-muted 2k:text-xl cursor-pointer">
-                            <Image 
-                            src={githubIcon}
-                            alt="GitHub logo"
-                            width={100}
-                            height={100}
-                            className="object-contain size-5 dark:filter dark:invert"
-                            />
-                            Continue with GitHub
-                        </Button>
-                        <Button variant="ghost" className="w-5/6 h-10 lg:h-12 2k:h-14 lg:w-4/6 flex gap-x-4 border-2 border-muted-foreground dark:border-muted 2k:text-xl cursor-pointer">
-                            <Image 
-                            src={googleIcon}
-                            alt="Google logo"
-                            width={100}
-                            height={100}
-                            className="object-contain size-5"
-                            />
-                            Continue with Google
-                        </Button>
+                        <GitHubButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
+                        <GoogleButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
                     </div>
                 </div>
             </div>

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useWindowScroll } from "react-use";
-import logoNoLetters from "../../../public/GEOQA_logo_no_letters.png"
+import logo from "../../../public/logo.svg";
 import { LogIn } from "lucide-react";
 import { useNavbarStyle } from "@/hooks/use-navbar-style";
 
@@ -27,15 +27,15 @@ const NavDesktop = () => {
             <div className="flex items-center justify-center flex-row">
                 <Link href='/'>
                     <Image
-                    src={logoNoLetters}
+                    src={logo}
                     alt='logo'
                     priority
                     height={100}
                     width={100}
-                    className="size-9/12 object-contain"
+                    className="size-full object-contain"
                     />
                 </Link>
-                <ul className="flex items-center space-x-10">
+                <ul className="flex items-center space-x-10 ml-8">
                     <li>
                         <Button variant="link" size="sm" className='cursor-pointer'>
                             Dashboard

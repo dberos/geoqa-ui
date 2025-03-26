@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/accordion"  
 import { useMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { ThemeToggle } from "@/components/theme-toggle";
-import logo from "../../../public/GEOQA_logo.png"
+import logo from "../../../public/logo.svg";
 import { useNavbarStyle } from "@/hooks/use-navbar-style";
 
 const NavMobile = () => {
@@ -50,18 +50,24 @@ const NavMobile = () => {
                 <SheetContent className="size-full">
                     <SheetHeader className="mt-5 relative flex items-center justify-center">
                     <SheetTitle>
-                        <div className="absolute left-12 bottom-6">
+                        <div className="absolute left-12 bottom-4">
                             <ThemeToggle />
                         </div>
                         <Link href='/'>
-                            <Image
-                            src={logo}
-                            alt='logo'
-                            priority
-                            height={100}
-                            width={100}
-                            className="size-40 object-contain"
-                            />
+                            <div className="flex items-center justify-center flex-col gap-y-4">
+                                <Image
+                                src={logo}
+                                alt='logo'
+                                priority
+                                height={100}
+                                width={100}
+                                className="size-32 object-contain"
+                                />
+                                <h1 className="text-5xl">
+                                    GeoQA
+                                </h1>
+                            </div>
+                            
                         </Link>
                     </SheetTitle>
                     </SheetHeader>
