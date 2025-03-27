@@ -6,6 +6,7 @@ import githubIcon from "../../../public/github.svg";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { generateCSRFToken } from "@/lib/csrf-token";
 
 const GitHubButton = ({
     isDisabled,
@@ -18,14 +19,23 @@ const GitHubButton = ({
 
     const router = useRouter();
 
-    const handleClick = () => {
+    const handleClick = async () => {
         setIsClicked(true);
         setIsDisabled(true);
 
+        // Get the url with read only permissions, and 10m state token to match the code exp
+        const githubAuthURL = 
+        "https://github.com/login/oauth/authorize?" +
+        "client_id=" + (process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID as string) +
+        "&redirect_uri=" + encodeURIComponent(process.env.NEXT_PUBLIC_APP_URL as string + "/auth/github/callback") +
+        "&scope=read:user" +
+        "&state=" + await generateCSRFToken('10m');
+        
         setTimeout(() => {
             setIsClicked(false);
             setIsDisabled(false);
-            router.push('/auth/github/callback');
+
+            router.push(githubAuthURL);
         }, 1000);
     }
 

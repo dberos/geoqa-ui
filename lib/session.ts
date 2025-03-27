@@ -1,6 +1,6 @@
 import { SignJWT, jwtVerify, JWTPayload } from 'jose';
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET as string);
+const JWT_SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET as string);
 
 export interface SessionPayload extends JWTPayload {
   email: string,

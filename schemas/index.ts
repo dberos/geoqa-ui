@@ -7,4 +7,9 @@ export const loginSchema = z.object({
 
 export const helloSchema = z.object({
     message: z.string()
-})
+});
+
+export const SignInWithGitHubSchema = z.object({
+    code: z.string(),
+    state: z.string()
+});

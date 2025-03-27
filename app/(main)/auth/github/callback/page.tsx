@@ -1,12 +1,11 @@
 import SignInWithGitHub from "@/app/(main)/_components/sign-in-with-github";
-import { headers } from "next/headers";
 
-export default async function GitHubCallbackPage() {
-    await headers();
+export default async function GitHubCallbackPage({searchParams}: { searchParams: Promise<{ [key: string]: string | undefined | null }> }) {
+    const { code, state } = await searchParams;
 
     return (
         <main className="flex h-screen flex-col items-center justify-between">
-            <SignInWithGitHub />
+            <SignInWithGitHub code={code} state={state} />
         </main>
     )
 }
