@@ -9,7 +9,7 @@ export const helloSchema = z.object({
     message: z.string()
 });
 
-export const SignInWithGitHubSchema = z.object({
+export const SignInSchema = z.object({
     code: z.string(),
     state: z.string()
 });

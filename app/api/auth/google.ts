@@ -10,12 +10,15 @@ const app = new Hono()
         async (c) => {
             try {
                 // Get the environment variables
-                const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-                const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+                const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
+                const clientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+                // Create redirectUri
+                const redirectUri = process.env.NEXT_PUBLIC_APP_URL as string + "/auth/google/callback";
+                console.log(redirectUri);
 
                 // Check if any of the environment variables are missing
                 if (!clientId || !clientSecret) {
-                    throw new Error('Missing GitHub OAuth environment variables');
+                    throw new Error('Missing Google OAuth environment variables');
                 }
 
                 // Get the code and state
@@ -27,63 +30,68 @@ const app = new Hono()
                     throw new Error('Failed to verify state');
                 }
 
+                const tokenUrl = 'https://oauth2.googleapis.com/token';
+
+                // Prepare JSON payload
+                const body = {
+                    code: code,
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                    redirect_uri: redirectUri,
+                    grant_type: 'authorization_code',
+                };
+
                 // Fetch the access token
-                const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+                const tokenResponse = await fetch(tokenUrl, {
                     method: 'POST',
+                    body: JSON.stringify(body),
                     headers: {
                         'Content-Type': 'application/json',
-                        Accept: 'application/json',
                     },
-                    body: JSON.stringify({
-                        client_id: clientId,
-                        client_secret: clientSecret,
-                        code,
-                    }),
                 });
 
-                // Chech for success
+                // Check if the response is successful
                 if (!tokenResponse.ok) {
                     const errorData = await tokenResponse.json();
-                    throw new Error(`GitHub access token fetch failed: ${errorData?.message}`);
+                    throw new Error(`Google access token fetch failed: ${errorData.error}`);
                 }
 
                 const tokenData = await tokenResponse.json();
 
-                // Get the token from the data
+                // Get the access token
                 const accessToken = tokenData?.access_token;
 
                 // Fetch the user
-                const userResponse = await fetch('https://api.github.com/user', {
+                const userResponse = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
+                    method: 'GET',
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
 
-                // Check for success
+                // Check if the response is successful
                 if (!userResponse.ok) {
                     const errorData = await userResponse.json();
-                    throw new Error(`GitHub user fetch failed: ${errorData?.message}`);
+                    throw new Error(`Google user fetch failed: ${errorData.error || 'Unknown error'}`);
                 }
 
                 // Get the json from the response
                 const userJson = await userResponse.json();
 
-                type GitHubUser = {
-                    githubId: number | null;
-                    login: string | null;
+                type GoogleUser = {
+                    googleId: string | null;
                     email: string | null;
                     name: string | null;
                     avatarUrl: string | null;
                 };
                 
-                const user: GitHubUser = {
-                    githubId: userJson?.id,
-                    login: userJson.login,
+                const user: GoogleUser = {
+                    googleId: userJson?.sub,
                     email: userJson?.email,
                     name: userJson?.name,
-                    avatarUrl: userJson?.avatar_url,
+                    avatarUrl: userJson?.picture,
                 };
-                
+
                 return c.json({ user });
             }
             catch (error) {

@@ -6,6 +6,7 @@ import googleIcon from "../../../public/google.svg";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { generateCSRFToken } from "@/lib/csrf-token";
 
 const GoogleButton = ({
     isDisabled,
@@ -18,14 +19,27 @@ const GoogleButton = ({
 
     const router = useRouter();
     
-    const handleClick = () => {
+    const handleClick = async () => {
         setIsClicked(true);
         setIsDisabled(true);
+
+        // OpenID compliant scope
+        // OpenID discovery document
+        // https://accounts.google.com/.well-known/openid-configuration
+        const googleAuthURL = 
+        "https://accounts.google.com/o/oauth2/v2/auth?" +
+        "scope=" + encodeURIComponent("openid email profile") +
+        "&include_granted_scopes=true" + 
+        "&response_type=code" + 
+        "&state=" + await generateCSRFToken('10m') + 
+        "&redirect_uri=" + encodeURIComponent(process.env.NEXT_PUBLIC_APP_URL as string + "/auth/google/callback") + 
+        "&client_id=" + (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string);
+
 
         setTimeout(() => {
             setIsClicked(false);
             setIsDisabled(false);
-            router.push('/auth/google/callback');
+            router.push(googleAuthURL);
         }, 1000);
     }
 
