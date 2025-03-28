@@ -14,7 +14,6 @@ const app = new Hono()
                 const clientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
                 // Create redirectUri
                 const redirectUri = process.env.NEXT_PUBLIC_APP_URL as string + "/auth/google/callback";
-                console.log(redirectUri);
 
                 // Check if any of the environment variables are missing
                 if (!clientId || !clientSecret) {
