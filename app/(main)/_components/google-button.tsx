@@ -35,7 +35,6 @@ const GoogleButton = ({
         "&redirect_uri=" + encodeURIComponent(process.env.NEXT_PUBLIC_APP_URL as string + "/auth/google/callback") + 
         "&client_id=" + (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string);
 
-
         setTimeout(() => {
             setIsClicked(false);
             setIsDisabled(false);
