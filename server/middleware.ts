@@ -41,9 +41,9 @@ class MiddlewareResponse {
         this.chain = this.chain.then(async () => {
             this.response = await createCors(this.request, this.response);
     
-            // If the request method is OPTIONS, throw an error to stop further execution
-            if (this.request.method === 'OPTIONS') {
-                throw new Error('Preflight request');
+            // If the request is preflight or not allowed, throw an error to stop further execution
+            if ([204, 403].includes(this.response.status)) {
+                throw new Error('Blocked request from CORS');
             }
         })
     
@@ -51,7 +51,7 @@ class MiddlewareResponse {
     }
 
     public csp(): MiddlewareResponse {
-        // This or any other chain won't execute for preflight
+        // This or any other chain won't execute after blocked CORS request
         // And the code inside won't run
         this.chain = this.chain.then(async () => {
             this.response = await createCsp(this.request, this.response);
@@ -98,7 +98,7 @@ class MiddlewareResponse {
             await this.chain;
         } 
         catch {
-            // Error thrown for preflight
+            // Error thrown from CORS
             return this.response;
         }
         // Return the response
