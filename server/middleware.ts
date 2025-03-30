@@ -37,17 +37,24 @@ class MiddlewareResponse {
         this.chain = Promise.resolve();
     }
 
-    public csp(): MiddlewareResponse {
-        this.chain = this.chain.then(async () => {
-            this.response = await createCsp(this.request, this.response);
-        });
-        // Allow chaining
-        return this;
-    }
-
     public cors(): MiddlewareResponse {
         this.chain = this.chain.then(async () => {
             this.response = await createCors(this.request, this.response);
+    
+            // If the request method is OPTIONS, throw an error to stop further execution
+            if (this.request.method === 'OPTIONS') {
+                throw new Error('Preflight request');
+            }
+        })
+    
+        return this;
+    }
+
+    public csp(): MiddlewareResponse {
+        // This or any other chain won't execute for preflight
+        // And the code inside won't run
+        this.chain = this.chain.then(async () => {
+            this.response = await createCsp(this.request, this.response);
         });
         // Allow chaining
         return this;
@@ -86,8 +93,14 @@ class MiddlewareResponse {
     }
 
     public async returns(): Promise<NextResponse> {
-        // Await all promises to resolve
-        await this.chain;
+        try {
+            // Await all promises to resolve
+            await this.chain;
+        } 
+        catch {
+            // Error thrown for preflight
+            return this.response;
+        }
         // Return the response
         return this.response;
     }
@@ -96,8 +109,8 @@ class MiddlewareResponse {
 export const middlewareHandler = async (request: NextRequest): Promise<NextResponse> => {
     // Create a new response and handle all middleware options
     const response = await new MiddlewareResponse(request)
-    .csp()
     .cors()
+    .csp()
     .session()
     .protect()
     .returns();
