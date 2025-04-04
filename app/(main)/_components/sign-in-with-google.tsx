@@ -26,8 +26,7 @@ const SignInWithGoogle = ({
                 }
                 mutate({ json: { code, state } },
                     {
-                        onSuccess: (data) => {
-                            console.log(data?.user);
+                        onSuccess: () => {
                             router.push('/');
                         },
                         onError: (error) => {

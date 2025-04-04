@@ -25,8 +25,8 @@ export const refreshSession = async (request: NextRequest, response: NextRespons
             }
             else {
                 // Generate new access and refresh tokens
-                const newAccessToken = await createJWT(verifiedRefreshToken.email, '10s') || "";
-                const newRefreshToken = await createJWT(verifiedRefreshToken.email, '1h') || "";
+                const newAccessToken = await createJWT(verifiedRefreshToken, '10s') || "";
+                const newRefreshToken = await createJWT(verifiedRefreshToken, '1h') || "";
 
                 response.cookies.set('accessToken', newAccessToken, {
                     httpOnly: true,

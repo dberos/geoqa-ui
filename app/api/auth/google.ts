@@ -1,7 +1,13 @@
+import { db } from "@/db";
+import { usersTable } from "@/db/schema";
 import { verifyCSRFToken } from "@/lib/csrf-token";
+import { createJWT } from "@/lib/session";
 import { SignInSchema } from "@/schemas";
+import { SessionPayload } from "@/types";
 import { zValidator } from "@hono/zod-validator";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
+import { setCookie } from "hono/cookie";
 
 const app = new Hono()
     .post(
@@ -74,28 +80,95 @@ const app = new Hono()
                     throw new Error(`Google user fetch failed: ${errorData.error || 'Unknown error'}`);
                 }
 
-                // Get the json from the response
-                const userJson = await userResponse.json();
+                const user = await userResponse.json();
 
-                type GoogleUser = {
-                    googleId: string | null;
-                    email: string | null;
-                    name: string | null;
-                    avatarUrl: string | null;
-                };
+                const name = user.name || `${user.given_name} ${user.family_name}`.trim() || user.email;
+
+                const [existingUser] = await db
+                .select()
+                .from(usersTable)
+                .where(eq(usersTable.googleId, user.sub))
+                .limit(1);
+
+                if (existingUser) {
+                    // If user exists, update their profile if needed
+                    const [updatedUser] = await db
+                    .update(usersTable)
+                    .set({
+                        name,
+                        avatarUrl: user.picture,
+                    })
+                    .where(eq(usersTable.googleId, user.sub))
+                    .returning();
+
+                    // Create the session JWTs
+                    const payload: SessionPayload = {
+                        id: updatedUser.id,
+                        name,
+                        avatarUrl: updatedUser.avatarUrl,
+                    }
+
+                    const newAccessToken = await createJWT(payload, '10s') || "";
+                    const newRefreshToken = await createJWT(payload, '1h') || "";
+
+                    setCookie(c, 'accessToken', newAccessToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'lax',
+                        maxAge: 60 * 60 * 24,
+                        path: '/',
+                    });
+
+                    setCookie(c, 'refreshToken', newRefreshToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'lax',
+                        maxAge: 60 * 60 * 24,
+                        path: '/',
+                    });
+
+                    return c.json({ success: true });
+                }
+
+                // If user doesn't exist, create a new user
+                const [newUser] = await db.insert(usersTable).values({
+                    googleId: user.sub,
+                    name,
+                    avatarUrl: user.picture,
+                })
+                .returning();
+
+                const payload: SessionPayload = {
+                    id: newUser.id,
+                    name,
+                    avatarUrl: newUser.avatarUrl,
+                }
+
+                // Create the session JWTs
+                const newAccessToken = await createJWT(payload, '10s') || "";
+                const newRefreshToken = await createJWT(payload, '1h') || "";
+
+                setCookie(c, 'accessToken', newAccessToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    maxAge: 60 * 60 * 24,
+                    path: '/',
+                });
+
+                setCookie(c, 'refreshToken', newRefreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    maxAge: 60 * 60 * 24,
+                    path: '/',
+                });
                 
-                const user: GoogleUser = {
-                    googleId: userJson?.sub,
-                    email: userJson?.email,
-                    name: userJson?.name,
-                    avatarUrl: userJson?.picture,
-                };
-
-                return c.json({ user });
+                return c.json({ success: true });
             }
             catch (error) {
                 console.error(error);
-                return c.json({ error }, { status: 500 });
+                return c.json({ success: false }, { status: 500 });
             }
         }
     )

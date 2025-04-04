@@ -1,18 +1,11 @@
-import { SignJWT, jwtVerify, JWTPayload } from 'jose';
+import { SessionPayload } from '@/types';
+import { SignJWT, jwtVerify } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET as string);
 
-export interface SessionPayload extends JWTPayload {
-  email: string,
-}
-
 // Creating JWTs
-
-export const createJWT= async (email: string, expiresIn: string = '1h') => {
+export const createJWT= async (payload: SessionPayload, expiresIn: string = '1h') => {
   try {
-    const payload: SessionPayload = {
-      email
-    }
     const jwt = await new SignJWT(payload)
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
       .setIssuedAt()
@@ -27,6 +20,7 @@ export const createJWT= async (email: string, expiresIn: string = '1h') => {
   }
 };
 
+// Verifying JWTs
 export const verifyJWT = async (token: string) => {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET, {

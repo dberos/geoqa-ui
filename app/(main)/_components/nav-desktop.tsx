@@ -7,15 +7,50 @@ import Image from "next/image";
 import Link from "next/link";
 import { useWindowScroll } from "react-use";
 import logo from "../../../public/logo.svg";
-import { LogIn } from "lucide-react";
+import { LogIn, User } from "lucide-react";
 import { useNavbarStyle } from "@/hooks/use-navbar-style";
+import { useSession } from "@/hooks/use-session";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useSignOut } from "@/hooks/use-sign-out";
+import { useRouter } from "next/navigation";
 
 const NavDesktop = () => {
     
     const { y } = useWindowScroll();
 
-    const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarDesktopId")
+    const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarDesktopId");
 
+    const { data, error, isLoading } = useSession();
+    if (!isLoading && !error) {
+        console.log(data?.session);
+    }
+
+    const { mutate } = useSignOut();
+
+    const router = useRouter();
+
+    const handleSignOut = () => {
+        mutate({},
+            {
+                onSuccess: () => {
+                    router.replace('/');
+                },
+                onError: (error) => {
+                    console.error(error);
+                    router.push('/error');
+                }
+            }
+        );
+    }
+      
     return ( 
         <nav 
         id="mainNavbarDesktopId" 
@@ -50,13 +85,36 @@ const NavDesktop = () => {
             </div>
             <div className="flex items-center justify-center gap-x-6">
                 <ThemeToggle />
-                <Button className='cursor-pointer'>
-                    <Link href="/auth/sign-in" className="flex items-center justify-center gap-x-2">
-                        Sign In
-                        <LogIn className="size-4" />
-                    </Link>
-                    
-                </Button>
+                {
+                    data?.session ? 
+                    <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger asChild>
+                            <Avatar className="cursor-pointer">
+                                <AvatarImage src={data?.session.avatarUrl} />
+                                <AvatarFallback>
+                                    <User className="size-4" />
+                                </AvatarFallback>
+                            </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="text-center">
+                            <DropdownMenuLabel>
+                                {data?.session.name}
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={handleSignOut}>
+                                Sign Out
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                     :
+                    <Button className='cursor-pointer'>
+                        <Link href="/auth/sign-in" className="flex items-center justify-center gap-x-2">
+                            Sign In
+                            <LogIn className="size-4" />
+                        </Link>
+                    </Button>
+                }
+                
             </div>
             
         </nav>

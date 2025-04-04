@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useWindowScroll } from "react-use";
-import { Menu } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import {
     Sheet,
     SheetContent,
@@ -23,6 +23,18 @@ import { useMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { ThemeToggle } from "@/components/theme-toggle";
 import logo from "../../../public/logo.svg";
 import { useNavbarStyle } from "@/hooks/use-navbar-style";
+import { useSession } from "@/hooks/use-session";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useRouter } from "next/navigation";
+import { useSignOut } from "@/hooks/use-sign-out";
 
 const NavMobile = () => {
 
@@ -32,6 +44,30 @@ const NavMobile = () => {
     const setIsOpen = useMobileMenuStore((state) => state.setIsOpen);
 
     const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarMobileId");
+
+    const { data, error, isLoading } = useSession();
+    if (!isLoading && !error) {
+        console.log(data?.session);
+    }
+
+    const { mutate } = useSignOut();
+
+    const router = useRouter();
+    
+    const handleSignOut = () => {
+        mutate({},
+            {
+                onSuccess: () => {
+                    router.replace('/');
+                    setIsOpen(false);
+                },
+                onError: (error) => {
+                    console.error(error);
+                    router.push('/error');
+                }
+            }
+        );
+    }
 
     return ( 
         <nav
@@ -53,6 +89,47 @@ const NavMobile = () => {
                         <div className="absolute left-12 bottom-4">
                             <ThemeToggle />
                         </div>
+                        <div className="absolute right-12 bottom-4">
+                            {
+                                data?.session ? 
+                                <DropdownMenu modal={false}>
+                                    <DropdownMenuTrigger asChild>
+                                        <Avatar className="cursor-pointer">
+                                            <AvatarImage src={data?.session.avatarUrl} />
+                                            <AvatarFallback>
+                                                <User className="size-4" />
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="text-center">
+                                        <DropdownMenuLabel>
+                                            {data?.session.name}
+                                        </DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem onClick={handleSignOut}>
+                                            Sign Out
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                 :
+                                <DropdownMenu modal={false}>
+                                    <DropdownMenuTrigger asChild>
+                                        <Avatar className="cursor-pointer">
+                                            <AvatarFallback>
+                                                <User className="size-4" />
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="text-center">
+                                        <DropdownMenuItem>
+                                        <Link href="/auth/sign-in" onClick={() => setIsOpen(false)}>
+                                            Sign In
+                                        </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            }
+                        </div>
                         <Link href='/'>
                             <div className="flex items-center justify-center flex-col gap-y-4">
                                 <Image
@@ -73,18 +150,6 @@ const NavMobile = () => {
                     </SheetHeader>
                     <div className="mt-10 p-4">
                         <Accordion type="single" collapsible className="w-full">
-                            <AccordionItem value="account">
-                                <AccordionTrigger>Account</AccordionTrigger>
-                                <AccordionContent>
-                                    <ul>
-                                        <li>
-                                            <Link href="/auth/sign-in">
-                                                Sign In
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </AccordionContent>
-                            </AccordionItem>
                             <AccordionItem value="dashboard">
                                 <AccordionTrigger>Dashboard</AccordionTrigger>
                                 <AccordionContent>
