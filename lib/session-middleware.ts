@@ -16,15 +16,18 @@ export const userMiddleware = createMiddleware<MiddlewareContext>(
         // Session refreshes from Next middleware early
         // Here only authorize api routes, without Authorization header
         const accessToken = getCookie(c, 'accessToken') || '';
-
-        const verifiedAccessToken = await verifyJWT(accessToken);
-        if (!verifiedAccessToken) {
+        if (!accessToken) {
             c.set('session', null);
         }
         else {
-            c.set('session', verifiedAccessToken);
+            const verifiedAccessToken = await verifyJWT(accessToken);
+            if (!verifiedAccessToken) {
+                c.set('session', null);
+            }
+            else {
+                c.set('session', verifiedAccessToken);
+            }
         }
-
         await next();
     }
 )
@@ -34,16 +37,20 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
         // Session refreshes from Next middleware early
         // Here only authorize api routes, without Authorization header
         const accessToken = getCookie(c, 'accessToken') || '';
-
-        const verifiedAccessToken = await verifyJWT(accessToken);
-        if (!verifiedAccessToken) {
+        if (!accessToken) {
             c.set('session', null);
             return c.json({ error: 'Unauthorized' }, { status: 401 });
         }
         else {
-            c.set('session', verifiedAccessToken);
+            const verifiedAccessToken = await verifyJWT(accessToken);
+            if (!verifiedAccessToken) {
+                c.set('session', null);
+                return c.json({ error: 'Unauthorized' }, { status: 401 });
+            }
+            else {
+                c.set('session', verifiedAccessToken);
+            }
         }
-
         await next();
     }
 );

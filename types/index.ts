@@ -8,6 +8,18 @@ export type UserType = {
     avatarUrl: string,
 }
 
+export enum OathEnum {
+    GITHUB,
+    GOOGLE
+}
+
+export type OathUserType = {
+    id: string,
+    name: string,
+    avatarUrl: string
+    type: OathEnum
+}
+
 export interface SessionPayload extends JWTPayload {
     id: number,
     name: string,

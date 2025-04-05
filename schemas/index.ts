@@ -1,15 +1,20 @@
+import { OathEnum } from "@/types";
 import { z } from "zod";
 
-export const loginSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(4)
+export const SignInTokenSchema = z.object({
+    code: z.string(),
+    state: z.string()
 });
 
-export const helloSchema = z.object({
-    message: z.string()
+export const SignInUserSchema = z.object({
+    accessToken: z.string()
 });
 
 export const SignInSchema = z.object({
-    code: z.string(),
-    state: z.string()
+    user: z.object({
+        id: z.string(),
+        name: z.string(),
+        avatarUrl: z.string(),
+        type: z.nativeEnum(OathEnum)
+    })
 });
