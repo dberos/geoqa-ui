@@ -1,5 +1,5 @@
 import { SessionPayload } from '@/types';
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, compactVerify, decodeJwt, jwtVerify } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET as string);
 
@@ -31,6 +31,24 @@ export const verifyJWT = async (token: string) => {
   } 
   catch (error) {
     console.error('Failed to verify JWT:', error);
+    return null;
+  }
+};
+
+// Verifying the signature without the claims of JWTs and decode them
+export const decodeJWT = async (token: string) => {
+  try {
+    // Verify the signature without the claims
+    // If it fails it throws an error
+    await compactVerify(token, JWT_SECRET);
+
+    // Then decode it
+    const decoded = await decodeJwt(token) as SessionPayload;
+
+    return decoded;
+  } 
+  catch (error) {
+    console.error('Failed to decode JWT:', error);
     return null;
   }
 };

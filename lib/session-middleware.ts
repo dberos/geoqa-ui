@@ -2,7 +2,7 @@ import "server-only";
 
 import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
-import { verifyJWT } from "./session";
+import { decodeJWT, verifyJWT } from "./session";
 import { SessionPayload } from "@/types";
 
 type MiddlewareContext = {
@@ -13,19 +13,21 @@ type MiddlewareContext = {
 
 export const userMiddleware = createMiddleware<MiddlewareContext>(
     async (c, next) => {
-        // Session refreshes from Next middleware early
-        // Here only authorize api routes, without Authorization header
+        // This is used for UI only
+        // Access token refresh early in next.js middleware
+        // But maybe there is no middleware call and access token gets invalid
+        // So only decode the token
         const accessToken = getCookie(c, 'accessToken') || '';
         if (!accessToken) {
             c.set('session', null);
         }
         else {
-            const verifiedAccessToken = await verifyJWT(accessToken);
-            if (!verifiedAccessToken) {
+            const decodedAccessToken = await decodeJWT(accessToken);
+            if (!decodedAccessToken) {
                 c.set('session', null);
             }
             else {
-                c.set('session', verifiedAccessToken);
+                c.set('session', decodedAccessToken);
             }
         }
         await next();
