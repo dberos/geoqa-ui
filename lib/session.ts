@@ -4,15 +4,23 @@ import { SignJWT, compactVerify, decodeJwt, jwtVerify } from 'jose';
 const JWT_SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET as string);
 
 // Creating JWTs
-export const createJWT= async (payload: SessionPayload, expiresIn: string = '1h') => {
+export const createJWT= async (
+  payload: SessionPayload, 
+  expiresIn: string = '1h',
+  jti?: string,
+) => {
   try {
-    const jwt = await new SignJWT(payload)
-      .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-      .setIssuedAt()
-      .setExpirationTime(expiresIn)
-      .sign(JWT_SECRET)
-  
-    return jwt;
+	const jwtBuilder = new SignJWT(payload)
+	.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+	.setIssuedAt()
+	.setExpirationTime(expiresIn);
+
+	if (jti) {
+		jwtBuilder.setJti(jti)
+	}
+
+	const jwt = await jwtBuilder.sign(JWT_SECRET);
+	return jwt;
   }
   catch (error) {
     console.error('Failed to create JWT:', error);

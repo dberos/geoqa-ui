@@ -21,7 +21,8 @@ export type OathUserType = {
 }
 
 export interface SessionPayload extends JWTPayload {
-    id: string,
-    name: string,
-    avatarUrl: string,
+    id?: string,
+    sessionId?: string,
+    name?: string,
+    avatarUrl?: string,
 }

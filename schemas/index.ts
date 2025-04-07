@@ -18,3 +18,10 @@ export const SignInSchema = z.object({
         type: z.nativeEnum(OathEnum)
     })
 });
+
+export const RefreshSchema = z.object({
+    sessionId: z.string(),
+    oldJti: z.string(),
+    jti: z.string(),
+    exp: z.number()
+})
