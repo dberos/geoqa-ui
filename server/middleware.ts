@@ -31,7 +31,7 @@ class MiddlewareResponse {
         ];
         // Redirect URL can't be a protected route
         // Or it gets endless loop
-        this.redirectUrl = '/test';
+        this.redirectUrl = '/auth/sign-in';
 
         // Resolve promises
         this.chain = Promise.resolve();

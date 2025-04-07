@@ -27,7 +27,9 @@ const SignInWithGoogle = ({
                 mutate({ json: { code, state } },
                     {
                         onSuccess: () => {
-                            router.push('/');
+                            const redirect = window.localStorage?.getItem('redirect');
+                            window.localStorage?.removeItem('redirect');
+                            router.push(redirect ? redirect : '/');
                         },
                         onError: (error) => {
                             // Error will be present from the mutation, error thrown

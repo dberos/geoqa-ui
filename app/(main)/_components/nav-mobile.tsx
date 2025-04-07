@@ -140,7 +140,7 @@ const NavMobile = () => {
                                 width={100}
                                 className="size-32 object-contain"
                                 />
-                                <h1 className="text-5xl">
+                                <h1 className="text-5xl text-muted-foreground">
                                     GeoQA
                                 </h1>
                             </div>
@@ -153,7 +153,9 @@ const NavMobile = () => {
                             <AccordionItem value="dashboard">
                                 <AccordionTrigger>Dashboard</AccordionTrigger>
                                 <AccordionContent>
-                                    Links
+                                    <Link href='/dashboard'>
+                                        Continue to GeoQA
+                                    </Link>
                                 </AccordionContent>
                             </AccordionItem>
                             <AccordionItem value="legal">

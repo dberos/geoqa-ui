@@ -24,7 +24,7 @@ const Hero = () => {
                 AI powered QnA engine for geospatial data
             </h2>
             <Button className="cursor-pointer">
-                <Link href="/auth/sign-in" className="flex items-center justify-center gap-x-2">
+                <Link href="/dashboard" className="flex items-center justify-center gap-x-2">
                     Get Started
                     <ArrowRight className="size-4" />
                 </Link>

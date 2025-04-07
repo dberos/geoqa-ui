@@ -73,7 +73,9 @@ const NavDesktop = () => {
                 <ul className="flex items-center space-x-10 ml-8">
                     <li>
                         <Button variant="link" size="sm" className='cursor-pointer'>
-                            Dashboard
+                            <Link href='/dashboard'>
+                                Dashboard
+                            </Link>
                         </Button>
                     </li>
                     <li>

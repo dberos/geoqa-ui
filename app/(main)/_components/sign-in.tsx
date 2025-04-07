@@ -4,10 +4,17 @@ import Image from "next/image";
 import logo from "../../../public/logo.svg";
 import GitHubButton from "./github-button";
 import GoogleButton from "./google-button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const SignIn = () => {
+const SignIn = ({ redirect }: { redirect?: string }) => {
     const [isDisabled, setIsDisabled] = useState(false);
+    useEffect(() => {
+        if (redirect) {
+            // Set in the localstorage the redirect route for the callback page
+            // Since i can't add another searchParam in the OAuth link
+            window.localStorage.setItem('redirect', redirect);
+        }
+    }, [redirect]);
     return ( 
         <div className="size-full grid grid-cols-1 grid-rows-[30%_70%]">
             <div className="flex items-center justify-center flex-col">
