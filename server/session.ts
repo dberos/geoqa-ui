@@ -25,11 +25,13 @@ export const refreshSession = async (request: NextRequest, response: NextRespons
                 return response;
             }
             else {
-                // Here the rotation takes place
-                // If session doesn't exist, delete the cookies
-                // If session exists, check if oldJti is blacklisted
-                // If it is not, then blacklist and insert the new jti in the db
-                // If it is blacklisted then delete the session from the db and the cookies
+                /**
+                 * Here the rotation takes place
+                 * If session doesn't exist, delete the cookies
+                 * If session exists, check if oldJti is blacklisted
+                 * If it is not, then blacklist and insert the new jti in the db
+                 * If it is blacklisted then delete the session from the db and the cookies
+                 */
 
                 // Extract the sessionId and jti from the refresh token
                 const sessionId = verifiedRefreshToken.sessionId || "";
@@ -47,13 +49,13 @@ export const refreshSession = async (request: NextRequest, response: NextRespons
                 }
 
                 // Generate new access and refresh tokens
-                const newAccessToken = await createJWT(decodedAccessToken, '10s') || "";
-                const newRefreshToken = await createJWT(verifiedRefreshToken, '1h', jti) || "";
+                const newAccessToken = await createJWT(decodedAccessToken, '1m') || "";
+                const newRefreshToken = await createJWT(verifiedRefreshToken, '1d', jti) || "";
 
                 // Get the exact exp to be stored
                 const decodedRefreshToken = await decodeJWT(newRefreshToken);
                 const now = Math.floor(Date.now() / 1000);
-                const exp = decodedRefreshToken?.exp || now | 3600;
+                const exp = decodedRefreshToken?.exp || now + 86400;
 
                 // Call the refresh route
                 const refreshUrl = process.env.NEXT_PUBLIC_APP_URL as string + "/api/auth/refresh";

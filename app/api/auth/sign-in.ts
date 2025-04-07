@@ -79,12 +79,12 @@ const createSession = async (user: UserType, now: number, c: Context) => {
         sessionId: newSession.id,
     }
 
-    const newAccessToken = await createJWT(accessPayload, '10s') || "";
-    const newRefreshToken = await createJWT(refreshPayload, '1h', jti) || "";
+    const newAccessToken = await createJWT(accessPayload, '1m') || "";
+    const newRefreshToken = await createJWT(refreshPayload, '1d', jti) || "";
 
     // Get the exact exp of the token to be stored
     const decodedRefreshToken = await decodeJWT(newRefreshToken);
-    const exp = decodedRefreshToken?.exp ||  now + 3600;
+    const exp = decodedRefreshToken?.exp ||  now + 86400;
 
     // Insert the token's fields to the tokens table
     await db
