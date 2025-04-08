@@ -19,10 +19,14 @@ import { useRouter } from "next/navigation";
 import { useMedia } from "react-use";
 import logo from '../../../public/logo.svg';
 import Image from "next/image";
+import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 
 const Toolbar = () => {
 
     const isMobile = useMedia("(max-width: 1024px)", false);
+
+    const isOpen = useDashboardMobileMenuStore((state) => state.isOpen);
+    const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
 
     const { mutate } = useSignOut();
     
@@ -50,7 +54,7 @@ const Toolbar = () => {
     return ( 
         <div className="w-full h-30 md:h-40 2k:h-52 4k:h-60 grid grid-rows-2 grid-cols-1">
             <div className="size-full relative flex items-center justify-between p-4 2k:p-6 border-b-1">
-                <Link href='/'>
+                <Link href='/' onClick={() => setIsOpen(!isOpen)}>
                 {
                     isMobile ?
                     <Image 
@@ -91,7 +95,7 @@ const Toolbar = () => {
             <div className="relative size-full flex items-center justify-around pl-4 pr-4">
                 <div className="absolute w-[1px] h-full bg-border left-1/2" />
                 <ThemeToggle />
-                <Button size='icon' variant='outline' className="cursor-pointer p-2">
+                <Button size='icon' variant='outline' className="cursor-pointer p-2" onClick={() => setIsOpen(!isOpen)}>
                     <Link href='/dashboard'>
                         <SquarePen className="size-4" />
                     </Link>
