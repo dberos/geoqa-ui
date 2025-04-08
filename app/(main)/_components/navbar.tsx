@@ -5,10 +5,7 @@ import { useMedia } from 'react-use';
 import NavDesktop from './nav-desktop';
 import NavMobile from './nav-mobile';
 
-// TODO: Implement links
-// TODO: Implement login
-
-const NavBar = () => {
+const Navbar = () => {
 
     const isMobile = useMedia("(max-width: 1024px)", false);
 
@@ -21,4 +18,4 @@ const NavBar = () => {
     return <NavDesktop />;
 }
  
-export default NavBar;
+export default Navbar;

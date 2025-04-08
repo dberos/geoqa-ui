@@ -9,3 +9,8 @@ export const useMobileMenuStore = create<MobileMenuStoreType>((set) => ({
     isOpen: false,
     setIsOpen: (value: boolean) => set({ isOpen: value })
 }))
+
+export const useDashboardMobileMenuStore = create<MobileMenuStoreType>((set) => ({
+    isOpen: false,
+    setIsOpen: (value: boolean) => set({ isOpen: value })
+}))

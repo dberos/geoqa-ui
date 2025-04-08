@@ -11,7 +11,7 @@ const Footer = () => {
         grid grid-rows-[60%_40%] grid-cols-1 md:grid-cols-1 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 
         border-t-2 bg-neutral-100 dark:bg-neutral-900"
         >
-            <div className="flex flex-col items-center p-10 order-2 gap-y-2 
+            <div className="flex flex-col items-center p-10 order-2 gap-y-2 2k:gap-y-5 
             md:p-12 md:items-center md:justify-center lg:items-start lg:justify-start lg:order-1"
             >
                 <h1 className="text-xl font-semibold">
@@ -69,34 +69,34 @@ const Footer = () => {
                     <h2 className="text-lg mt-10 text-muted-foreground">
                         About Us
                     </h2>
-                    <div className="mt-1 md:mt-4 flex flex-row gap-x-1">
-                            <Link href="https://ai.di.uoa.gr/" target="_blank">
-                                <Button variant="link" size="sm" className='cursor-pointer'>
-                                    <Globe className="size-5"/>
-                                </Button>
-                            </Link>
-                            <Link href="https://github.com/AI-team-UoA" target="_blank">
-                                <Button variant="link" size="sm" className='cursor-pointer'>
-                                    <Image 
-                                    src={gitHub}
-                                    alt='github icon'
-                                    width={100}
-                                    height={100}
-                                    className="object-contain size-5 dark:filter dark:invert"
-                                    />
-                                </Button>
-                            </Link>
-                            <Link href="https://linkedin.com/company/ai-team-uoa" target="_blank">
-                                <Button variant="link" size="sm" className='cursor-pointer'>
-                                    <Image 
-                                    src={linkedin}
-                                    alt='github icon'
-                                    width={100}
-                                    height={100}
-                                    className="object-contain size-5 dark:filter dark:invert"
-                                    />
-                                </Button>
-                            </Link>
+                    <div className="mt-1 md:mt-4 flex flex-row gap-x-1 2k:gap-x-5">
+                        <Link href="https://ai.di.uoa.gr/" target="_blank">
+                            <Button variant="link" size="sm" className='cursor-pointer'>
+                                <Globe className="size-5"/>
+                            </Button>
+                        </Link>
+                        <Link href="https://github.com/AI-team-UoA" target="_blank">
+                            <Button variant="link" size="sm" className='cursor-pointer'>
+                                <Image 
+                                src={gitHub}
+                                alt='github icon'
+                                width={100}
+                                height={100}
+                                className="object-contain size-5 dark:filter dark:invert"
+                                />
+                            </Button>
+                        </Link>
+                        <Link href="https://linkedin.com/company/ai-team-uoa" target="_blank">
+                            <Button variant="link" size="sm" className='cursor-pointer'>
+                                <Image 
+                                src={linkedin}
+                                alt='github icon'
+                                width={100}
+                                height={100}
+                                className="object-contain size-5 dark:filter dark:invert"
+                                />
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -29,6 +29,9 @@ const app = new Hono()
                 // Extract the token from the Authorization header
                 const refreshToken = authHeader.split(' ')[1];
                 const verifiedRefreshToken = await verifyJWT(refreshToken);
+                if (!verifiedRefreshToken) {
+                    return c.json({ success: false }, { status: 500 });
+                }
 
                 const rtJti = verifiedRefreshToken?.jti || "";
                 const rtSessionId = verifiedRefreshToken?.sessionId || "";

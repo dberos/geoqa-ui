@@ -42,7 +42,7 @@ const SignInWithGoogle = ({
             }
             const timeoutId = setTimeout(() => {
                 handleSignIn();
-            }, 1000);
+            }, 4000);
     
             return () => clearTimeout(timeoutId);
         }, [router, mutate, code, state])
