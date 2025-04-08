@@ -44,7 +44,6 @@ const Toolbar = () => {
     return ( 
         <div className="w-full h-40 2k:h-52 4k:h-60 grid grid-rows-2 grid-cols-1">
             <div className="size-full relative flex items-center justify-between p-4 2k:p-6 border-b-1">
-                <div className="absolute w-0.5 h-full bg-muted left-1/2" />
                 <Link href='/' className="text-2xl font-semibold text-muted-foreground">
                     GeoQA
                 </Link>
@@ -71,8 +70,8 @@ const Toolbar = () => {
                 </DropdownMenu>
                 }
             </div>
-            <div className="relative size-full border-b-1 flex items-center justify-around pl-4 pr-4">
-                <div className="absolute w-0.5 h-full bg-muted left-1/2" />
+            <div className="relative size-full flex items-center justify-around pl-4 pr-4">
+                <div className="absolute w-[1px] h-full bg-border left-1/2" />
                 <ThemeToggle />
                 <Button size='icon' variant='outline' className="cursor-pointer p-2">
                     <Link href='/dashboard'>

@@ -26,7 +26,7 @@ const SignIn = ({ redirect }: { redirect?: string }) => {
                 </h1>
             </div>
             <div className="flex size-full items-center justify-center">
-                <div className="h-4/6 w-3/4 md:w-2/4 lg:w-2/4 lg:h-9/12 xl:w-1/4 4k:w-1/6 4k:h-7/12 border-2 border-neutral-300 dark:border-muted rounded-md grid grid-cols-1 grid-rows-[40%_60%]">
+                <div className="h-4/6 w-3/4 md:w-2/4 lg:w-2/4 lg:h-9/12 xl:w-1/4 4k:w-1/6 4k:h-7/12 border-2 rounded-md grid grid-cols-1 grid-rows-[40%_60%]">
                     <div className="relative flex flex-col items-center justify-center">
                         <Image 
                         src={logo}
@@ -35,7 +35,7 @@ const SignIn = ({ redirect }: { redirect?: string }) => {
                         height={100}
                         className="object-contain size-4/6"
                         />
-                        <div className="absolute w-full h-0.5 bg-neutral-300 dark:bg-muted bottom-0" />
+                        <div className="absolute w-full h-0.5 bg-border bottom-0" />
                     </div>
                     <div className="flex items-center justify-center flex-col gap-y-4">
                         <GitHubButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
