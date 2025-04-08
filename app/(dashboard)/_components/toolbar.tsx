@@ -16,8 +16,14 @@ import { useSignOut } from "@/hooks/use-sign-out";
 import { SquarePen, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMedia } from "react-use";
+import logo from '../../../public/logo.svg';
+import Image from "next/image";
 
 const Toolbar = () => {
+
+    const isMobile = useMedia("(max-width: 1024px)", false);
+
     const { mutate } = useSignOut();
     
     const { data, error, isLoading } = useSession();
@@ -42,10 +48,22 @@ const Toolbar = () => {
     }
 
     return ( 
-        <div className="w-full h-40 2k:h-52 4k:h-60 grid grid-rows-2 grid-cols-1">
+        <div className="w-full h-30 md:h-40 2k:h-52 4k:h-60 grid grid-rows-2 grid-cols-1">
             <div className="size-full relative flex items-center justify-between p-4 2k:p-6 border-b-1">
-                <Link href='/' className="text-2xl font-semibold text-muted-foreground">
-                    GeoQA
+                <Link href='/'>
+                {
+                    isMobile ?
+                    <Image 
+                    src={logo}
+                    alt="GeoQA logo"
+                    width={100}
+                    height={100}
+                    className="object-contain size-10"
+                    /> :
+                    <p className="text-2xl font-semibold text-muted-foreground">
+                        GeoQA
+                    </p>
+                }
                 </Link>
                 {
                     data?.session &&

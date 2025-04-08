@@ -16,7 +16,7 @@ const Sidebar = () => {
         <aside className="h-screen w-[350px] 2k:w-[450px] 4k:w-[600px] flex flex-col border-r-1 bg-neutral-100 dark:bg-neutral-900">
             <Toolbar />
             <div className="size-full flex flex-col">
-                <div className="w-full flex-1 2k:h-4/5"/>
+                <div className="w-full flex-1"/>
                 <Footer />
             </div>
         </aside>
