@@ -26,9 +26,7 @@ const MobileMenu = () => {
         }
 
         const [isMounted, setIsMounted] = useState(false);
-        useEffect(() => {
-            setIsMounted(true);
-        }, [])
+        useEffect(() => setIsMounted(true), []);
         if (!isMounted) return null;
         
     return ( 
