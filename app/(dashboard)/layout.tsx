@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Navigation from "./_components/navigation";
+
+export const metadata: Metadata = {
+    title: "GeoQA | Dashboard",
+    description: "GeoQA UI for the GeoQA engine",
+  };
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
