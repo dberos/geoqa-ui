@@ -60,7 +60,9 @@ const NavMobile = () => {
         mutate({},
             {
                 onSuccess: () => {
-                    router.replace('/');
+                    // Use window instead of router for mobile issue
+                    // Not blocking dashboard after sign out
+                    window.location.replace('/');
                     setIsOpen(false);
                 },
                 onError: (error) => {
@@ -101,7 +103,7 @@ const NavMobile = () => {
                                 </Link>
                                 {
                                     data?.session ?
-                                    <DropdownMenu modal={false}>
+                                    <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Avatar className="cursor-pointer">
                                             <AvatarImage src={data?.session.avatarUrl} />
@@ -120,7 +122,7 @@ const NavMobile = () => {
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu> :
-                                <DropdownMenu modal={false}>
+                                <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Avatar className="cursor-pointer">
                                         <AvatarFallback>

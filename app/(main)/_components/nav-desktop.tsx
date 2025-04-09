@@ -41,7 +41,9 @@ const NavDesktop = () => {
         mutate({},
             {
                 onSuccess: () => {
-                    router.replace('/');
+                    // Use window instead of router for mobile issue
+                    // Not blocking dashboard after sign out
+                    window.location.replace('/');
                 },
                 onError: (error) => {
                     console.error(error);
@@ -89,7 +91,7 @@ const NavDesktop = () => {
                 <ThemeToggle />
                 {
                     data?.session ? 
-                    <DropdownMenu modal={false}>
+                    <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Avatar className="cursor-pointer">
                                 <AvatarImage src={data?.session.avatarUrl} />

@@ -41,7 +41,10 @@ const Toolbar = () => {
         mutate({},
             {
                 onSuccess: () => {
-                    router.replace('/');
+                    // Use window instead of router for mobile issue
+                    // Not blocking dashboard after sign out
+                    window.location.replace('/');
+                    setIsOpen(false);
                 },
                 onError: (error) => {
                     console.error(error);
@@ -71,7 +74,7 @@ const Toolbar = () => {
                 </Link>
                 {
                     data?.session &&
-                    <DropdownMenu modal={false}>
+                    <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Avatar className="cursor-pointer">
                             <AvatarImage src={data?.session.avatarUrl} />
