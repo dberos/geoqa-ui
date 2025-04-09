@@ -9,10 +9,10 @@ const NewChat = () => {
     const [isMounded, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
     if (!isMounded) return null;
-    
+
     return ( 
         <div className="size-full flex items-center justify-center flex-col gap-y-4">
-            <div className="w-full h-36 md:h-48 lg:h-44 xl:h-56 2k:h-64 4k:h-72 flex items-center justify-center">
+            <div className="w-full h-36 md:h-48 lg:h-44 xl:h-52 2k:h-64 4k:h-72 flex items-center justify-center">
                 <Image 
                 src={logo}
                 alt="GeoQA logo"
