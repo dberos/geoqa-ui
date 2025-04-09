@@ -17,7 +17,7 @@ import { SquarePen, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMedia } from "react-use";
-import logo from '../../../public/logo.svg';
+import logo from '../../../public/logo.png';
 import Image from "next/image";
 import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 
@@ -62,7 +62,7 @@ const Toolbar = () => {
                     alt="GeoQA logo"
                     width={100}
                     height={100}
-                    className="object-contain size-10"
+                    className="object-contain size-12"
                     /> :
                     <p className="text-2xl font-semibold text-muted-foreground">
                         GeoQA

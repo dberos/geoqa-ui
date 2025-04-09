@@ -1,16 +1,25 @@
+"use client";
+
 import Image from "next/image";
-import logo from '../../../public/logo.svg';
+import logo from '../../../public/logo.png';
 import Searchbar from "./searchbar";
+import { useEffect, useState } from "react";
 
 const NewChat = () => {
+    const [isMounded, setIsMounted] = useState(false);
+    useEffect(() => setIsMounted(true), []);
+    if (!isMounded) return null;
+    
     return ( 
         <div className="size-full flex items-center justify-center flex-col gap-y-4">
-            <div className="w-full h-28 md:h-36 4k:h-44 flex items-center justify-center">
+            <div className="w-full h-36 md:h-48 lg:h-44 xl:h-56 2k:h-64 4k:h-72 flex items-center justify-center">
                 <Image 
                 src={logo}
                 alt="GeoQA logo"
-                width={100}
-                height={100}
+                width={200}
+                height={200}
+                quality={100}
+                priority
                 className="object-contain size-full"
                 />
             </div>

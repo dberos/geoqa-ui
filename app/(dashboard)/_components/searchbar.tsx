@@ -22,7 +22,7 @@ const Searchbar = () => {
     return ( 
         <SearchCommand>
             <SearchCommandInput 
-            placeholder="What do you want to learn?" 
+            placeholder="How may i assist you?" 
             value={inputValue}
             onChangeCapture={handleInputChange}
             clear={setInputValue}

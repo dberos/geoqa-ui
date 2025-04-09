@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useWindowScroll } from "react-use";
-import logo from "../../../public/logo.svg";
+import logo from "../../../public/logo.png";
 import { LogIn, User } from "lucide-react";
 import { useNavbarStyle } from "@/hooks/use-navbar-style";
 import { useSession } from "@/hooks/use-session";
@@ -67,7 +67,7 @@ const NavDesktop = () => {
                     priority
                     height={100}
                     width={100}
-                    className="size-full object-contain"
+                    className="size-14 object-contain"
                     />
                 </Link>
                 <ul className="flex items-center space-x-10 ml-8">

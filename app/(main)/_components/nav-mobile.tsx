@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/accordion"  
 import { useMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { ThemeToggle } from "@/components/theme-toggle";
-import logo from "../../../public/logo.svg";
+import logo from "../../../public/logo.png";
 import { useNavbarStyle } from "@/hooks/use-navbar-style";
 import { useSession } from "@/hooks/use-session";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -96,7 +96,7 @@ const NavMobile = () => {
                                     alt="GeoQA logo"
                                     width={100}
                                     height={100}
-                                    className="object-contain size-10"
+                                    className="object-contain size-12"
                                     />
                                 </Link>
                                 {

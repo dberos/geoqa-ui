@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import logo from "../../../public/logo.svg";
+import logo from "../../../public/logo.png";
 import GitHubButton from "./github-button";
 import GoogleButton from "./google-button";
 import { useEffect, useState } from "react";
