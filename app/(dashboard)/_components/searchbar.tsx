@@ -15,6 +15,19 @@ const Searchbar = () => {
         setInputValue(e.target.value);
     }
 
+    const [isSelected, setIsSelected] = useState(false);
+    const handleSelect = (text?: string) => {
+        if (text) {
+            setInputValue(text);
+        }
+        // Loading state
+        setIsSelected(true);
+        setTimeout(() => {
+            setInputValue('');
+            setIsSelected(false);
+        }, 1000)
+    }
+
     const [isMounded, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
     if (!isMounded) return null;
@@ -23,23 +36,33 @@ const Searchbar = () => {
         <SearchCommand>
             <SearchCommandInput 
             placeholder="How may i assist you?" 
+            disabled={isSelected}
             value={inputValue}
             onChangeCapture={handleInputChange}
             clear={setInputValue}
-            className="max-xl:text-base"
+            select={handleSelect}
+            isSelected={isSelected}
+            className="max-xl:text-base disabled:cursor-default"
             />
             {
-                inputValue &&
+                /**
+                 * Use this logic to show suggestions if needed
+                 * The user input command group is hidden anyway
+                 * Having this group also prevents auto selecting suggestions if inluded
+                 * SearchCommandGroup also has border-t
+                 */
+                inputValue && !isSelected &&
                 <SearchCommandList className="h-auto max-h-48 overflow-y-scroll [&::-webkit-scrollbar]:hidden">
-                    <SearchCommandGroup heading="Suggestions">
-                        <SearchCommandItem>
-                            Which countries border Greece?
-                        </SearchCommandItem>
-                        <SearchCommandItem>
-                            Where is the largest river in Greece?
-                        </SearchCommandItem>
-                        <SearchCommandItem>
-                            Where is the largest lake in Greece?
+                    <SearchCommandGroup 
+                    heading="User Input" 
+                    className="hidden"
+                    >
+                        <SearchCommandItem
+                        value={inputValue}
+                        className="data-[disabled]:pointer-events-auto cursor-pointer data-[disabled]:opacity-80 dark:data-[disabled]:opacity-50 max-xl:text-base"
+                        onSelect={() => handleSelect(inputValue)}
+                        >
+                            {inputValue}
                         </SearchCommandItem>
                     </SearchCommandGroup>
                 </SearchCommandList>

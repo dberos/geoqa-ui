@@ -32,7 +32,7 @@ const Services = () => {
                         alt='map'
                         width={100}
                         height={100}
-                        className="object-contain size-28 lg:size-32 4k:size-56"
+                        className="object-contain size-28 lg:size-32 4k:size-56 pointer-events-none"
                         />
                     </div>
                     <div className="h-full w-1/2 flex items-center justify-center lg:justify-start lg:ml-14 4k:ml-20">
@@ -41,7 +41,7 @@ const Services = () => {
                         alt='image'
                         width={100}
                         height={100}
-                        className="object-contain size-28 lg:size-32 4k:size-56"
+                        className="object-contain size-28 lg:size-32 4k:size-56 pointer-events-none"
                         />
                     </div>
                 </div>
@@ -51,7 +51,7 @@ const Services = () => {
                     alt='data'
                     width={100}
                     height={100}
-                    className="object-contain size-40 lg:size-44 4k:size-72 4k:mt-32"
+                    className="object-contain size-40 lg:size-44 4k:size-72 4k:mt-32 pointer-events-none"
                     />
                 </div>
                 </div>

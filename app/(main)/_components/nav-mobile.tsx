@@ -152,6 +152,16 @@ const NavMobile = () => {
                     </SheetHeader>
                     <div className="mt-10 p-4 flex flex-col">
                         <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="dashboard">
+                                <AccordionTrigger>Dashboard</AccordionTrigger>
+                                <AccordionContent>
+                                <Button variant="link" size="sm" className='cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
+                                    <Link href="/dashboard">
+                                        Start a new chat
+                                    </Link>
+                                </Button>
+                                </AccordionContent>
+                            </AccordionItem>
                             <AccordionItem value="legal">
                                 <AccordionTrigger>Legal</AccordionTrigger>
                                 <AccordionContent>

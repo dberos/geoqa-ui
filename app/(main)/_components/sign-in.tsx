@@ -33,7 +33,7 @@ const SignIn = ({ redirect }: { redirect?: string }) => {
                         alt="GeoQA logo"
                         width={100}
                         height={100}
-                        className="object-contain size-4/6"
+                        className="object-contain size-4/6 pointer-events-none"
                         />
                         <div className="absolute w-full h-0.5 bg-border bottom-0" />
                     </div>

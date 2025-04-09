@@ -16,7 +16,7 @@ const Authenticating = () => {
             width={100}
             height={100}
             priority
-            className="object0-contain h-3/6 w-4/6 max-md:ml-10 lg:h-2/6 animate-pulse duration-[3000ms]"
+            className="object0-contain h-3/6 w-4/6 max-md:ml-10 lg:h-2/6 animate-pulse duration-[3000ms] pointer-events-none"
             />
         </div>
     );

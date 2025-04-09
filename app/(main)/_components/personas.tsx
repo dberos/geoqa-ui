@@ -21,7 +21,7 @@ const Personas = () => {
                         alt={"non-experts"}
                         width={100}
                         height={100}
-                        className="object-contain size-4/6 lg:size-5/6 max-md:-mt-20"
+                        className="object-contain size-4/6 lg:size-5/6 max-md:-mt-20 pointer-events-none"
                         />
                     </div>
                     <div className="h-2/4 lg:h-full w-full lg:w-4/5 4k:w-3/5 lg:ml-10 flex flex-col order-1 lg:order-2 lg:p-6">
@@ -44,7 +44,7 @@ const Personas = () => {
                             alt={"experts"}
                             width={100}
                             height={100}
-                            className="object-contain size-4/6 lg:size-5/6"
+                            className="object-contain size-4/6 lg:size-5/6 pointer-events-none"
                             />
                         </div>
                         <div className="h-2/4 lg:h-full w-full lg:w-4/5 4k:w-3/5 lg:ml-10 flex flex-col order-1 lg:order-2 lg:p-6">

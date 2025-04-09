@@ -20,7 +20,7 @@ const NewChat = () => {
                 height={200}
                 quality={100}
                 priority
-                className="object-contain size-full"
+                className="object-contain size-full pointer-events-none"
                 />
             </div>
             <div className="w-full h-60 flex items-center justify-center">

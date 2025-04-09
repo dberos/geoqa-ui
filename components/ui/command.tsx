@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
-import { SearchIcon, SendHorizonal, X } from "lucide-react"
+import { Loader2, SearchIcon, SendHorizonal, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -97,9 +97,13 @@ function CommandInput({
 function SearchCommandInput({
   className,
   clear,
+  select,
+  isSelected,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input> & {
-    clear: React.Dispatch<React.SetStateAction<string>>
+    clear: React.Dispatch<React.SetStateAction<string>>,
+    select: (item?: string) => void,
+    isSelected: boolean
 }) {
   return (
     <div
@@ -107,7 +111,7 @@ function SearchCommandInput({
       className="flex h-12 4k:h-20 items-center gap-2 px-3 bg-neutral-100 dark:bg-neutral-900"
     >
       {
-        props.value ?
+        props.value && !isSelected ?
         <X className="size-4 shrink-0 opacity-50 cursor-pointer" onClick={() => clear('')}/> :
         <SearchIcon className="size-4 shrink-0 opacity-50" />
       }
@@ -119,7 +123,16 @@ function SearchCommandInput({
         )}
         {...props}
       />
-      <SendHorizonal className="size-4 shrink-0 opacity-50 cursor-pointer" />
+      {
+        isSelected ?
+        <Loader2 className="size-4 shrink-0 opacity-50 animate-spin" /> :
+        <SendHorizonal className={cn(
+          "size-4 shrink-0 opacity-50",
+          props.value && 'cursor-pointer'
+        )} 
+        onClick={() => select(props.value)}
+        />
+      }
     </div>
   )
 }
@@ -240,7 +253,7 @@ function SearchCommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "4k:h-12 data-[selected=true]:bg-neutral-200 dark:data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "xl:h-10 4k:h-12 data-[selected=true]:bg-neutral-200 dark:data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}

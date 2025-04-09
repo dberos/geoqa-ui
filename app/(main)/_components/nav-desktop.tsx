@@ -67,7 +67,7 @@ const NavDesktop = () => {
                     priority
                     height={100}
                     width={100}
-                    className="size-14 object-contain"
+                    className="size-14 object-contain pointer-events-none"
                     />
                 </Link>
                 <ul className="flex items-center space-x-10 ml-8">
