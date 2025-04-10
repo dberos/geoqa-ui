@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <section className="h-screen w-full flex ">
+        <section className="h-screen w-full flex">
             <Navigation />
             <div className="size-full flex flex-col">
                 <div className="w-full h-[10vh] 2k:h-[15vh] 4k:h-[20vh] flex items-center justify-center">

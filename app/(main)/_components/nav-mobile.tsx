@@ -88,9 +88,9 @@ const NavMobile = () => {
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="size-full">
-                    <SheetHeader className="mt-5 h-36 w-full flex items-center justify-center">
+                    <SheetHeader className="mt-5 h-30 md:h-36 w-full flex items-center justify-center">
                     <SheetTitle className="size-full">
-                        <div className="w-full h-36 grid grid-rows-2 grid-cols-1">
+                        <div className="w-full h-30 md:h-36 grid grid-rows-2 grid-cols-1">
                             <div className="size-full relative flex items-center justify-between p-4 2k:p-6 border-b-1">
                                 <Link href='/' onClick={() => setIsOpen(!isOpen)}>
                                     <Image 
@@ -245,7 +245,7 @@ const NavMobile = () => {
                         </Accordion>
                     </div>
                     <div className="w-full flex-1"/>
-                    <div className="w-full h-30 md:h-40 2k:h-64 4k:h-80 border-t-1 p-6 2k:p-8 flex items-center justify-center flex-col gap-y-2 2k:gap-y-5">
+                    <div className="w-full h-30 md:h-40 border-t-1 p-6 2k:p-8 flex items-center justify-center flex-col gap-y-2 2k:gap-y-5">
                     <p className="text-xs leading-4 2k:text-lg 2k:leading-6 4k:text-2xl 4k:leading-7 text-muted-foreground text-center">
                         Department of Informatics & Telecommunications
                         <br />

@@ -26,7 +26,7 @@ const SignIn = ({ redirect }: { redirect?: string }) => {
                 </h1>
             </div>
             <div className="flex size-full items-center justify-center">
-                <div className="h-4/6 w-3/4 md:w-2/4 lg:w-2/4 lg:h-9/12 xl:w-1/4 4k:w-1/6 4k:h-7/12 border-2 rounded-md grid grid-cols-1 grid-rows-[40%_60%]">
+                <div className="h-4/6 w-3/4 md:w-2/4 lg:w-2/4 lg:h-8/12 xl:h-9/12 xl:w-1/4 4k:w-1/6 4k:h-7/12 border-2 rounded-md grid grid-cols-1 grid-rows-[40%_60%]">
                     <div className="relative flex flex-col items-center justify-center">
                         <Image 
                         src={logo}

@@ -1,6 +1,8 @@
 import 'server-only';
 import { NextRequest, NextResponse } from "next/server";
 
+// TODO: Maybe remove upgrade-insecure-requests as it started giving weird net::ERR_SSL_PROTOCOL_ERROR at localhost
+
 export const createCsp = async (request: NextRequest, response: NextResponse) => {
     // Skip CSP in development
     if (process.env.NODE_ENV === 'development') {

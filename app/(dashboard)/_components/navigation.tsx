@@ -2,7 +2,7 @@
 
 import { useMedia } from "react-use";
 import Sidebar from "./sidebar";
-import MobileMenu from "./mobile-menu";
+import Menu from "./menu";
 
 const Navigation = () => {
     const isMobile = useMedia("(max-width: 1024px)", false);
@@ -12,7 +12,7 @@ const Navigation = () => {
         {
             !isMobile ?
             <Sidebar /> :
-            <MobileMenu />
+            <Menu />
         }
         </>
     );

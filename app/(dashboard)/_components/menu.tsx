@@ -7,15 +7,16 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { Menu } from "lucide-react";
+import { Menu as MenuIcon } from "lucide-react";
 import { useSession } from "@/hooks/use-session";
 import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Footer from "./footer";
 import Toolbar from "./toolbar";
+import Chats from "./chats";
 
-const MobileMenu = () => {
+const Menu = () => {
 
     const isOpen = useDashboardMobileMenuStore((state) => state.isOpen);
     const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
@@ -34,7 +35,7 @@ const MobileMenu = () => {
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
                     <Button variant="outline" size="icon" className='cursor-pointer'>
-                        <Menu />
+                        <MenuIcon />
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="size-full">
@@ -43,8 +44,9 @@ const MobileMenu = () => {
                         <Toolbar />
                     </SheetTitle>
                     </SheetHeader>
-                    <div className="size-full flex flex-col">
-                        <div className="w-full flex-1" />
+                    <div className="flex flex-col flex-1 min-h-0">
+                        <Chats />
+                        <div className="h-10 md:h-15" />
                         <Footer />
                     </div>
                 </SheetContent>
@@ -53,4 +55,4 @@ const MobileMenu = () => {
     );
 }
  
-export default MobileMenu;
+export default Menu;
