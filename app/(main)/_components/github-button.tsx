@@ -42,7 +42,9 @@ const GitHubButton = ({
     return ( 
         <Button 
         variant="ghost" 
-        className="w-5/6 h-10 lg:h-12 2k:h-14 lg:w-4/6 flex gap-x-4 2xl:text-base border-2 2k:text-xl cursor-pointer"
+        className="w-5/6 h-10 md:h-12 2k:h-14 lg:w-2/3 4k:w-2/5 4k:h-18 flex gap-x-4 2xl:text-base 2k:text-xl cursor-pointer
+        border-2 border-muted-foreground/50 dark:border-border
+        "
         onClick={handleClick}
         disabled={isDisabled}
         >

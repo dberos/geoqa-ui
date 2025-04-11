@@ -91,7 +91,7 @@ const NavDesktop = () => {
                 <ThemeToggle />
                 {
                     data?.session ? 
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
                             <Avatar className="cursor-pointer">
                                 <AvatarImage src={data?.session.avatarUrl} />

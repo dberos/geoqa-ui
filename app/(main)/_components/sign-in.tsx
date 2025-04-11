@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import logo from "../../../public/logo.png";
 import GitHubButton from "./github-button";
 import GoogleButton from "./google-button";
 import { useEffect, useState } from "react";
@@ -16,31 +14,30 @@ const SignIn = ({ redirect }: { redirect?: string }) => {
         }
     }, [redirect]);
     return ( 
-        <div className="size-full grid grid-cols-1 grid-rows-[30%_70%]">
-            <div className="flex items-center justify-center flex-col">
-                <h2 className="text-3xl lg:text-4xl">
-                    Continue to
-                </h2>
-                <h1 className="text-6xl lg:text-7xl 2k:text-8xl 4k:text-9xl font-semibold">
-                    GeoQA
-                </h1>
-            </div>
-            <div className="flex size-full items-center justify-center">
-                <div className="h-4/6 w-3/4 md:w-2/4 lg:w-2/4 lg:h-8/12 xl:h-9/12 xl:w-1/4 4k:w-1/6 4k:h-7/12 border-2 rounded-md grid grid-cols-1 grid-rows-[40%_60%]">
-                    <div className="relative flex flex-col items-center justify-center">
-                        <Image 
-                        src={logo}
-                        alt="GeoQA logo"
-                        width={100}
-                        height={100}
-                        className="object-contain size-4/6 pointer-events-none"
-                        />
-                        <div className="absolute w-full h-0.5 bg-border bottom-0" />
+        <div className="size-full flex items-center justify-center">
+            <div 
+            className="w-4/5 h-[400px] md:w-1/2 lg:h-[410px] xl:w-1/3 xl:h-[450px] 2xl:w-1/4 2xl:h-1/2 2k:h-1/3 2k:w-1/3 
+            border-2 border-muted-foreground/50 dark:border-border rounded-lg flex flex-col
+            ">
+                <div className="w-full h-14 xl:h-24">
+                    <div className="w-0.5 h-full ml-auto mr-auto bg-muted-foreground/50 dark:bg-border" />
+                </div>
+                <div className="size-full flex flex-col">
+                    <div className="w-full h-1/2 flex items-center justify-center">
+                        <h1 className="text-center text-2xl lg:text-3xl 4k:text-4xl">
+                            Continue to <br />
+                            <span className="text-3xl lg:text-4xl font-semibold 4k:text-5xl">
+                                GeoQA
+                            </span>
+                        </h1>
                     </div>
-                    <div className="flex items-center justify-center flex-col gap-y-4">
-                        <GitHubButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
-                        <GoogleButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
+                    <div className="w-full h-1/2 flex flex-col gap-y-4 lg:gap-y-6 items-center justify-start">
+                    <GitHubButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
+                    <GoogleButton isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
                     </div>
+                </div>
+                <div className="w-full h-14 xl:h-24">
+                    <div className="w-0.5 h-full ml-auto mr-auto bg-muted-foreground/50 dark:bg-border" />
                 </div>
             </div>
         </div>
