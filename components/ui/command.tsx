@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
-import { Loader2, SearchIcon, SendHorizonal, X } from "lucide-react"
+import { SearchIcon, SendHorizonal, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -96,12 +96,10 @@ function CommandInput({
 // Edited shadcn CommandInput
 function SearchCommandInput({
   className,
-  clear,
   select,
   isSelected,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input> & {
-    clear: React.Dispatch<React.SetStateAction<string>>,
     select: (item?: string) => void,
     isSelected: boolean
 }) {
@@ -112,7 +110,7 @@ function SearchCommandInput({
     >
       {
         props.value && !isSelected ?
-        <X className="size-4 shrink-0 opacity-50 cursor-pointer" onClick={() => clear('')}/> :
+        <X className="size-4 shrink-0 opacity-50 cursor-pointer" onClick={() => select('')}/> :
         <SearchIcon className="size-4 shrink-0 opacity-50" />
       }
       <CommandPrimitive.Input
@@ -123,16 +121,19 @@ function SearchCommandInput({
         )}
         {...props}
       />
-      {
-        isSelected ?
-        <Loader2 className="size-4 shrink-0 opacity-50 animate-spin" /> :
-        <SendHorizonal className={cn(
-          "size-4 shrink-0 opacity-50",
-          props.value && 'cursor-pointer'
+      <SendHorizonal className={cn(
+        "size-4 shrink-0 opacity-50",
+        props.value && 'cursor-pointer'
         )} 
-        onClick={() => select(props.value)}
+        onClick={() => {
+          select(props.value);
+          // Also blur the input as it is selected, like the onSelect
+          // But not on delete
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement?.blur();
+          }
+        }}
         />
-      }
     </div>
   )
 }

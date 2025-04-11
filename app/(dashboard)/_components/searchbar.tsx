@@ -19,13 +19,16 @@ const Searchbar = () => {
     const handleSelect = (text?: string) => {
         if (text) {
             setInputValue(text);
+            // Loading state
+            setIsSelected(true);
+            setTimeout(() => {
+                setInputValue('');
+                setIsSelected(false);
+            }, 200)
         }
-        // Loading state
-        setIsSelected(true);
-        setTimeout(() => {
+        else {
             setInputValue('');
-            setIsSelected(false);
-        }, 1000)
+        }
     }
 
     const [isMounded, setIsMounted] = useState(false);
@@ -35,11 +38,10 @@ const Searchbar = () => {
     return ( 
         <SearchCommand>
             <SearchCommandInput 
-            placeholder="How may i assist you?" 
+            placeholder="How may I assist you?" 
             disabled={isSelected}
             value={inputValue}
             onChangeCapture={handleInputChange}
-            clear={setInputValue}
             select={handleSelect}
             isSelected={isSelected}
             className="max-xl:text-base disabled:cursor-default"
