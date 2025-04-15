@@ -11,11 +11,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <section className="h-screen w-full flex">
             <Navigation />
             <div className="size-full flex flex-col">
-                <div className="w-full h-[10vh] 2k:h-[15vh] 4k:h-[20vh] flex items-center justify-center">
+                <div className="w-full h-[10vh] 4k:h-[15vh] flex items-center justify-center">
                     <div className="w-0.5 h-full bg-muted-foreground/50 dark:bg-border" />
                 </div>
-                {children}
-                <div className="w-full h-[10vh] 2k:h-[15vh] 4k:h-[20vh] flex items-center justify-center">
+                <div className="flex-1 overflow-hidden">
+                    {children}
+                </div>
+                <div className="w-full h-[10vh] 4k:h-[15vh] flex items-center justify-center">
                     <div className="w-0.5 h-full bg-muted-foreground/50 dark:bg-border" />
                 </div>
             </div>
