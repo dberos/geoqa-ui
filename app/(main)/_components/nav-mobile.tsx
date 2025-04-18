@@ -60,7 +60,9 @@ const NavMobile = () => {
         mutate({},
             {
                 onSuccess: () => {
-                    router.replace('/');
+                    // Use window instead of router for mobile issue
+                    // Not blocking dashboard after sign out
+                    window.location.replace('/');
                     setIsOpen(false);
                 },
                 onError: (error) => {
