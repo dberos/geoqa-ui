@@ -1,12 +1,8 @@
 import Messages from "@/app/(dashboard)/_components/messages";
 import Searchbar from "@/app/(dashboard)/_components/searchbar";
-import { authenticateSession } from "@/server/session";
-import { redirect } from "next/navigation";
 
 export default async function ChatIdPage({ params }: { params: Promise<{ chatId: string }> }) {
     await params;
-    const success = await authenticateSession();
-    if (!success) redirect('/');
     return (
         <main className="h-full w-full flex flex-col items-center justify-between">
             <Messages />

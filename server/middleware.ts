@@ -70,7 +70,7 @@ class MiddlewareResponse {
 
     public protect(): MiddlewareResponse {
         this.chain = this.chain.then(async () => {
-            if (!this.response.cookies?.get('accessToken')) {
+            if (!this.response.cookies?.get('accessToken')?.value) {
                 if (this.isProtectedRoute.some((route) => new RegExp(route).test(this.request.nextUrl.pathname))) {
                     // Create a new URL
                     const url = new URL(this.redirectUrl, this.request.url);

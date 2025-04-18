@@ -2,7 +2,6 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { createJWT, decodeJWT, verifyJWT } from '@/lib/session';
 import { v4 as uuidv4 } from 'uuid';
-import { cookies } from 'next/headers';
 
 export const refreshSession = async (request: NextRequest, response: NextResponse) => {
     try {
@@ -11,6 +10,8 @@ export const refreshSession = async (request: NextRequest, response: NextRespons
         const refreshToken = request.cookies.get('refreshToken')?.value || "";
 
         if (!accessToken || !refreshToken) {
+            response.cookies?.delete('accessToken');
+            response.cookies?.delete('refreshToken');
             return response;
         }
 
@@ -119,13 +120,8 @@ export const refreshSession = async (request: NextRequest, response: NextRespons
     }
     catch (error) {
         console.error(error);
+        response.cookies?.delete('accessToken');
+        response.cookies?.delete('refreshToken');
         return response;
     }
-}
-
-export const authenticateSession = async (): Promise<boolean> => {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore?.get('accessToken')?.value || "";
-    const verifiedAccessToken = await verifyJWT(accessToken);
-    return verifiedAccessToken ? true : false;
 }
