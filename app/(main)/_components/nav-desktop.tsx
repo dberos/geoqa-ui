@@ -41,9 +41,7 @@ const NavDesktop = () => {
         mutate({},
             {
                 onSuccess: () => {
-                    // Use window instead of router for mobile issue
-                    // Not blocking dashboard after sign out
-                    window.location.replace('/');
+                    router.replace('/');
                 },
                 onError: (error) => {
                     console.error(error);
