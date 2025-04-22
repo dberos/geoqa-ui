@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";  
 import { ChevronDown } from "lucide-react";
+import Map from "./map";
 
 const Message = () => {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +76,7 @@ const Message = () => {
                                 Results
                                 <ChevronDown className="text-muted-foreground size-4" />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
+                            <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()} className="z-50">
                             <DropdownMenuItem onClick={() => {
                                 setTabValue("results");
                                 setResultsTab("map");
@@ -109,9 +110,7 @@ const Message = () => {
                 <TabsContent value="results">
                     {
                         resultsTab === "map" && 
-                        <div>
-                            Map here.
-                        </div>
+                        <Map />
                     }
                     {
                         resultsTab === "images" && 
