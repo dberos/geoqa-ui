@@ -1,8 +1,6 @@
 import 'server-only';
 import { NextRequest, NextResponse } from "next/server";
 
-// TODO: Maybe remove upgrade-insecure-requests as it started giving weird net::ERR_SSL_PROTOCOL_ERROR at localhost
-
 export const createCsp = async (request: NextRequest, response: NextResponse) => {
     // Skip CSP in development
     if (process.env.NODE_ENV === 'development') {
@@ -12,7 +10,7 @@ export const createCsp = async (request: NextRequest, response: NextResponse) =>
     // Get request headers
     const requestHeaders = new Headers(request.headers);
     
-    const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
     const cspHeader = `
     default-src 'self';
     base-uri 'self';
@@ -20,7 +18,7 @@ export const createCsp = async (request: NextRequest, response: NextResponse) =>
     font-src 'self' https:;
     form-action 'self';
     frame-ancestors 'none';
-    img-src 'self' https:;
+    img-src 'self' https: data:;
     manifest-src 'self';
     media-src 'self';
     object-src 'none';
@@ -35,7 +33,7 @@ export const createCsp = async (request: NextRequest, response: NextResponse) =>
     // Replace newline characters and spaces
     const contentSecurityPolicyHeaderValue = cspHeader
         .replace(/\s{2,}/g, ' ')
-        .trim()
+        .trim();
     
     // Set the CSP headers
     requestHeaders.set('X-NONCE', nonce);
