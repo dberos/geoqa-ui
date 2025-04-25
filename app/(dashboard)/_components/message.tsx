@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";  
 import { ChevronDown } from "lucide-react";
 import Map from "./map";
+import Carousel from "./carousel";
 
 const Message = () => {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -114,9 +115,7 @@ const Message = () => {
                     }
                     {
                         resultsTab === "images" && 
-                        <div>
-                            Images here.
-                        </div>
+                        <Carousel />
                     }
                     {
                         resultsTab === "table" && 
