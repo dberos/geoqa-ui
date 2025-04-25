@@ -26,7 +26,7 @@ const Carousel = () => {
                         >
                             <div className="p-1 size-full">
                                 <Card className="size-full border-8 p-0">
-                                    <CardContent className="flex size-full items-center justify-center relative">
+                                    <CardContent className="size-full relative">
                                         <Image 
                                         src={homeHero}
                                         alt="Home hero"
