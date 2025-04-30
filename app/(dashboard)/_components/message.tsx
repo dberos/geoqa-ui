@@ -12,6 +12,8 @@ import {
 import { ChevronDown } from "lucide-react";
 import Map from "./map";
 import Carousel from "./carousel";
+import DataTable from "./data-table";
+import { columns, results } from "../_data";
 
 const Message = () => {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -119,9 +121,7 @@ const Message = () => {
                     }
                     {
                         resultsTab === "table" && 
-                        <div>
-                            Table here.
-                        </div>
+                        <DataTable  columns={columns} data={results} />
                     }
                     {
                         resultsTab === "text" && 
