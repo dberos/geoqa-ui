@@ -31,6 +31,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { useMedia } from "react-use"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -54,11 +55,15 @@ const DataTable = <TData, TValue> ({
   })
 
   const isMobile = useMedia("(max-width: 1280px)", false);
-
+  
   return (
     <div className="size-full relative">
         <div className="border-b">
-        <Table>
+        <Table className={cn(
+            "md:table-fixed",
+            columns.length <= 3 && "table-fixed"
+        )}>
+
             <TableHeader className="2xl:h-12 2k:h-14 4k:h-16">
             {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -85,14 +90,17 @@ const DataTable = <TData, TValue> ({
                     data-state={row.getIsSelected() && "selected"}
                 >
                     {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="max-w-20 md:max-w-32 lg:max-w-40 xl:max-w-52 2xl:max-w-96 4k:max-w-[600px] max-lg:h-11 xl:h-14 2k:h-18 4k:h-22 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <TableCell key={cell.id} className={cn(
+                        "max-lg:h-11 xl:h-14 2k:h-18 4k:h-22",
+                        columns.length > 3 && "max-md:max-w-20",
+                    )}>
                         {
                             !isMobile ?
                             <HoverCard>
                             <HoverCardTrigger asChild>
                             <Button
                             variant='ghost'
-                            className="hover:!bg-transparent hover:!text-inherit block h-full max-w-20 md:max-w-32 lg:max-w-40 xl:max-w-52 2xl:max-w-96 4k:max-w-[600px] p-0 2k:text-lg 4k:text-xl text-left overflow-hidden text-ellipsis whitespace-nowrap"
+                            className="hover:!bg-transparent hover:!text-inherit block size-full p-0 2k:text-lg 4k:text-xl text-left overflow-hidden text-ellipsis whitespace-nowrap"
                             >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </Button>
