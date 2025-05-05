@@ -6,8 +6,6 @@ import {
   CarouselNext as CarouselNextUI,
   CarouselPrevious as CarouselPreviousUI,
 } from "@/components/ui/carousel";
-import homeHero from '../../../public/home_hero.jpg';
-import Image from "next/image";
 
 const Carousel = () => {
     return ( 
@@ -27,13 +25,10 @@ const Carousel = () => {
                             <div className="p-1 size-full">
                                 <Card className="size-full border-8 p-0">
                                     <CardContent className="size-full relative">
-                                        <Image 
-                                        src={homeHero}
+                                        <img 
+                                        src={'/home_hero.jpg'}
                                         alt="Home hero"
-                                        fill
-                                        priority
-                                        quality={100}
-                                        className="object-fill rounded-md"
+                                        className="absolute inset-0 size-full object-fill rounded-md"
                                         />
                                     </CardContent>
                                 </Card>
