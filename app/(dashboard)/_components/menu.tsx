@@ -22,13 +22,13 @@ const Menu = () => {
     const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
 
     const { data, error, isLoading } = useSession();
-        if (!isLoading && !error) {
-            console.log(data?.session);
-        }
+    if (!isLoading && !error) {
+        console.log(data?.session);
+    }
 
-        const [isMounted, setIsMounted] = useState(false);
-        useEffect(() => setIsMounted(true), []);
-        if (!isMounted) return null;
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => setIsMounted(true), []);
+    if (!isMounted) return null;
         
     return ( 
       <nav className="absolute top-6 left-6">

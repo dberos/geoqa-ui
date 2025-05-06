@@ -14,6 +14,7 @@ import Map from "./map";
 import Carousel from "./carousel";
 import DataTable from "./data-table";
 import { columns, results } from "../_data";
+import Question from "./question";
 
 const Message = () => {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -108,7 +109,9 @@ const Message = () => {
                         </DropdownMenu>
                     </CustomTabsTrigger>
                 </TabsList>
-                <TabsContent value="question">Question here.</TabsContent>
+                <TabsContent value="question">
+                    <Question />
+                </TabsContent>
                 <TabsContent value="query">Query here.</TabsContent>
                 <TabsContent value="results">
                     {
