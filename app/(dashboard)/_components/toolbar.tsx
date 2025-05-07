@@ -31,9 +31,9 @@ const Toolbar = () => {
     const { mutate } = useSignOut();
     
     const { data, error, isLoading } = useSession();
-        if (!isLoading && !error) {
-            console.log(data?.session);
-        }
+    if (!isLoading && !error) {
+        console.log(data?.session);
+    }
     
     const router = useRouter();
 

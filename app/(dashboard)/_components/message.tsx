@@ -15,6 +15,7 @@ import Carousel from "./carousel";
 import DataTable from "./data-table";
 import { columns, results } from "../_data";
 import Question from "./question";
+import Query from "./query";
 
 const Message = () => {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -112,7 +113,9 @@ const Message = () => {
                 <TabsContent value="question">
                     <Question />
                 </TabsContent>
-                <TabsContent value="query">Query here.</TabsContent>
+                <TabsContent value="query">
+                    <Query />
+                </TabsContent>
                 <TabsContent value="results">
                     {
                         resultsTab === "map" && 
