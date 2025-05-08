@@ -126,7 +126,7 @@
     @apply bg-transparent w-2;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-200 rounded-sm;
+    @apply bg-neutral-300 rounded-sm;
   }
   .dark {
     ::-webkit-scrollbar-thumb {

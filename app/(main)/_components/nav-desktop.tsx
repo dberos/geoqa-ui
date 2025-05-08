@@ -28,10 +28,7 @@ const NavDesktop = () => {
 
     const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarDesktopId");
 
-    const { data, error, isLoading } = useSession();
-    if (!isLoading && !error) {
-        console.log(data?.session);
-    }
+    const { data } = useSession();
 
     const { mutate } = useSignOut();
 
@@ -41,8 +38,10 @@ const NavDesktop = () => {
         mutate({},
             {
                 onSuccess: () => {
-                    // Use window instead of router for mobile issue
-                    // Not blocking dashboard after sign out
+                    // Use window instead of router
+                    // When signing out, the cookies are cleared from the api
+                    // But the set-cookie is already present from middleware
+                    // So it needs a full page reload
                     window.location.replace('/');
                 },
                 onError: (error) => {

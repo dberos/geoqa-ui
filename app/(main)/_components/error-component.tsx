@@ -13,7 +13,7 @@ const ErrorComponent = () => {
             width={100}
             height={100}
             priority
-            className="object-contain h-2/6 w-4/6"
+            className="object-contain h-1/3 w-2/3 md:w-1/2"
             />
         </div>
     );

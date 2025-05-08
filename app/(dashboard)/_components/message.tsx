@@ -16,6 +16,7 @@ import DataTable from "./data-table";
 import { columns, results } from "../_data";
 import Question from "./question";
 import Query from "./query";
+import Text from "./text";
 
 const Message = () => {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -131,9 +132,7 @@ const Message = () => {
                     }
                     {
                         resultsTab === "text" && 
-                        <div>
-                            Text here.
-                        </div>
+                        <Text />
                     }
                 </TabsContent>
             </Tabs>

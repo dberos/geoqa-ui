@@ -8,7 +8,6 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Menu as MenuIcon } from "lucide-react";
-import { useSession } from "@/hooks/use-session";
 import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -20,11 +19,6 @@ const Menu = () => {
 
     const isOpen = useDashboardMobileMenuStore((state) => state.isOpen);
     const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
-
-    const { data, error, isLoading } = useSession();
-    if (!isLoading && !error) {
-        console.log(data?.session);
-    }
 
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
