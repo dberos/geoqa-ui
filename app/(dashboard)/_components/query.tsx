@@ -14,7 +14,7 @@ const Query = () => {
             <div className="h-[calc(100%-48px)] w-full p-2 2xl:p-4 2k:p-6 2xl:grid 2xl:grid-rows-1 2xl:grid-cols-2">
                 <div>
                     <p className="max-h-54 lg:max-h-42 xl:max-h-61 2xl:max-h-66 2k:max-h-91 4k:max-h-106
-                    overflow-hidden overflow-y-scroll [&::-webkit-scrollbar]:hidden whitespace-pre-wrap break-words
+                    overflow-hidden overflow-y-auto whitespace-pre-wrap break-words
                     text-left text-base 2k:text-lg 4k:text-xl">
                         {
                         dedent( `

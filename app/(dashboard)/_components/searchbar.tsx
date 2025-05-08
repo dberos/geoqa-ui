@@ -54,7 +54,7 @@ const Searchbar = () => {
                  * SearchCommandGroup also has border-t
                  */
                 inputValue && !isSelected &&
-                <SearchCommandList className="h-auto max-h-48 overflow-y-scroll [&::-webkit-scrollbar]:hidden">
+                <SearchCommandList className="h-auto max-h-48 overflow-y-auto">
                     <SearchCommandGroup 
                     heading="User Input" 
                     className="hidden"

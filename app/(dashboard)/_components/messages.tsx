@@ -12,7 +12,7 @@ const Messages = () => {
 
     return (
         <div className="flex-1 w-full min-h-0">
-            <div className="h-full w-full overflow-y-auto snap-y snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden">
+            <div className="h-full w-full overflow-y-auto snap-y snap-mandatory scroll-smooth">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <div
                         key={i}

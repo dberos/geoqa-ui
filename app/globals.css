@@ -122,4 +122,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  ::-webkit-scrollbar {
+    @apply bg-transparent w-2;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-200 rounded-sm;
+  }
+  .dark {
+    ::-webkit-scrollbar-thumb {
+      @apply bg-neutral-800;
+    }
+  }
 }

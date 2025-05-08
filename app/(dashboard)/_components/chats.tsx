@@ -19,7 +19,7 @@ const Chats = () => {
         description: "10/4/2025",
     }));
     return ( 
-        <div className="flex-1 overflow-y-auto pl-6 pr-6 lg:p-4 [&::-webkit-scrollbar]:hidden">
+        <div className="flex-1 overflow-y-auto pl-6 pr-6 lg:p-4">
             <Accordion type="single" collapsible>
                 {
                     chats.map((item) => (
