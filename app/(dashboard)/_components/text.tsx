@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { MessageSquareText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const Text = () => {
+const Text = ({ textualResponse }: { textualResponse: string | undefined | null }) => {
     const paragraphRef = useRef<HTMLParagraphElement>(null);
     const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -33,7 +33,7 @@ const Text = () => {
                     isOverflowing && "px-4"
                 )}
                 >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nunc urna, laoreet non iaculis ut, imperdiet et velit. Suspendisse euismod nisi vitae ipsum tempor, vitae varius nunc consequat. Fusce eu purus et mauris malesuada ornare. Maecenas commodo est nec bibendum tincidunt. Etiam facilisis, urna non facilisis tincidunt, metus magna tempus libero, quis sodales eros magna at nisi. Aliquam ut ultrices diam, et elementum diam. In vulputate commodo metus, ut feugiat turpis euismod quis. Phasellus hendrerit cursus ante vitae rhoncus. Morbi congue nec nibh sed finibus. Morbi vel tristique lorem, id convallis metus. Quisque sit amet maximus enim, non blandit nisi. Aenean vitae nulla rutrum, interdum enim sed, tincidunt nisi.
+                    {textualResponse}
                 </p>
             </div>
             <div className="size-full flex items-center justify-center">

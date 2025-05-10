@@ -6,23 +6,34 @@ export type UserType = {
     googleId: string | null,
     name: string,
     avatarUrl: string,
-}
+};
 
 export enum OathEnum {
     GITHUB,
     GOOGLE
-}
+};
 
 export type OathUserType = {
     id: string,
     name: string,
     avatarUrl: string
     type: OathEnum
-}
+};
 
 export interface SessionPayload extends JWTPayload {
     id?: string,
     sessionId?: string,
     name?: string,
     avatarUrl?: string,
-}
+};
+
+export type MessageType = {
+    id: string;
+    chatId: string;
+    question?: string | null;
+    query?: string | null;
+    queryResults?: string | null;
+    textualResponse?: string | null;
+    isLoading?: boolean;
+    createdAt?: string;
+};

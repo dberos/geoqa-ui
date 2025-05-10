@@ -7,9 +7,18 @@ import {
     SearchCommandItem,
     SearchCommandList,
 } from "@/components/ui/command"  
+import { usePostMessage } from "@/hooks/use-post-message";
+import { usePostChat } from "@/hooks/use-post.chat";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Searchbar = () => {
+
+    const { mutate } = usePostChat();
+    const { mutate: messageMutate } = usePostMessage();
+
+    const router = useRouter();
+
     const [inputValue, setInputValue] = useState('');
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
@@ -22,8 +31,30 @@ const Searchbar = () => {
             // Loading state
             setIsSelected(true);
             setTimeout(() => {
-                setInputValue('');
-                setIsSelected(false);
+                mutate({ json: { question: text } }, 
+                    {
+                        onSuccess: (data) => {
+                            setInputValue('');
+                            setIsSelected(false);
+                            router.push(`/dashboard/chats/${data.chatId}`);
+                            setTimeout(() => {
+                                messageMutate({ param: { messageId: data.messageId || "" } },
+                                {
+                                    onError: () => {
+                                        router.push('/error');
+                                    }
+                                }
+                            )
+                            }, 1000);
+                        },
+                        onError: () => {
+                            setInputValue('');
+                            setIsSelected(false);
+                            router.push('/error');
+                        }
+                    }
+                )
+                
             }, 200)
         }
         else {

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { MessageCircleQuestion } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const Question = () => {
+const Question = ({ question }: { question: string | undefined | null }) => {
     const paragraphRef = useRef<HTMLParagraphElement>(null);
     const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -33,7 +33,7 @@ const Question = () => {
                     isOverflowing && "px-4"
                 )}
                 >
-                    Find 10 images of Piedmont with cloud coverage under 20% and more than 50% vegetation taken in August 2022.
+                    {question}
                 </p>
             </div>
             <div className="size-full flex items-center justify-center">

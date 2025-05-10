@@ -23,45 +23,19 @@ const FormSchema = z.object({
     query: z.string()
 });
 
-const QueryEdit = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const QueryEdit = ({ 
+    setIsOpen, 
+    query
+ }: { 
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+    query: string | undefined | null 
+}) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-        query: dedent( 
-        `
-        PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-        PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
-        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-        PREFIX yago: <http://yago-knowledge.org/resource/>
-        PREFIX y2geor: <http://kr.di.uoa.gr/yago2geo/resource/>
-        PREFIX y2geoo: <http://kr.di.uoa.gr/yago2geo/ontology/>
-        PREFIX strdf: <http://strdf.di.uoa.gr/ontology#>
-        PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>
-        PREFIX da4dte: <http://ai.di.uoa.gr/da4dte/ontology/>
-        PREFIX pnyqa: <http://pnyqa.di.uoa.gr/ontology/>
-        PREFIX owl: <http://www.w3.org/2002/07/owl#>
-
-        SELECT DISTINCT  ?c_image_10 ?cWKT10 ?thumb
-        WHERE
-        { ?c_image_10  rdf:type          da4dte:Image ;
-                    geo:hasGeometry      ?cGeometry10 .
-            ?cGeometry10  geo:asWKT        ?cWKT10 .
-            ?c_image_10  da4dte:hasTimestamp  ?time .
-            ?c_image_10  da4dte:hasThumbnail  ?thumb .
-            OPTIONAL
-            { yago:Belgium  geo:hasGeometry  ?iGeometry1 .
-                ?iGeometry1  geo:asWKT     ?iWKT1
-            }
-            ?c_image_10  da4dte:hasSnowIcePercentage  ?p_snow_36 . 
-            yago:Belgium  geo:sfIntersects  ?c_image_10
-            FILTER ( ?p_snow_36 > 10.0 )
-        }
-        LIMIT   10
-        `)
+        query: dedent(query || "")
     }
   });
   function onSubmit(data: z.infer<typeof FormSchema>) {

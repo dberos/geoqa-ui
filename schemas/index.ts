@@ -24,4 +24,8 @@ export const RefreshSchema = z.object({
     oldJti: z.string(),
     jti: z.string(),
     exp: z.number()
-})
+});
+
+export const PostChatSchema = z.object({
+    question: z.string()
+});
