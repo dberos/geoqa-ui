@@ -22,20 +22,21 @@ export const tokensTable = pgTable("tokens", {
 });
 
 export const chatsTable = pgTable("chats", {
-    id: uuid().primaryKey().defaultRandom(),
-    userId: uuid().notNull().references(() => usersTable.id, { onDelete: "cascade" }),
-    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  id: uuid().primaryKey().defaultRandom(),
+  userId: uuid().notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  name: varchar({ length: 255 }).default('New Chat'),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 });
 
 export const messagesTable = pgTable("messages", {
-    id: uuid().primaryKey().defaultRandom(),
-    chatId: uuid().notNull().references(() => chatsTable.id, { onDelete: "cascade" }),
-    question: text(),
-    query: text(),
-    queryResults: text(),
-    textualResponse: text(),
-    errorMessage: text(),
-    // Whether the engine has been fetched or show loading state while fetching
-    isLoading: boolean().notNull().default(true),
-    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  id: uuid().primaryKey().defaultRandom(),
+  chatId: uuid().notNull().references(() => chatsTable.id, { onDelete: "cascade" }),
+  question: text(),
+  query: text(),
+  queryResults: text(),
+  textualResponse: text(),
+  errorMessage: text(),
+  // Whether the engine has been fetched or show loading state while fetching
+  isLoading: boolean().notNull().default(true),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 });

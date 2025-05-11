@@ -34,7 +34,6 @@ export const userMiddleware = createMiddleware<MiddlewareContext>(
         await next();
     }
 )
-// TODO: Fix this since it gets the cookie from the request, not the update one
 export const sessionMiddleware = createMiddleware<MiddlewareContext>(
     async (c, next) => {
         try {

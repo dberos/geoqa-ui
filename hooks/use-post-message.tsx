@@ -20,7 +20,7 @@ export const usePostMessage = () => {
                 return await response.json();
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['messages'] })
+                queryClient.invalidateQueries({ queryKey: ['messages'] });
             }
         })
     return mutation;

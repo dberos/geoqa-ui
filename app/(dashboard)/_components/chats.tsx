@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Accordion,
     AccordionContent,
@@ -11,25 +13,47 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { usefindChats } from "@/hooks/use-find-chats";
+import { useSession } from "@/hooks/use-session";
+import { format } from 'date-fns';
+import Link from "next/link";
+import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
+import { usePathname } from 'next/navigation';
+import { cn } from "@/lib/utils";
 
 const Chats = () => {
-    const chats = Array.from({ length: 15 }, (_, index) => ({
-        id: index + 1,
-        title: 'New Chat',
-        description: "10/4/2025",
-    }));
+    const pathname = usePathname();
+    const segments = pathname.split('/');
+    const chatId = segments[segments.length - 1];
+
+    const { data } = useSession();
+    const { data: chats } = usefindChats(data?.session?.id || "");
+
+    const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
+
     return ( 
-        <div className="flex-1 overflow-y-auto pl-6 pr-6 lg:p-4">
+        <div className="flex-1 overflow-y-auto">
             <Accordion type="single" collapsible>
                 {
-                    chats.map((item) => (
-                        <AccordionItem key={item.id} value={`item-${item.id}`}>
-                            <AccordionTrigger className="cursor-pointer">
-                                {item.title}
+                    chats?.chats && chats.chats.map((item) => (
+                        <AccordionItem 
+                        key={item.id} 
+                        value={`item-${item.id}`}
+                        className={cn(
+                            "cursor-pointer",
+                            chatId === item.id && 'bg-neutral-300 dark:bg-neutral-700'
+                        )}
+                        >
+                            <AccordionTrigger 
+                            className="cursor-pointer px-6 lg:p-4"
+                            >
+                                <Link href={`/dashboard/chats/${item.id}`} onClick={() => setIsOpen(false)}>
+                                    {item.name}
+                                </Link>
                             </AccordionTrigger>
-                            <AccordionContent className="text-muted-foreground flex flex-row items-center justify-between">
+                            <AccordionContent className="text-muted-foreground flex flex-row items-center justify-between px-6 lg:px-4">
                                 <p className="cursor-pointer">
-                                    {item.description}
+                                    {format(new Date(item.createdAt), 'dd/MM/yy')}
                                 </p>
                                 <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger>
