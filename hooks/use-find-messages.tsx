@@ -5,7 +5,7 @@ export const usefindMessages = (chatId: string) => {
     const query = useQuery({
         queryKey: ['messages', chatId],
         queryFn: async () => {
-            const response = await client.api.chats[":chatId"]["$get"]({
+            const response = await client.api.messages[":chatId"]["$get"]({
                 param: { chatId },
             });
             if (!response.ok) {

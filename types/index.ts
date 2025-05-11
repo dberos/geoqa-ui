@@ -27,6 +27,13 @@ export interface SessionPayload extends JWTPayload {
     avatarUrl?: string,
 };
 
+export type ChatType = {
+     id: string;
+    userId: string;
+    name: string | null;
+    createdAt: string;
+};
+
 export type MessageType = {
     id: string;
     chatId: string;

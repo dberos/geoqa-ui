@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { chatsTable } from "@/db/schema";
 import { sessionMiddleware } from "@/lib/session-middleware";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { Hono } from "hono";
 
 const app = new Hono()
@@ -18,7 +18,8 @@ const app = new Hono()
                 const chats = await db
                 .select()
                 .from(chatsTable)
-                .where(eq(chatsTable.userId, userId));
+                .where(eq(chatsTable.userId, userId))
+                .orderBy(asc(chatsTable.createdAt));
 
                 return c.json({ chats });
             }

@@ -6,7 +6,7 @@ export const createCors = async (request: NextRequest, response: NextResponse) =
     const requestHeaders = new Headers(request.headers);
     const origin = requestHeaders.get("Origin");
     const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL!;
-    const allowedMethods = ["GET", "POST", "OPTIONS"];
+    const allowedMethods = ["GET", "POST", "PATCH", "OPTIONS"];
 
     // Add CORS headers
     const corsHeaders = {

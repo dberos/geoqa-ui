@@ -29,3 +29,7 @@ export const RefreshSchema = z.object({
 export const PostChatSchema = z.object({
     question: z.string()
 });
+
+export const UpdateChatNameSchema = z.object({
+    name: z.string().min(4).max(255),
+});
