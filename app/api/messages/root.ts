@@ -72,6 +72,7 @@ const app = new Hono()
                     textualResponse: result.textualResponse,
                     errorMessage: result.errorMessage
                 })
+                .where(eq(messagesTable.id, messageId))
                 .returning();
 
                 return c.json({ message: updatedMessage });
