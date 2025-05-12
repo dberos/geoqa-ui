@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { sessionMiddleware } from "@/lib/session-middleware";
+import { sessionMiddleware } from "@/lib/hono-middleware";
 
 // Rename file to index.ts to have root route
 // Create more files in this folder to have nested routes

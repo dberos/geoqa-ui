@@ -1,4 +1,4 @@
-import { userMiddleware } from "@/lib/session-middleware";
+import { userMiddleware } from "@/lib/hono-middleware";
 import { Hono } from "hono";
 
 const app = new Hono()

@@ -4,8 +4,12 @@ import test from '../test';
 import auth from '../auth';
 import chats from '../chats';
 import messages from '../messages';
+import { corsMiddleware, cspMiddleware } from '@/lib/hono-middleware';
 
-const app = new Hono().basePath('/api')
+const app = new Hono()
+    .basePath('/api')
+    .use(corsMiddleware)
+    .use(cspMiddleware)
     .route('/auth', auth)
     .route('/chats', chats)
     .route('/messages', messages)

@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { chatsTable } from "@/db/schema";
-import { sessionMiddleware } from "@/lib/session-middleware";
+import { sessionMiddleware } from "@/lib/hono-middleware";
 import { asc, eq } from "drizzle-orm";
 import { Hono } from "hono";
 

@@ -33,7 +33,8 @@ export const userMiddleware = createMiddleware<MiddlewareContext>(
         }
         await next();
     }
-)
+);
+
 export const sessionMiddleware = createMiddleware<MiddlewareContext>(
     async (c, next) => {
         try {
@@ -169,5 +170,63 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
             c.set('session', null);
             return c.json({ error: 'Unauthorized' }, { status: 401 });
         }
+    }
+);
+
+export const corsMiddleware = createMiddleware(
+    async (c, next) => {
+        const origin = c.req.header('origin');
+        const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL!;
+        const isAllowedOrigin = !origin || origin === allowedOrigin;
+        const allowedMethods = ["GET", "POST", "PATCH", "OPTIONS"];
+
+        // Block CORS requests from unauthorized origins
+        if (origin && !isAllowedOrigin) {
+            return c.json(
+                { error: 'Request blocked from CORS policy' },
+                { status: 403 }
+            );
+        }
+
+        // Add CORS headers
+        const corsHeaders = {
+            'Access-Control-Allow-Origin': allowedOrigin,
+            "Access-Control-Allow-Methods": allowedMethods.join(",")
+        };
+
+        // Handle preflight request
+        if (c.req.method === 'OPTIONS') {
+            return new Response(null, {
+                status: 204,
+                headers: corsHeaders
+            });
+        }
+
+        // Set CORS headers
+        Object.entries(corsHeaders).forEach(([key, value]) => c.res.headers.set(key, value));
+
+        await next();
+    }
+);
+
+export const cspMiddleware = createMiddleware(
+    async(c, next) => {
+        if (process.env.NODE_ENV === 'development') {
+            await next();
+            return;
+        }
+        const cspHeader = `
+        default-src 'none';
+        frame-ancestors 'none';
+        `;
+        const contentSecurityPolicyHeaderValue = cspHeader
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+        c.res.headers.set(
+            'Content-Security-Policy',
+            contentSecurityPolicyHeaderValue
+        );
+        await next();
     }
 );
