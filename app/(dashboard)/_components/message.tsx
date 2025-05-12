@@ -19,7 +19,13 @@ import Query from "./query";
 import Text from "./text";
 import { MessageType } from "@/types";
 
-const Message = ({ message }: { message: MessageType }) => {
+const Message = ({ 
+    message,
+    messages
+ }: { 
+    message: MessageType,
+    messages: MessageType[] | null
+ }) => {
     console.log(message);
     const messageRef = useRef<HTMLDivElement | null>(null);
     const [isVisible, setIsVisible] = useState(true);
@@ -40,7 +46,7 @@ const Message = ({ message }: { message: MessageType }) => {
         return () => {
             if (ref) observer.unobserve(ref);
         };
-    }, []);
+    }, [messages]);
 
     const [tabValue, setTabValue] = useState("question");
     const [resultsTab, setResultsTab] = useState("");

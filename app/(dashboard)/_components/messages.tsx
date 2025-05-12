@@ -7,12 +7,24 @@ import { MessageType } from "@/types";
 
 const Messages = ({ chatId }: { chatId: string }) => {
     const bottomRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "instant" });
-    }, []);
+    const originalLength = useRef<number | null>(null);
 
     const { data } = usefindMessages(chatId);
+
+    useEffect(() => {
+        if (data?.messages) {
+            if (originalLength.current === null) {
+                // Set the original length on the first load
+                // So it scrolls instantly on bottom
+                originalLength.current = data.messages.length;
+                bottomRef.current?.scrollIntoView({ behavior: "instant" });
+            } 
+            else if (data.messages.length !== originalLength.current) {
+                // Smooth scroll when a new message is added
+                bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [data?.messages]);
 
     return (
         <div className="flex-1 w-full min-h-0">
@@ -23,7 +35,7 @@ const Messages = ({ chatId }: { chatId: string }) => {
                         key={message.id}
                         className="h-full w-full snap-start flex items-center justify-center"
                     >
-                        <Message message={message}/>
+                        <Message message={message} messages={data.messages} />
                     </div>
                     ))
                 }

@@ -7,17 +7,22 @@ import {
     SearchCommandItem,
     SearchCommandList,
 } from "@/components/ui/command"  
-import { usePostMessage } from "@/hooks/use-post-message";
+import { usePostChatMessage, usePostMessage } from "@/hooks/use-post-message";
 import { usePostChat } from "@/hooks/use-post.chat";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Searchbar = () => {
 
-    const { mutate } = usePostChat();
+    const { mutate: postChatMutate } = usePostChat();
+    const { mutate: postChatMessageMutate } = usePostChatMessage();
     const { mutate: messageMutate } = usePostMessage();
 
     const router = useRouter();
+    const pathname = usePathname();
+    const isOnChatPage = pathname.startsWith("/dashboard/chats/");
+    const segments = pathname.split('/');
+    const chatId = segments[segments.length - 1];
 
     const [inputValue, setInputValue] = useState('');
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,32 +35,60 @@ const Searchbar = () => {
             setInputValue(text);
             // Loading state
             setIsSelected(true);
-            setTimeout(() => {
-                mutate({ json: { question: text } }, 
-                    {
-                        onSuccess: (data) => {
-                            setInputValue('');
-                            setIsSelected(false);
-                            router.push(`/dashboard/chats/${data.chatId}`);
-                            setTimeout(() => {
-                                messageMutate({ param: { messageId: data.messageId || "" } },
-                                {
-                                    onError: () => {
-                                        router.push('/error');
+            // If it is the searchbar to start a new chat
+            if (!isOnChatPage) {
+                setTimeout(() => {
+                    postChatMutate({ json: { question: text } }, 
+                        {
+                            onSuccess: (data) => {
+                                setInputValue('');
+                                setIsSelected(false);
+                                router.push(`/dashboard/chats/${data.chatId}`);
+                                setTimeout(() => {
+                                    messageMutate({ param: { messageId: data.messageId || "" } },
+                                    {
+                                        onError: () => {
+                                            router.push('/error');
+                                        }
                                     }
-                                }
-                            )
-                            }, 1000);
-                        },
-                        onError: () => {
-                            setInputValue('');
-                            setIsSelected(false);
-                            router.push('/error');
+                                )
+                                }, 1000);
+                            },
+                            onError: () => {
+                                setInputValue('');
+                                setIsSelected(false);
+                                router.push('/error');
+                            }
                         }
-                    }
-                )
-                
-            }, 200)
+                    )
+                }, 200);
+            }
+            else {
+                setTimeout(() => {
+                    postChatMessageMutate({ json: { question: text }, param: { chatId } },
+                        {
+                            onSuccess: (data) => {
+                                setInputValue('');
+                                setIsSelected(false);
+                                setTimeout(() => {
+                                    messageMutate({ param: { messageId: data.messageId || "" } },
+                                    {
+                                        onError: () => {
+                                            router.push('/error');
+                                        }
+                                    }
+                                )
+                                }, 1000);
+                            },
+                            onError: () => {
+                                setInputValue('');
+                                setIsSelected(false);
+                                router.push('/error');
+                            }
+                        }
+                    )
+                }, 200)
+            }
         }
         else {
             setInputValue('');
