@@ -178,7 +178,7 @@ export const corsMiddleware = createMiddleware(
         const origin = c.req.header('origin');
         const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL!;
         const isAllowedOrigin = !origin || origin === allowedOrigin;
-        const allowedMethods = ["GET", "POST", "PATCH", "OPTIONS"];
+        const allowedMethods = ["GET", "POST", "PATCH", "DELETE", "OPTIONS"];
 
         // Block CORS requests from unauthorized origins
         if (origin && !isAllowedOrigin) {

@@ -69,5 +69,36 @@ const app = new Hono()
             }
         }
     )
+    .delete(
+        '/:chatId',
+        sessionMiddleware,
+        async (c) => {
+            try {
+                const chatId = c.req.param('chatId');
+                if (!chatId) throw new Error ('No present chatId');
+
+                const [chat] = await db
+                .select()
+                .from(chatsTable)
+                .where(eq(chatsTable.id, chatId));
+
+                const session = c.get('session');
+                const userId = session?.id
+                if (!session || !userId) throw new Error('No session present');
+
+                if (chat?.userId !== userId) throw new Error ('Unauthorized');
+
+                await db
+                .delete(chatsTable)
+                .where(eq(chatsTable.id, chatId));
+
+                return c.json({ success: true });
+            }
+            catch (error) {
+                console.error(error);
+                return c.json({ success: false });
+            }
+        }
+    )
 
 export default app;

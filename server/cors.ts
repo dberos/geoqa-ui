@@ -7,7 +7,7 @@ export const createCors = async (request: NextRequest, response: NextResponse) =
     const origin = requestHeaders.get("Origin");
     const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL!;
     const isAllowedOrigin = !origin || origin === allowedOrigin;
-    const allowedMethods = ["GET", "POST", "PATCH", "OPTIONS"];
+    const allowedMethods = ["GET", "POST", "PATCH", "DELETE", "OPTIONS"];
 
     // Block CORS requests from unauthorized origins
     if (origin && !isAllowedOrigin) {

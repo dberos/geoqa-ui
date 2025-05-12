@@ -10,7 +10,7 @@ export const usefindChats = (userId: string | null | undefined) => {
                 return { chats: null };
             }
             const response = await client.api.chats.user[":userId"]["$get"]({
-                param: { userId },
+                param: { userId }
             });
             if (!response.ok) {
                 return { chats: null };

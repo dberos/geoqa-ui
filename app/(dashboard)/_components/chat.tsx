@@ -6,7 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Ellipsis, Loader2, PencilLine, Trash2 } from "lucide-react";
+import { Ellipsis, Loader2, PencilLine, Trash2, X } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,6 +19,8 @@ import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -26,7 +28,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +36,7 @@ import { z } from "zod";
 import { UpdateChatNameSchema } from "@/schemas";
 import { useUpdateChat } from "@/hooks/use-update-chat";
 import { useState } from "react";
+import { useDeleteChat } from "@/hooks/use-delete-chat";
 
 const Chat = ({ chat }: { chat: ChatType }) => {
 
@@ -41,14 +44,19 @@ const Chat = ({ chat }: { chat: ChatType }) => {
     const segments = pathname.split('/');
     const chatId = segments[segments.length - 1];
 
+    const router = useRouter();
+
     const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
 
-    const { mutate } = useUpdateChat(chat.id);
+    const { mutate: updateMutate } = useUpdateChat(chat.id);
+    const { mutate: deleteMutate } = useDeleteChat(chat.id);
 
     const [isOpenOptions, setIsOpenOptions] = useState(false);
-    const [isOpenDialog, setIsOpenDialog] = useState(false);
+    const [isOpenEdit, setIsOpenEdit] = useState(false);
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+    const [isSubmittingDelete, setIsSubmittingDelete] = useState(false);
 
     const form = useForm<z.infer<typeof UpdateChatNameSchema>>({
         resolver: zodResolver(UpdateChatNameSchema),
@@ -58,16 +66,27 @@ const Chat = ({ chat }: { chat: ChatType }) => {
     })
     
     function onSubmit(values: z.infer<typeof UpdateChatNameSchema>) {
-        setIsSubmitting(true);
+        setIsSubmittingEdit(true);
         setTimeout(() => {
             const chatId = chat.id;
-            mutate({ json: values, param: { chatId } });
+            updateMutate({ json: values, param: { chatId } });
             form.reset();
-            setIsOpenDialog(false);
+            setIsOpenEdit(false);
             setIsOpenOptions(false);
-            setIsSubmitting(false);
+            setIsSubmittingEdit(false);
         }, 1000);
-        
+    }
+
+    const handleDelete = () => {
+        setIsSubmittingDelete(true);
+        setTimeout(() => {
+            const chatId = chat.id;
+            deleteMutate({ param: { chatId } });
+            setIsOpenDelete(false);
+            setIsOpenOptions(false);
+            setIsSubmittingDelete(false);
+            router.replace('/dashboard');
+        }, 1000);
     }
 
     return ( 
@@ -100,8 +119,8 @@ const Chat = ({ chat }: { chat: ChatType }) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end' onCloseAutoFocus={(e) => e.preventDefault()}>
                     <Dialog
-                    open={isOpenDialog}
-                    onOpenChange={setIsOpenDialog}
+                    open={isOpenEdit}
+                    onOpenChange={setIsOpenEdit}
                     >
                     <DialogTrigger asChild>
                         <DropdownMenuItem 
@@ -127,15 +146,15 @@ const Chat = ({ chat }: { chat: ChatType }) => {
                                         <FormItem>
                                         <FormLabel>Rename Chat</FormLabel>
                                         <FormControl>
-                                            <Input placeholder={chat.name || "New Chat"} {...field} disabled={isSubmitting}/>
+                                            <Input placeholder={chat.name || "New Chat"} {...field} disabled={isSubmittingEdit}/>
                                         </FormControl>
                                         <FormMessage />
                                         </FormItem>
                                     )}
                                     />
-                                    <Button type="submit" disabled={isSubmitting}>
+                                    <Button type="submit" disabled={isSubmittingEdit}>
                                         {
-                                            isSubmitting ?
+                                            isSubmittingEdit ?
                                             <>
                                                 <Loader2 className="text-muted-foreground size-4 animate-spin" />
                                                 Submitting
@@ -149,10 +168,57 @@ const Chat = ({ chat }: { chat: ChatType }) => {
                             </Form>
                     </DialogContent>
                     </Dialog>
-                    <DropdownMenuItem className="flex justify-between">
-                        Delete Chat
-                        <Trash2 className="size-3 text-destructive"/>
-                    </DropdownMenuItem>
+                    <Dialog
+                    open={isOpenDelete}
+                    onOpenChange={setIsOpenDelete}
+                    >
+                        <DialogTrigger asChild>
+                            <DropdownMenuItem 
+                            className="flex justify-between"
+                            onSelect={(e) => e.preventDefault()}
+                            >
+                                Delete Chat
+                                <Trash2 className="size-3 text-destructive"/>
+                            </DropdownMenuItem>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                                This action cannot be undone. The selected chat will be deleted.
+                            </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <Button 
+                                variant='secondary' 
+                                disabled={isSubmittingDelete}
+                                onClick={() => {
+                                    setIsOpenDelete(false);
+                                    setIsOpenOptions(false);
+                                }}>
+                                    <X className="size-4" />
+                                    Cancel
+                                </Button>
+                                <Button 
+                                variant='destructive' 
+                                disabled={isSubmittingDelete}
+                                onClick={handleDelete}
+                                >
+                                    {
+                                        isSubmittingDelete ?
+                                        <>
+                                            <Loader2 className="text-muted-foreground size-4 animate-spin" />
+                                            Deleting
+                                        </> :
+                                        <>
+                                            <Trash2 className="size-4" />
+                                            Confirm
+                                        </>
+                                    }
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </DropdownMenuContent>
                 </DropdownMenu>
             </AccordionContent>
