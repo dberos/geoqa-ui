@@ -4,12 +4,20 @@ import { useEffect, useRef } from "react";
 import Message from "./message";
 import { usefindMessages } from "@/hooks/use-find-messages";
 import { MessageType } from "@/types";
+import { useRouter } from "next/navigation";
 
 const Messages = ({ chatId }: { chatId: string }) => {
+
+    const router = useRouter();
+
     const bottomRef = useRef<HTMLDivElement | null>(null);
     const originalLength = useRef<number | null>(null);
 
-    const { data } = usefindMessages(chatId);
+    const { data, error } = usefindMessages(chatId);
+    if (error) {
+        console.error(error);
+        router.replace('/error');
+    }
 
     useEffect(() => {
         if (data?.messages) {

@@ -19,7 +19,8 @@ export const useSignInWithGitHub = () => {
                 // Fetch the GitHub access token
                 const tokenResponse = await client.api.auth.github.token["$post"]({ json });
                 if (!tokenResponse.ok) {
-                    throw new Error(`Failed to fetch GitHub token: ${tokenResponse.statusText}`);
+                    const errorResponse = await tokenResponse.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
 
                 const { accessToken } = await tokenResponse.json();
@@ -27,7 +28,8 @@ export const useSignInWithGitHub = () => {
                 // Fetch the GitHub user info
                 const userResponse = await client.api.auth.github.user["$post"]({ json: { accessToken } });
                 if (!userResponse.ok) {
-                    throw new Error(`Failed to fetch GitHub user: ${userResponse.statusText}`);
+                    const errorResponse = await userResponse.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
 
                 const { user } = await userResponse.json();
@@ -35,7 +37,8 @@ export const useSignInWithGitHub = () => {
                 // Authenticate the user
                 const signInResponse = await client.api.auth["sign-in"]["$post"]({ json: { user } });
                 if (!signInResponse.ok) {
-                    throw new Error(`Failed to authenticate GitHub user: ${signInResponse.statusText}`);
+                    const errorResponse = await signInResponse.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
                 return await signInResponse.json();
             },
@@ -57,7 +60,8 @@ export const useSignInWithGoogle = () => {
                 // Fetch the Google access token
                 const tokenResponse = await client.api.auth.google.token["$post"]({ json });
                 if (!tokenResponse.ok) {
-                    throw new Error(`Failed to fetch Google token: ${tokenResponse.statusText}`);
+                    const errorResponse = await tokenResponse.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
 
                 const { accessToken } = await tokenResponse.json();
@@ -65,7 +69,8 @@ export const useSignInWithGoogle = () => {
                 // Fetch the Google user info
                 const userResponse = await client.api.auth.google.user["$post"]({ json: { accessToken } });
                 if (!userResponse.ok) {
-                    throw new Error(`Failed to fetch Google user: ${userResponse.statusText}`);
+                    const errorResponse = await userResponse.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
 
                 const { user } = await userResponse.json();
@@ -73,7 +78,8 @@ export const useSignInWithGoogle = () => {
                 // Authenticate the user
                 const signInResponse = await client.api.auth["sign-in"]["$post"]({ json: { user } });
                 if (!signInResponse.ok) {
-                    throw new Error(`Failed to authenticate Google user: ${signInResponse.statusText}`);
+                    const errorResponse = await signInResponse.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
                 return await signInResponse.json();
             },

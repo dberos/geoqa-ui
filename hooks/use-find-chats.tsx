@@ -13,11 +13,11 @@ export const usefindChats = (userId: string | null | undefined) => {
                 param: { userId }
             });
             if (!response.ok) {
-                return { chats: null };
+                const errorResponse = await response.json();
+                throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
             }
 
-            const { chats } = await response.json() || null;
-            return { chats };
+            return await response.json();
         },
     });
     return query;

@@ -15,17 +15,14 @@ export const useSignOut = () => {
             mutationFn: async () => {
                 const response = await client.api.auth["sign-out"]["$post"]();
                 if (!response.ok) {
-                    throw new Error(`Failed to sign out: ${response.statusText}`);
+                    const errorResponse = await response.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
                 return await response.json();
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['session'] });
-            },
-            onError: (error) => {
-                console.error("Error signing out:", error);
-                queryClient.invalidateQueries({ queryKey: ['session'] });
-            },
+            }
         })
     return mutation;
 }

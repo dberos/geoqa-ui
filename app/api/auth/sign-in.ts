@@ -23,12 +23,12 @@ const app = new Hono()
                     case OathEnum.GOOGLE:
                         return await signInWithGoogle(user, c);
                     default:
-                        return c.json({ success: false }, { status: 500 });
+                        return c.json({ error: 'Failed to sign in' }, { status: 500 });
                 }
             }
             catch (error) {
                 console.error(error);
-                return c.json({ success: false }, { status: 500 });
+                return c.json({ error: 'Failed to sign in' }, { status: 500 });
             }
         }
     )
@@ -163,7 +163,7 @@ const signInWithGitHub = async (user: OathUserType, c: Context) => {
     }
     catch (error) {
         console.error(error);
-        return c.json({ success: false }, { status: 500 });
+        return c.json({ error: 'Failed to sign in with GitHub' }, { status: 500 });
     }
 }
 
@@ -217,7 +217,7 @@ const signInWithGoogle = async (user: OathUserType, c: Context) => {
     }
     catch (error) {
         console.error(error);
-        return c.json({ success: false }, { status: 500 });
+        return c.json({ error: 'Failed to sign in with Google' }, { status: 500 });
     }
 }
 

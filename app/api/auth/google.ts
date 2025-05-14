@@ -18,7 +18,7 @@ const app = new Hono()
 
                 // Check if any of the environment variables are missing
                 if (!clientId || !clientSecret) {
-                    throw new Error('Missing Google OAuth environment variables');
+                    return c.json({ error: 'Missing Google clientId or clientSecret' }, { status: 400 });
                 }
 
                 // Get the code and state
@@ -27,7 +27,7 @@ const app = new Hono()
                 // Verify the state
                 const isVerifiedState = await verifyCSRFToken(state);
                 if (!isVerifiedState) {
-                    throw new Error('Failed to verify state');
+                    return c.json({ error: 'Failed to verify anti csrf token' }, { status: 401 });
                 }
 
                 const tokenUrl = 'https://oauth2.googleapis.com/token';
@@ -52,8 +52,7 @@ const app = new Hono()
 
                 // Check if the response is successful
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Google access token fetch failed: ${errorData.error}`);
+                    return c.json({ error: 'Failed to fetch Google access token' }, { status: 500 });
                 }
 
                 const data = await response.json();
@@ -65,7 +64,7 @@ const app = new Hono()
             }
             catch (error) {
                 console.error(error);
-                return c.json({ accessToken: null }, { status: 500 });
+                return c.json({ error: 'Failed to fetch Google access token' }, { status: 500 });
             }
         }
     )
@@ -84,8 +83,7 @@ const app = new Hono()
 
             // Check if the response is successful
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Google user fetch failed: ${errorData.error || 'Unknown error'}`);
+                return c.json({ error: 'Failed to fetch Google user' }, { status: 500 });
             }
 
             const userJson = await response.json();

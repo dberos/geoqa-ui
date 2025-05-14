@@ -15,7 +15,9 @@ const app = new Hono()
             try {
                 const session = c.get('session');
                 const userId = session?.id
-                if (!session || !userId) throw new Error('No session present');
+                if (!session || !userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
 
                 const { question } = c.req.valid("json");
                 const chatId = c.req.param('chatId');
@@ -24,7 +26,9 @@ const app = new Hono()
                 .select()
                 .from(chatsTable)
                 .where(eq(chatsTable.id, chatId));
-                if (chat?.userId !== userId) throw new Error ('Unauthorized');
+                if (chat?.userId !== userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
 
                 const [message] = await db.insert(messagesTable).values({
                     chatId: chatId,
@@ -35,7 +39,7 @@ const app = new Hono()
             }
             catch (error) {
                 console.error(error);
-                return c.json({ messageId: null });
+                return c.json({ error }, { status: 500 });
             }
         }
     )

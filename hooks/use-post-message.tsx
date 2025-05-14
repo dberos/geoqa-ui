@@ -5,8 +5,8 @@ import { InferRequestType, InferResponseType } from "hono";
 type ChatRequestType = InferRequestType<typeof client.api.messages.chat[":chatId"]["$post"]>;
 type ChatResponseType = InferResponseType<typeof client.api.messages.chat[":chatId"]["$post"]>;
 
-type RequestType = InferRequestType<typeof client.api.messages[":messageId"]["$post"]>;
-type ResponseType = InferResponseType<typeof client.api.messages[":messageId"]["$post"]>;
+type MessageRequestType = InferRequestType<typeof client.api.messages[":messageId"]["$patch"]>;
+type MessageResponseType = InferResponseType<typeof client.api.messages[":messageId"]["$patch"]>;
 
 export const usePostChatMessage = () => {
     const queryClient = useQueryClient();
@@ -18,7 +18,8 @@ export const usePostChatMessage = () => {
             mutationFn: async ({ json, ...args }) => {
                 const response = await client.api.messages.chat[":chatId"]["$post"]({ json, ...args });
                 if (!response.ok) {
-                    throw new Error("Failed to add a new message to chat");
+                    const errorResponse = await response.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
                 return await response.json();
             },
@@ -32,12 +33,12 @@ export const usePostChatMessage = () => {
 export const usePostMessage = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation<
-        ResponseType,
+        MessageResponseType,
         Error,
-        RequestType
+        MessageRequestType
         >({
-            mutationFn: async (args: RequestType) => {
-                const response = await client.api.messages[":messageId"]["$post"](args);
+            mutationFn: async (args: MessageRequestType) => {
+                const response = await client.api.messages[":messageId"]["$patch"](args);
                 if (!response.ok) {
                     throw new Error("Failed to update message");
                 }

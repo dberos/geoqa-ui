@@ -43,21 +43,31 @@ const Searchbar = () => {
                             onSuccess: (data) => {
                                 setInputValue('');
                                 setIsSelected(false);
-                                router.push(`/dashboard/chats/${data.chatId}`);
-                                setTimeout(() => {
-                                    messageMutate({ param: { messageId: data.messageId || "" } },
-                                    {
-                                        onError: () => {
-                                            router.push('/error');
+                                // Narrow down the type for type safety
+                                // It can be either { chatId, messageId } or { error }
+                                // Error will be caught from !response.ok in the hook
+                                // And here with onError
+                                // But typescript needs to know
+                                if ('chatId' in data && 'messageId' in data) {
+                                    router.push(`/dashboard/chats/${data.chatId}`);
+                                    setTimeout(() => {
+                                        messageMutate({ param: { messageId: data.messageId } },
+                                        {
+                                            onError: () => {
+                                                router.replace('/error');
+                                            }
                                         }
-                                    }
-                                )
-                                }, 1000);
+                                    )
+                                    }, 1000);
+                                }
+                                else {
+                                    router.replace('/error');
+                                }
                             },
                             onError: () => {
                                 setInputValue('');
                                 setIsSelected(false);
-                                router.push('/error');
+                                router.replace('/error');
                             }
                         }
                     )
@@ -71,19 +81,30 @@ const Searchbar = () => {
                                 setInputValue('');
                                 setIsSelected(false);
                                 setTimeout(() => {
-                                    messageMutate({ param: { messageId: data.messageId || "" } },
-                                    {
-                                        onError: () => {
-                                            router.push('/error');
-                                        }
+                                    // Narrow down the type for type safety
+                                    // It can be either { messageId } or { error }
+                                    // Error will be caught from !response.ok in the hook
+                                    // And here with onError
+                                    // But typescript needs to know
+                                    if ('messageId' in data) {
+                                        messageMutate({ param: { messageId: data.messageId } },
+                                            {
+                                                onError: () => {
+                                                    router.replace('/error');
+                                                }
+                                            }
+                                        )
                                     }
-                                )
+                                    else {
+                                        router.replace('/error');
+                                    }
+                                    
                                 }, 1000);
                             },
                             onError: () => {
                                 setInputValue('');
                                 setIsSelected(false);
-                                router.push('/error');
+                                router.replace('/error');
                             }
                         }
                     )

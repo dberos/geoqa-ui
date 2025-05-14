@@ -18,7 +18,8 @@ export const useUpdateChat = (chatId: string) => {
                     param: { chatId }
                  });
                 if (!response.ok) {
-                    throw new Error("Failed to update the name of the chat");
+                    const errorResponse = await response.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
                 return await response.json();
             },

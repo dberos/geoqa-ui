@@ -9,11 +9,11 @@ export const usefindMessages = (chatId: string) => {
                 param: { chatId }
             });
             if (!response.ok) {
-                return { messages: null };
+                const errorResponse = await response.json();
+                throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
             }
 
-            const { messages } = await response.json() || null;
-            return { messages };
+            return await response.json();
         },
     });
     return query;

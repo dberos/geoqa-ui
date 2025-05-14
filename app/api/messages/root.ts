@@ -11,7 +11,9 @@ const app = new Hono()
         async (c) => {
             try {
                 const chatId = c.req.param('chatId');
-                if (!chatId) throw new Error ('No present chatId');
+                if (!chatId) {
+                    return c.json({ error: 'Not present chatId' }, { status: 400 });
+                }
 
                 const [chat] = await db
                 .select()
@@ -20,9 +22,13 @@ const app = new Hono()
 
                 const session = c.get('session');
                 const userId = session?.id
-                if (!session || !userId) throw new Error('No session present');
+                if (!session || !userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
 
-                if (chat?.userId !== userId) throw new Error ('Unauthorized');
+                if (chat?.userId !== userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
 
                 const messages = await db
                 .select()
@@ -34,23 +40,27 @@ const app = new Hono()
             }
             catch (error) {
                 console.error(error);
-                return c.json({ messages: null });
+                return c.json({ error }, { status: 500 });
             }
         }
     )
-    .post(
+    .patch(
         '/:messageId',
         sessionMiddleware,
         async (c) => {
             try {
                 const messageId = c.req.param('messageId');
-                if (!messageId) throw new Error ('No present messageId');
+                if (!messageId) {
+                    return c.json({ error: 'Not present chatId' }, { status: 400 });
+                }
                 const [message] = await db
                 .select()
                 .from(messagesTable)
                 .where(eq(messagesTable.id, messageId));
 
-                if (!message.question) throw new Error ('No present question');
+                if (!message.question) {
+                    return c.json({ error: 'Not present question' }, { status: 400 });
+                }
 
                 const response = await fetch(process.env.NLQ_API_URL!, {
                     method: 'POST',
@@ -79,7 +89,7 @@ const app = new Hono()
             }
             catch (error) {
                 console.error(error);
-                return c.json({ message: null });
+                return c.json({ error }, { status: 500 });
             }
         }
     )
