@@ -18,7 +18,8 @@ export const useDeleteChat = (chatId: string) => {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Failed to delete chat");
+                    const errorResponse = await response.json();
+                    throw new Error('error' in errorResponse ? errorResponse.error : 'Unknown error');
                 }
                 return await response.json();
             },

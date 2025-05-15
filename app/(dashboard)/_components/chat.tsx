@@ -69,7 +69,11 @@ const Chat = ({ chat }: { chat: ChatType }) => {
         setIsSubmittingEdit(true);
         setTimeout(() => {
             const chatId = chat.id;
-            updateMutate({ json: values, param: { chatId } });
+            updateMutate({ json: values, param: { chatId } }, {
+                onError: () => {
+                    router.replace('/error');
+                }
+            });
             form.reset();
             setIsOpenEdit(false);
             setIsOpenOptions(false);
@@ -81,7 +85,11 @@ const Chat = ({ chat }: { chat: ChatType }) => {
         setIsSubmittingDelete(true);
         setTimeout(() => {
             const chatId = chat.id;
-            deleteMutate({ param: { chatId } });
+            deleteMutate({ param: { chatId } }, {
+                onError: () => {
+                    router.replace('/');
+                }
+            });
             setIsOpenDelete(false);
             setIsOpenOptions(false);
             setIsSubmittingDelete(false);
