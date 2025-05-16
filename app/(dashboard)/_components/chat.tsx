@@ -49,7 +49,8 @@ const Chat = ({ chat }: { chat: ChatType }) => {
     const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
 
     const { mutate: updateMutate } = useUpdateChat(chat.id);
-    const { mutate: deleteMutate } = useDeleteChat(chat.id);
+    const { mutate: deleteMutate } = useDeleteChat();
+
 
     const [isOpenOptions, setIsOpenOptions] = useState(false);
     const [isOpenEdit, setIsOpenEdit] = useState(false);

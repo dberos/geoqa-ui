@@ -18,17 +18,25 @@ import Question from "./question";
 import Query from "./query";
 import Text from "./text";
 import { MessageType } from "@/types";
+import { useDeleteMessage } from "@/hooks/use-delete-message";
+import { useRouter } from "next/navigation";
+import toast from 'react-hot-toast';
 
 const Message = ({ 
     message,
-    messages
+    messages,
  }: { 
     message: MessageType,
-    messages: MessageType[] | null
+    messages: MessageType[] | null,
  }) => {
     console.log(message);
+
+    const router = useRouter();
+
     const messageRef = useRef<HTMLDivElement | null>(null);
     const [isVisible, setIsVisible] = useState(true);
+
+    const { mutate: deleteMessageMutate } = useDeleteMessage();
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -57,6 +65,43 @@ const Message = ({
             setResultsTab("");
         }
     }, [isVisible]);
+
+    useEffect(() => {
+        if (message && message.errorMessage) {
+            deleteMessageMutate({ param: { messageId: message.id } },
+                {
+                    onSuccess: () => {
+                        // Use toast.custom from react-hot-toast because nothing else works with the current CSP
+                        toast.custom((t) => (
+                            <div
+                                className={`${
+                                    t.visible ? 'animate-enter' : 'animate-leave'
+                                } mb-2 mr-2 max-w-sm w-full bg-neutral-200 dark:bg-neutral-800 shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                            >
+                                <div className="flex-1 w-0 p-4">
+                                    <div className="flex items-start">
+                                        <div className="ml-1 flex-1">
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Failed to generate an answer for your request.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ));
+                    },
+                    onError: () => {
+                        console.error('Error deleting message');
+                        router.replace('/error');
+                    }
+                }
+            )
+        }
+    }, [message, router, deleteMessageMutate]);
+
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => { setIsMounted(true) }, []);
+    if (!isMounted) return null;
 
     return (
         <>

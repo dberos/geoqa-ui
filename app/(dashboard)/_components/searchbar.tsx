@@ -7,6 +7,7 @@ import {
     SearchCommandItem,
     SearchCommandList,
 } from "@/components/ui/command"  
+import { useDeleteChat } from "@/hooks/use-delete-chat";
 import { usePostChatMessage, usePostMessage } from "@/hooks/use-post-message";
 import { usePostChat } from "@/hooks/use-post.chat";
 import { usePathname, useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ const Searchbar = () => {
     const { mutate: postChatMutate } = usePostChat();
     const { mutate: postChatMessageMutate } = usePostChatMessage();
     const { mutate: messageMutate } = usePostMessage();
+    const { mutate: deleteChatMutate } = useDeleteChat();
 
     const router = useRouter();
     const pathname = usePathname();
@@ -54,7 +56,16 @@ const Searchbar = () => {
                                         messageMutate({ param: { messageId: data.messageId } },
                                         {
                                             onError: () => {
-                                                router.replace('/error');
+                                                deleteChatMutate({ param: { chatId } },
+                                                    {
+                                                        onSuccess: () => {
+                                                            router.replace('/error');
+                                                        },
+                                                        onError: () => {
+                                                            router.replace('/error');
+                                                        }
+                                                    }
+                                                )
                                             }
                                         }
                                     )

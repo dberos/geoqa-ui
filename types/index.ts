@@ -42,5 +42,6 @@ export type MessageType = {
     queryResults?: string | null;
     textualResponse?: string | null;
     isLoading?: boolean;
+    errorMessage?: string | null;
     createdAt?: string;
 };

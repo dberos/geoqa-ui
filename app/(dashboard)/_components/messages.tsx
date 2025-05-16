@@ -5,6 +5,8 @@ import Message from "./message";
 import { usefindMessages } from "@/hooks/use-find-messages";
 import { MessageType } from "@/types";
 import { useRouter } from "next/navigation";
+import { useDeleteChat } from "@/hooks/use-delete-chat";
+import toast from 'react-hot-toast';
 
 const Messages = ({ chatId }: { chatId: string }) => {
 
@@ -18,6 +20,8 @@ const Messages = ({ chatId }: { chatId: string }) => {
         console.error(error);
         router.replace('/error');
     }
+
+    const { mutate: deleteChatMutate } = useDeleteChat();
 
     useEffect(() => {
         if (data?.messages) {
@@ -33,6 +37,40 @@ const Messages = ({ chatId }: { chatId: string }) => {
             }
         }
     }, [data?.messages]);
+
+    useEffect(() => {
+        if (data && data.messages && data?.messages.length === 0) {
+            deleteChatMutate({ param: { chatId } }, 
+                {
+                    onSuccess: () => {
+                        // Use toast.custom from react-hot-toast because nothing else works with the current CSP
+                        toast.custom((t) => (
+                            <div
+                                className={`${
+                                    t.visible ? 'animate-enter' : 'animate-leave'
+                                } mb-2 mr-2 max-w-sm w-full bg-neutral-200 dark:bg-neutral-800 shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                            >
+                                <div className="flex-1 w-0 p-4">
+                                    <div className="flex items-start">
+                                        <div className="ml-1 flex-1">
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Empty chat was deleted.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ));
+                        router.replace('/dashboard');
+                    },
+                    onError: () => {
+                        console.error('Failed to delete chat');
+                        router.replace('/error');
+                    }
+                }
+            )
+        }
+        }, [data, chatId, data?.messages, deleteChatMutate, router])
 
     return (
         <div className="flex-1 w-full min-h-0">

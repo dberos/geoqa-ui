@@ -53,6 +53,13 @@ const app = new Hono()
                 if (!messageId) {
                     return c.json({ error: 'Not present chatId' }, { status: 400 });
                 }
+
+                const session = c.get('session');
+                const userId = session?.id
+                if (!session || !userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
+
                 const [message] = await db
                 .select()
                 .from(messagesTable)
@@ -71,7 +78,39 @@ const app = new Hono()
                         question: message.question
                     })
                 });
+                // Just set the errorMessage and return 200 status with a text
+                // And still loading
+                // Get the null message in the message UI
+                // And there delete the message and show a toast
+                if (!response.ok) {
+                    const [updatedMessage] = await db
+                    .update(messagesTable)
+                    .set({ errorMessage: 'Failed to generate answer' })
+                    .where(eq(messagesTable.id, messageId))
+                    .returning();
+
+                    return c.json({ 
+                        message: updatedMessage, 
+                        text: 'Failed to generate response from GeoQA API'
+                    }, { 
+                        status: 200
+                    });
+                }
                 const result = await response.json();
+                if (result.errorMessage) {
+                    const [updatedMessage] = await db
+                    .update(messagesTable)
+                    .set({ errorMessage: result.errorMessage })
+                    .where(eq(messagesTable.id, messageId))
+                    .returning();
+
+                    return c.json({ 
+                        message: updatedMessage, 
+                        text: 'Failed to generate response from GeoQA API'
+                    }, { 
+                        status: 200
+                    });
+                }
 
                 const [updatedMessage] = await db
                 .update(messagesTable)
@@ -86,6 +125,60 @@ const app = new Hono()
                 .returning();
 
                 return c.json({ message: updatedMessage });
+            }
+            catch (error) {
+                console.error(error);
+
+                const messageId = c.req.param('messageId');
+                if (!messageId) {
+                    return c.json({ error: 'Not present chatId' }, { status: 400 });
+                }
+
+                const [updatedMessage] = await db
+                .update(messagesTable)
+                .set({ errorMessage: 'Failed to generate answer' })
+                .where(eq(messagesTable.id, messageId))
+                .returning();
+
+                return c.json({ 
+                    message: updatedMessage, 
+                    text: 'Failed to generate response from GeoQA API'
+                }, { 
+                    status: 200
+                });
+            }
+        }
+    )
+    .delete(
+        '/:messageId',
+        sessionMiddleware,
+        async (c) => {
+            try {
+                const messageId = c.req.param('messageId');
+                if (!messageId) {
+                    return c.json({ error: 'Not present chatId' }, { status: 400 });
+                }
+
+                const session = c.get('session');
+                const userId = session?.id
+                if (!session || !userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
+
+                const [message] = await db
+                .select()
+                .from(messagesTable)
+                .where(eq(messagesTable.id, messageId));
+
+                if (!message) {
+                    return c.json({ error: 'No present message' }, { status: 400 });
+                }
+
+                await db
+                .delete(messagesTable)
+                .where(eq(messagesTable.id, messageId));
+
+                return c.json({ success: true });
             }
             catch (error) {
                 console.error(error);

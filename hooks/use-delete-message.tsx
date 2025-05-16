@@ -2,10 +2,10 @@ import { client } from "@/lib/rpc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
-type RequestType = InferRequestType<typeof client.api.chats[":chatId"]["$delete"]>;
-type ResponseType = InferResponseType<typeof client.api.chats[":chatId"]["$delete"]>;
+type RequestType = InferRequestType<typeof client.api.messages[":messageId"]["$delete"]>;
+type ResponseType = InferResponseType<typeof client.api.messages[":messageId"]["$delete"]>;
 
-export const useDeleteChat = () => {
+export const useDeleteMessage = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation<
         ResponseType,
@@ -13,7 +13,7 @@ export const useDeleteChat = () => {
         RequestType
         >({
             mutationFn: async (args: RequestType) => {
-                const response = await client.api.chats[":chatId"]["$delete"](args);
+                const response = await client.api.messages[":messageId"]["$delete"](args);
 
                 if (!response.ok) {
                     const errorResponse = await response.json();
@@ -22,7 +22,7 @@ export const useDeleteChat = () => {
                 return await response.json();
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['chats'] });
+                queryClient.invalidateQueries({ queryKey: ['messages'] });
             }
         })
     return mutation;
