@@ -13,14 +13,15 @@ import { ChevronDown, Loader2 } from "lucide-react";
 import Map from "./map";
 import Carousel from "./carousel";
 import DataTable from "./data-table";
-import { columns, results } from "../_data";
 import Question from "./question";
 import Query from "./query";
 import Text from "./text";
-import { MessageType } from "@/types";
+import { MessageType, QueryResultsType } from "@/types";
 import { useDeleteMessage } from "@/hooks/use-delete-message";
 import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
+import { parseQueryResults } from "../_utils";
+import { ColumnDef } from "@tanstack/react-table";
 
 const Message = ({ 
     message,
@@ -31,6 +32,25 @@ const Message = ({
  }) => {
     console.log(message);
 
+    const [parsedResults, setParsedResults] = useState<QueryResultsType[]>([]);
+    const [columns, setColumns] = useState<ColumnDef<QueryResultsType>[]>([]);
+
+    useEffect(() => {
+        if (message.queryResults) {
+            parseQueryResults(message.queryResults).then((data) => {
+                setParsedResults(data);
+
+                if (data.length > 0) {
+                    const cols: ColumnDef<QueryResultsType>[] = Object.keys(data[0]).map((key) => ({
+                        id: key,
+                        accessorKey: key,
+                        header: key,
+                    }));
+                    setColumns(cols);
+                }
+            });
+        }
+    }, [message]);
     const router = useRouter();
 
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -188,7 +208,7 @@ const Message = ({
                         }
                         {
                             resultsTab === "table" && 
-                            <DataTable  columns={columns} data={results} />
+                            <DataTable  columns={columns} data={parsedResults} />
                         }
                         {
                             resultsTab === "text" && 

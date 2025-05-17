@@ -45,3 +45,5 @@ export type MessageType = {
     errorMessage?: string | null;
     createdAt?: string;
 };
+
+export type QueryResultsType = Record<string, string>;

@@ -70,7 +70,7 @@ const Messages = ({ chatId }: { chatId: string }) => {
                 }
             )
         }
-        }, [data, chatId, data?.messages, deleteChatMutate, router])
+    }, [data, chatId, data?.messages, deleteChatMutate, router])
 
     return (
         <div className="flex-1 w-full min-h-0">
