@@ -30,8 +30,8 @@ const Messages = ({ chatId }: { chatId: string }) => {
                 // So it scrolls instantly on bottom
                 originalLength.current = data.messages.length;
                 bottomRef.current?.scrollIntoView({ behavior: "instant" });
-            } 
-            else if (data.messages.length !== originalLength.current) {
+            }
+            else {
                 // Smooth scroll when a new message is added
                 bottomRef.current?.scrollIntoView({ behavior: "smooth" });
             }
