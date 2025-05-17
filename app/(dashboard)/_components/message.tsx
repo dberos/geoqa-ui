@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
 import { parseQueryResults } from "../_utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { useFindImages } from "@/hooks/use-find-images";
 
 const Message = ({ 
     message,
@@ -34,6 +35,8 @@ const Message = ({
 
     const [parsedResults, setParsedResults] = useState<QueryResultsType[]>([]);
     const [columns, setColumns] = useState<ColumnDef<QueryResultsType>[]>([]);
+
+    const { imageUrls } = useFindImages(parsedResults);
 
     useEffect(() => {
         if (message.queryResults) {
@@ -51,6 +54,7 @@ const Message = ({
             });
         }
     }, [message]);
+
     const router = useRouter();
 
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -169,7 +173,7 @@ const Message = ({
                                 }}>
                                     Map
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => {
+                                <DropdownMenuItem disabled={!imageUrls} onClick={() => {
                                     setTabValue("results");
                                     setResultsTab("images");
                                 }}>
@@ -204,7 +208,7 @@ const Message = ({
                         }
                         {
                             resultsTab === "images" && 
-                            <Carousel />
+                            <Carousel imageUrls={imageUrls} />
                         }
                         {
                             resultsTab === "table" && 

@@ -14,7 +14,7 @@ export const createCsp = async (request: NextRequest, response: NextResponse) =>
     const cspHeader = `
     default-src 'self';
     base-uri 'self';
-    connect-src 'self';
+    connect-src 'self' https:;
     font-src 'self' https:;
     form-action 'self';
     frame-ancestors 'none';

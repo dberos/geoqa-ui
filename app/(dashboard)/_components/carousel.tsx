@@ -7,9 +7,9 @@ import {
   CarouselPrevious as CarouselPreviousUI,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import homeHero from "../../../public/home_hero.jpg";
 
-const Carousel = () => {
+const Carousel = ({ imageUrls }: { imageUrls: string[] | null }) => {
+
     return ( 
         <div className="size-full rounded-md flex items-center justify-center">
             <CarouselUI 
@@ -19,7 +19,7 @@ const Carousel = () => {
             }}
             >
                 <CarouselContentUI>
-                    {Array.from({ length: 5 }).map((_, index) => (
+                    {imageUrls && imageUrls.map((url, index) => (
                         <CarouselItemUI 
                         key={index} 
                         className="w-full h-72 md:h-64 lg:h-56 xl:h-72 2k:h-96 4k:h-[450px]"
@@ -28,8 +28,8 @@ const Carousel = () => {
                                 <Card className="size-full border-8 p-0">
                                     <CardContent className="size-full relative">
                                         <Image 
-                                        src={homeHero}
-                                        alt="Home hero"
+                                        src={url}
+                                        alt="Query result image"
                                         fill
                                         quality={100}
                                         className="object-fill rounded-md"
