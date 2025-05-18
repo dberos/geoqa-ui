@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 
-const Map = () => {
+const Map = ({ wktValues }: { wktValues: string[] | null }) => {
     const LeafletMap = useMemo(() => dynamic(
         () => import('../_components/leaflet-map'),
         { 
@@ -20,7 +20,7 @@ const Map = () => {
       ), [])
     return ( 
         <div className="size-full rounded-md z-0">
-            <LeafletMap />
+            <LeafletMap wktValues={wktValues} />
         </div>
     );
 }

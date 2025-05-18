@@ -22,13 +22,15 @@ import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
 import { useFindImages } from "@/hooks/use-find-images";
 import { useParseQueryResults } from "@/hooks/use-parse-query-results";
+import { useFindWkts } from "@/hooks/use-find-wkt";
 
 const Message = ({ message }: { message: MessageType }) => {
-    console.log(message);
 
     const { parsedResults, columns } = useParseQueryResults(message);
 
     const { imageUrls } = useFindImages(parsedResults);
+
+    const { wktValues } = useFindWkts(parsedResults);
 
     const router = useRouter();
 
@@ -151,12 +153,15 @@ const Message = ({ message }: { message: MessageType }) => {
                                         <ChevronDown className="text-muted-foreground size-4" />
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()} className="z-50">
-                                    <DropdownMenuItem onClick={() => {
-                                        setTabValue("results");
-                                        setResultsTab("map");
-                                    }}>
-                                        Map
-                                    </DropdownMenuItem>
+                                    {
+                                        wktValues &&
+                                        <DropdownMenuItem onClick={() => {
+                                            setTabValue("results");
+                                            setResultsTab("map");
+                                        }}>
+                                            Map
+                                        </DropdownMenuItem>
+                                    }
                                     {
                                         imageUrls &&
                                         <DropdownMenuItem disabled={!imageUrls} onClick={() => {
@@ -192,7 +197,7 @@ const Message = ({ message }: { message: MessageType }) => {
                     <TabsContent value="results">
                         {
                             resultsTab === "map" && 
-                            <Map />
+                            <Map wktValues={wktValues} />
                         }
                         {
                             resultsTab === "images" && 
