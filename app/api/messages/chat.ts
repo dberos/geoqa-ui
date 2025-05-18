@@ -19,7 +19,7 @@ const app = new Hono()
                     return c.json({ error: 'Unauthorized' }, { status: 401 });
                 }
 
-                const { question } = c.req.valid("json");
+                const { question, query } = c.req.valid("json");
                 const chatId = c.req.param('chatId');
 
                 const [chat] = await db
@@ -32,7 +32,8 @@ const app = new Hono()
 
                 const [message] = await db.insert(messagesTable).values({
                     chatId: chatId,
-                    question
+                    question,
+                    query
                 }).returning();
 
                 return c.json({ messageId: message.id });

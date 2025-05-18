@@ -81,7 +81,7 @@ const Messages = ({ chatId }: { chatId: string }) => {
                         key={message.id}
                         className="h-full w-full snap-start flex items-center justify-center"
                     >
-                        <Message message={message} messages={data.messages} />
+                        <Message message={message} />
                     </div>
                     ))
                 }

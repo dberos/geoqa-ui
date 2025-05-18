@@ -16,44 +16,19 @@ import DataTable from "./data-table";
 import Question from "./question";
 import Query from "./query";
 import Text from "./text";
-import { MessageType, QueryResultsType } from "@/types";
+import { MessageType } from "@/types";
 import { useDeleteMessage } from "@/hooks/use-delete-message";
 import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
-import { parseQueryResults } from "../_utils";
-import { ColumnDef } from "@tanstack/react-table";
 import { useFindImages } from "@/hooks/use-find-images";
+import { useParseQueryResults } from "@/hooks/use-parse-query-results";
 
-const Message = ({ 
-    message,
-    messages,
- }: { 
-    message: MessageType,
-    messages: MessageType[] | null,
- }) => {
+const Message = ({ message }: { message: MessageType }) => {
     console.log(message);
 
-    const [parsedResults, setParsedResults] = useState<QueryResultsType[]>([]);
-    const [columns, setColumns] = useState<ColumnDef<QueryResultsType>[]>([]);
+    const { parsedResults, columns } = useParseQueryResults(message);
 
     const { imageUrls } = useFindImages(parsedResults);
-
-    useEffect(() => {
-        if (message.queryResults) {
-            parseQueryResults(message.queryResults).then((data) => {
-                setParsedResults(data);
-
-                if (data.length > 0) {
-                    const cols: ColumnDef<QueryResultsType>[] = Object.keys(data[0]).map((key) => ({
-                        id: key,
-                        accessorKey: key,
-                        header: key,
-                    }));
-                    setColumns(cols);
-                }
-            });
-        }
-    }, [message]);
 
     const router = useRouter();
 
@@ -77,18 +52,25 @@ const Message = ({
 
         return () => {
             if (ref) observer.unobserve(ref);
+            observer.disconnect();
         };
-    }, [messages]);
+    });
 
     const [tabValue, setTabValue] = useState("question");
     const [resultsTab, setResultsTab] = useState("");
+    const [defaultTab, setDefaultTab] = useState('question');
+
+    useEffect(() => {
+        setDefaultTab(message?.question ? 'question' : 'query');
+        setTabValue(message?.question ? 'question' : 'query');
+    }, [message?.question]);
 
     useEffect(() => {
         if (!isVisible) {
-            setTabValue("question");
+            setTabValue(message?.question ? 'question' : 'query');
             setResultsTab("");
         }
-    }, [isVisible]);
+    }, [isVisible, message?.question]);
 
     useEffect(() => {
         if (message && message.errorMessage) {
@@ -144,56 +126,62 @@ const Message = ({
                 )}
             >
                 <Tabs 
-                defaultValue="question" 
+                defaultValue={defaultTab} 
                 value={tabValue} 
                 onValueChange={setTabValue}
                 className="size-full"
                 >
                     <TabsList className="absolute -mt-[38px] max-md:left-1/2 max-md:transform max-md:-translate-x-1/2">
-                        <CustomTabsTrigger value="question">Question</CustomTabsTrigger>
-                        <CustomTabsTrigger value="query">Query</CustomTabsTrigger>
-                        <CustomTabsTrigger value="results" asChild>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger 
-                                className={cn(
-                                    "text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-x-0.5",
-                                    "rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow]",
-                                    "focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50",
-                                    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-                                    tabValue === 'results' && 'bg-muted-foreground/20 dark:text-foreground'
-                                )}
-                                >
-                                    Results
-                                    <ChevronDown className="text-muted-foreground size-4" />
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()} className="z-50">
-                                <DropdownMenuItem onClick={() => {
-                                    setTabValue("results");
-                                    setResultsTab("map");
-                                }}>
-                                    Map
-                                </DropdownMenuItem>
-                                <DropdownMenuItem disabled={!imageUrls} onClick={() => {
-                                    setTabValue("results");
-                                    setResultsTab("images");
-                                }}>
-                                    Images
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => {
-                                    setTabValue("results");
-                                    setResultsTab("table");
-                                }}>
-                                    Table
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => {
-                                    setTabValue("results");
-                                    setResultsTab("text");
-                                }}>
-                                    Text
-                                </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </CustomTabsTrigger>
+                        { message.question && <CustomTabsTrigger value="question">Question</CustomTabsTrigger> }
+                        { message.query && <CustomTabsTrigger value="query">Query</CustomTabsTrigger> }
+                        {
+                            message.queryResults &&
+                            <CustomTabsTrigger value="results" asChild>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger 
+                                    className={cn(
+                                        "text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-x-0.5",
+                                        "rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow]",
+                                        "focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50",
+                                        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+                                        tabValue === 'results' && 'bg-muted-foreground/20 dark:text-foreground'
+                                    )}
+                                    >
+                                        Results
+                                        <ChevronDown className="text-muted-foreground size-4" />
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()} className="z-50">
+                                    <DropdownMenuItem onClick={() => {
+                                        setTabValue("results");
+                                        setResultsTab("map");
+                                    }}>
+                                        Map
+                                    </DropdownMenuItem>
+                                    {
+                                        imageUrls &&
+                                        <DropdownMenuItem disabled={!imageUrls} onClick={() => {
+                                            setTabValue("results");
+                                            setResultsTab("images");
+                                        }}>
+                                            Images
+                                        </DropdownMenuItem>
+                                    }
+                                    <DropdownMenuItem onClick={() => {
+                                        setTabValue("results");
+                                        setResultsTab("table");
+                                    }}>
+                                        Table
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => {
+                                        setTabValue("results");
+                                        setResultsTab("text");
+                                    }}>
+                                        Text
+                                    </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </CustomTabsTrigger>
+                        }
                     </TabsList>
                     <TabsContent value="question">
                         <Question question={message.question} />

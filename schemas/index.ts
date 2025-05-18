@@ -35,5 +35,6 @@ export const UpdateChatNameSchema = z.object({
 });
 
 export const PostMessageSchema = z.object({
-    question: z.string()
+    question: z.optional(z.string()),
+    query: z.optional(z.string())
 });

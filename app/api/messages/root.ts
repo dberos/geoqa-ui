@@ -65,23 +65,88 @@ const app = new Hono()
                 .from(messagesTable)
                 .where(eq(messagesTable.id, messageId));
 
-                if (!message.question) {
-                    return c.json({ error: 'Not present question' }, { status: 400 });
+                if (message.question) {
+                    const response = await fetch(process.env.NLQ_API_URL!, {
+                        method: 'POST',
+                        headers:{
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                        },    
+                        body: new URLSearchParams({
+                            question: message.question
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const [updatedMessage] = await db
+                        .update(messagesTable)
+                        .set({ errorMessage: 'Failed to generate answer' })
+                        .where(eq(messagesTable.id, messageId))
+                        .returning();
+
+                        return c.json({ 
+                            message: updatedMessage, 
+                            text: 'Failed to generate response from GeoQA API'
+                        }, { 
+                            status: 200
+                        });
+                    }
+
+                    const result = await response.json();
+                    if (result.errorMessage) {
+                        const [updatedMessage] = await db
+                        .update(messagesTable)
+                        .set({ errorMessage: result.errorMessage })
+                        .where(eq(messagesTable.id, messageId))
+                        .returning();
+
+                        return c.json({ 
+                            message: updatedMessage, 
+                            text: 'Failed to generate response from GeoQA API'
+                        }, { 
+                            status: 200
+                        });
+                    }
+
+                    const [updatedMessage] = await db
+                    .update(messagesTable)
+                    .set({
+                        isLoading: false,
+                        query: result.query,
+                        queryResults: result.queryResults,
+                        textualResponse: result.textualResponse,
+                        errorMessage: result.errorMessage
+                    })
+                    .where(eq(messagesTable.id, messageId))
+                    .returning();
+
+                    return c.json({ message: updatedMessage });
+                }
+                
+                if (!message.query) {
+                    const [updatedMessage] = await db
+                    .update(messagesTable)
+                    .set({ errorMessage: 'Failed to generate answer' })
+                    .where(eq(messagesTable.id, messageId))
+                    .returning();
+
+                    return c.json({ 
+                        message: updatedMessage, 
+                        text: 'Failed to generate response from GeoQA API'
+                    }, { 
+                        status: 200
+                    });
                 }
 
-                const response = await fetch(process.env.NLQ_API_URL!, {
+                const response = await fetch(process.env.SPARQL_API_URL!, {
                     method: 'POST',
                     headers:{
                     'Content-Type': 'application/x-www-form-urlencoded'
                     },    
                     body: new URLSearchParams({
-                        question: message.question
+                        sparql: message.query
                     })
                 });
-                // Just set the errorMessage and return 200 status with a text
-                // And still loading
-                // Get the null message in the message UI
-                // And there delete the message and show a toast
+
                 if (!response.ok) {
                     const [updatedMessage] = await db
                     .update(messagesTable)
@@ -96,6 +161,7 @@ const app = new Hono()
                         status: 200
                     });
                 }
+
                 const result = await response.json();
                 if (result.errorMessage) {
                     const [updatedMessage] = await db

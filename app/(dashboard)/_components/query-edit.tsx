@@ -18,6 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import dedent from "dedent-js";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { usePostChatMessage, usePostMessage } from "@/hooks/use-post-message";
+import { usePathname, useRouter } from "next/navigation";
 
 const FormSchema = z.object({
     query: z.string()
@@ -30,6 +32,13 @@ const QueryEdit = ({
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, 
     query: string | undefined | null 
 }) => {
+
+    const router = useRouter();
+
+    const pathname = usePathname();
+    const segments = pathname.split('/');
+    const chatId = segments[segments.length - 1];
+
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -38,14 +47,49 @@ const QueryEdit = ({
         query: dedent(query || "")
     }
   });
+
+  const { mutate: postChatMessageMutate } = usePostChatMessage();
+  const { mutate: messageMutate } = usePostMessage();
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsSubmitting(true);
-    console.log(data);
     setTimeout(() => {
-        setIsSubmitting(false);
-        form.reset();
-        setIsOpen(false);
-    }, 2000)
+        postChatMessageMutate({ json: data, param: { chatId } },
+            {
+                onSuccess: (data) => {
+                    setIsSubmitting(false);
+                    form.reset();
+                    setIsOpen(false);
+                    setTimeout(() => {
+                        // Narrow down the type for type safety
+                        // It can be either { messageId } or { error }
+                        // Error will be caught from !response.ok in the hook
+                        // And here with onError
+                        // But typescript needs to know
+                        if ('messageId' in data) {
+                            messageMutate({ param: { messageId: data.messageId } },
+                                {
+                                    onError: () => {
+                                        router.replace('/error');
+                                    }
+                                }
+                            )
+                        }
+                        else {
+                            router.replace('/error');
+                        }
+                        
+                    }, 1000);
+                },
+                onError: () => {
+                    setIsSubmitting(false);
+                    form.reset();
+                    setIsOpen(false);
+                    router.replace('/error');
+                }
+            }
+        )
+    }, 200)
   } 
     return ( 
         <DialogContent className="w-full  2xl:max-w-2xl 2k:max-w-3xl 4k:max-w-4xl">
