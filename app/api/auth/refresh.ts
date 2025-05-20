@@ -41,47 +41,50 @@ const app = new Hono()
                 }
                 
                 // Check if session exists
-                const [session] = await db
+                const session = await db.transaction(async (tx) => {
+                const [session] = await tx
                 .select()
                 .from(sessionsTable)
                 .where(eq(sessionsTable.id, sessionId))
                 .limit(1);
-    
                 if (!session) {
                     // If no present session, then something's wrong
-                    return c.json({ success: false }, { status: 500 });
+                        return null;
                 }
-                else {
                     // Check if token is blacklisted
-                    const [token] = await db
+                    const [token] = await tx
                     .select()
                     .from(tokensTable)
                     .where(eq(tokensTable.jti, oldJti))
                     .limit(1);
                     if (token?.isBlacklisted) {
                         // If it is blacklisted delete the session
-                        await db
+                        await tx
                         .delete(sessionsTable)
                         .where(eq(sessionsTable.id, sessionId));
-                        return c.json({ success: false }, { status: 500 });
+                        return null;
                     }
                     else {
                         // Blacklist it and insert the new token with blacklist false
-                        await db
+                        await tx
                         .update(tokensTable)
                         .set({ isBlacklisted: true })
-                        .where(eq(tokensTable.jti, oldJti))
+                        .where(eq(tokensTable.jti, oldJti));
     
-                        await db
+                        await tx
                         .insert(tokensTable)
                         .values({
                             sessionId,
                             jti,
                             exp,
                         });
-                        return c.json({ success: true });
+                        return session;
                     }
+                });
+                if (!session) {
+                    return c.json({ success: false }, { status: 500 });
                 }
+                return c.json({ success: true });
             }
             catch (error) {
                 console.error(error);

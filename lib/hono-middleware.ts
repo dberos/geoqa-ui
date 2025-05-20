@@ -1,5 +1,3 @@
-import "server-only";
-
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import { createJWT, decodeJWT, verifyJWT } from "./session";
@@ -47,6 +45,24 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
                 deleteCookie(c, 'refreshToken');
                 c.set('session', null);
                 return c.json({ error: 'Unauthorized' }, { status: 401 });
+            }
+
+            // Don't refresh the token in GET requests
+            if (c.req.method === 'GET') {
+                // If the request is a GET request, just decode the access token
+                // It is not state changing
+                // It can be cached, subsequent to a successful state changing request
+                // When during that, the access token expired
+                const decodedAccessToken = await decodeJWT(accessToken);
+                if (!decodedAccessToken) {
+                    deleteCookie(c, 'accessToken');
+                    deleteCookie(c, 'refreshToken');
+                    c.set('session', null);
+                    return new Response(null, { status: 204 });
+                }
+                c.set('session', decodedAccessToken);
+                await next();
+                return;
             }
 
             // Verify the access token

@@ -29,7 +29,14 @@ const Message = ({ messageId }: { messageId: string }) => {
 
     const queryClient = useQueryClient();
 
-    const { data, isLoading } = usefindMessage(messageId);
+    const router = useRouter();
+
+    const { data, isLoading, error } = usefindMessage(messageId);
+    if (error) {
+        console.error(error);
+        router.replace('/error');
+    }
+    
     const message = useMemo(() => data?.message, [data?.message]);
 
     const { parsedResults, columns } = useParseQueryResults(message);
@@ -37,8 +44,6 @@ const Message = ({ messageId }: { messageId: string }) => {
     const { imageUrls } = useFindImages(parsedResults);
 
     const { wktValues } = useFindWkts(parsedResults);
-
-    const router = useRouter();
 
     const messageRef = useRef<HTMLDivElement | null>(null);
     const [isVisible, setIsVisible] = useState(true);
