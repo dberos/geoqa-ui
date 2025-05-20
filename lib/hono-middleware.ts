@@ -58,7 +58,7 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
                     deleteCookie(c, 'accessToken');
                     deleteCookie(c, 'refreshToken');
                     c.set('session', null);
-                    return new Response(null, { status: 204 });
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
                 }
                 c.set('session', decodedAccessToken);
                 await next();
