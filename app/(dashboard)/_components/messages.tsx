@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import Message from "./message";
 import { usefindMessages } from "@/hooks/use-find-messages";
-import { MessageType } from "@/types";
 import { useRouter } from "next/navigation";
 import { useDeleteChat } from "@/hooks/use-delete-chat";
 import toast from 'react-hot-toast';
@@ -24,11 +23,11 @@ const Messages = ({ chatId }: { chatId: string }) => {
     const { mutate: deleteChatMutate } = useDeleteChat();
 
     useEffect(() => {
-        if (data?.messages) {
+        if (data?.messageIds) {
             if (originalLength.current === null) {
                 // Set the original length on the first load
                 // So it scrolls instantly on bottom
-                originalLength.current = data.messages.length;
+                originalLength.current = data.messageIds.length;
                 bottomRef.current?.scrollIntoView({ behavior: "instant" });
             }
             else {
@@ -36,10 +35,10 @@ const Messages = ({ chatId }: { chatId: string }) => {
                 bottomRef.current?.scrollIntoView({ behavior: "smooth" });
             }
         }
-    }, [data?.messages]);
+    }, [data?.messageIds]);
 
     useEffect(() => {
-        if (data && data.messages && data?.messages.length === 0) {
+        if (data && data.messageIds && data?.messageIds.length === 0) {
             deleteChatMutate({ param: { chatId } }, 
                 {
                     onSuccess: () => {
@@ -70,18 +69,18 @@ const Messages = ({ chatId }: { chatId: string }) => {
                 }
             )
         }
-    }, [data, chatId, data?.messages, deleteChatMutate, router])
+    }, [data, chatId, data?.messageIds, deleteChatMutate, router])
 
     return (
         <div className="flex-1 w-full min-h-0">
             <div className="h-full w-full overflow-y-auto snap-y snap-mandatory scroll-smooth">
                 {
-                    data && data.messages && data.messages.map((message: MessageType) => (
+                    data && data.messageIds && data.messageIds.map((value: { id: string }) => (
                         <div
-                        key={message.id}
+                        key={value.id}
                         className="h-full w-full snap-start flex items-center justify-center"
                     >
-                        <Message message={message} />
+                        <Message messageId={value.id} />
                     </div>
                     ))
                 }

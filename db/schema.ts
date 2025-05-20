@@ -31,6 +31,7 @@ export const chatsTable = pgTable("chats", {
 export const messagesTable = pgTable("messages", {
   id: uuid().primaryKey().defaultRandom(),
   chatId: uuid().notNull().references(() => chatsTable.id, { onDelete: "cascade" }),
+  userId: uuid().notNull().references(() => usersTable.id, { onDelete: "cascade" }),
   question: text(),
   query: text(),
   queryResults: text(),

@@ -21,12 +21,12 @@ const parseQueryResults = (data: string): Promise<Record<string, string>[]> => {
     });
 };
 
-export const useParseQueryResults = (message: MessageType) => {
+export const useParseQueryResults = (message: MessageType | undefined) => {
     const [parsedResults, setParsedResults] = useState<QueryResultsType[]>([]);
     const [columns, setColumns] = useState<ColumnDef<QueryResultsType>[]>([]);
 
     useEffect(() => {
-        if (message.queryResults) {
+        if (message?.queryResults) {
             // Parse the CSV data
             parseQueryResults(message.queryResults).then((data) => {
                 setParsedResults(data);

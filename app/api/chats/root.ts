@@ -25,6 +25,7 @@ const app = new Hono()
 
                 const [message] = await db.insert(messagesTable).values({
                     chatId: chat.id,
+                    userId,
                     question
                 }).returning()
 

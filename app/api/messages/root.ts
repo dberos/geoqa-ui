@@ -30,13 +30,13 @@ const app = new Hono()
                     return c.json({ error: 'Unauthorized' }, { status: 401 });
                 }
 
-                const messages = await db
+                const messageIds = await db
                 .select()
                 .from(messagesTable)
                 .where(eq(messagesTable.chatId, chatId))
                 .orderBy(asc(messagesTable.createdAt));
 
-                return c.json({ messages });
+                return c.json({ messageIds });
             }
             catch (error) {
                 console.error(error);
@@ -64,6 +64,10 @@ const app = new Hono()
                 .select()
                 .from(messagesTable)
                 .where(eq(messagesTable.id, messageId));
+
+                if (message?.userId !== userId) {
+                    return c.json({ error: 'Unauthorized' }, { status: 401 });
+                }
 
                 if (message.question) {
                     const response = await fetch(process.env.NLQ_API_URL!, {

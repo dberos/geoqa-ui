@@ -46,6 +46,7 @@ export const usePostMessage = () => {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['messages'] });
+                queryClient.invalidateQueries({ queryKey: ['message'] });
             }
         })
     return mutation;

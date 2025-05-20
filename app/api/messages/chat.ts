@@ -31,7 +31,8 @@ const app = new Hono()
                 }
 
                 const [message] = await db.insert(messagesTable).values({
-                    chatId: chatId,
+                    chatId,
+                    userId,
                     question,
                     query
                 }).returning();

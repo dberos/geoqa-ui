@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, CustomTabsTrigger } from "@/components/ui/tabs";
 import {
@@ -16,15 +16,21 @@ import DataTable from "./data-table";
 import Question from "./question";
 import Query from "./query";
 import Text from "./text";
-import { MessageType } from "@/types";
 import { useDeleteMessage } from "@/hooks/use-delete-message";
 import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
 import { useFindImages } from "@/hooks/use-find-images";
 import { useParseQueryResults } from "@/hooks/use-parse-query-results";
 import { useFindWkts } from "@/hooks/use-find-wkt";
+import { usefindMessage } from "@/hooks/use-find-message";
+import { useQueryClient } from "@tanstack/react-query";
 
-const Message = ({ message }: { message: MessageType }) => {
+const Message = ({ messageId }: { messageId: string }) => {
+
+    const queryClient = useQueryClient();
+
+    const { data, isLoading } = usefindMessage(messageId);
+    const message = useMemo(() => data?.message, [data?.message]);
 
     const { parsedResults, columns } = useParseQueryResults(message);
 
@@ -107,6 +113,12 @@ const Message = ({ message }: { message: MessageType }) => {
         }
     }, [message, router, deleteMessageMutate]);
 
+    useEffect(() => {
+        return () => {
+            queryClient.removeQueries({ queryKey: ['message', messageId] });
+        };
+    }, [queryClient, messageId]);
+
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => { setIsMounted(true) }, []);
     if (!isMounted) return null;
@@ -114,7 +126,7 @@ const Message = ({ message }: { message: MessageType }) => {
     return (
         <>
             {
-                message.isLoading ?
+                (message?.isLoading || isLoading) ?
                 <div className="relative h-80 w-4/5 lg:h-72 xl:h-96 2k:h-[500px] 4k:h-[600px] 4k:w-3/5
                 rounded-md border border-muted-foreground/50 dark:border-border transition-all duration-500 flex items-center justify-center">
                     <Loader2 className="size-10 text-muted-foreground animate-spin" />
@@ -134,10 +146,10 @@ const Message = ({ message }: { message: MessageType }) => {
                 className="size-full"
                 >
                     <TabsList className="absolute -mt-[38px] max-md:left-1/2 max-md:transform max-md:-translate-x-1/2">
-                        { message.question && <CustomTabsTrigger value="question">Question</CustomTabsTrigger> }
-                        { message.query && <CustomTabsTrigger value="query">Query</CustomTabsTrigger> }
+                        { message?.question && <CustomTabsTrigger value="question">Question</CustomTabsTrigger> }
+                        { message?.query && <CustomTabsTrigger value="query">Query</CustomTabsTrigger> }
                         {
-                            message.queryResults &&
+                            message?.queryResults &&
                             <CustomTabsTrigger value="results" asChild>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger 
@@ -189,10 +201,10 @@ const Message = ({ message }: { message: MessageType }) => {
                         }
                     </TabsList>
                     <TabsContent value="question">
-                        <Question question={message.question} />
+                        <Question question={message?.question} />
                     </TabsContent>
                     <TabsContent value="query">
-                        <Query query={message.query} />
+                        <Query query={message?.query} />
                     </TabsContent>
                     <TabsContent value="results">
                         {
@@ -209,7 +221,7 @@ const Message = ({ message }: { message: MessageType }) => {
                         }
                         {
                             resultsTab === "text" && 
-                            <Text textualResponse={message.textualResponse}/>
+                            <Text textualResponse={message?.textualResponse}/>
                         }
                     </TabsContent>
                 </Tabs>
@@ -221,4 +233,4 @@ const Message = ({ message }: { message: MessageType }) => {
     );
 };
 
-export default Message;
+export default React.memo(Message);
