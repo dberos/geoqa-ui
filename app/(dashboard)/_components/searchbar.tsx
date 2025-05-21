@@ -134,7 +134,7 @@ const Searchbar = () => {
     return ( 
         <SearchCommand>
             <SearchCommandInput 
-            placeholder="How may I assist you?" 
+            placeholder="Start exploring..." 
             disabled={isSelected}
             value={inputValue}
             onChangeCapture={handleInputChange}

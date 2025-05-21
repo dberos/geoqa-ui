@@ -97,7 +97,7 @@ const NavMobile = () => {
                                     alt="GeoQA logo"
                                     width={100}
                                     height={100}
-                                    className="object-contain size-12"
+                                    className="object-contain size-12 -mt-3"
                                     />
                                 </Link>
                                 {
