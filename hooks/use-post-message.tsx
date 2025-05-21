@@ -23,8 +23,10 @@ export const usePostChatMessage = () => {
                 }
                 return await response.json();
             },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['messages'] });
+            onSuccess: (data) => {
+                if ('chatId' in data) {
+                    queryClient.invalidateQueries({ queryKey: ['messages', data.chatId] });
+                }
             }
         })
     return mutation;
@@ -44,9 +46,10 @@ export const usePostMessage = () => {
                 }
                 return await response.json();
             },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['messages'] });
-                queryClient.invalidateQueries({ queryKey: ['message'] });
+            onSuccess: (data) => {
+                if ('message' in data) {
+                    queryClient.invalidateQueries({ queryKey: ['message', data.message.id] });
+                }
             }
         })
     return mutation;

@@ -41,6 +41,7 @@ import { useDeleteChat } from "@/hooks/use-delete-chat";
 const Chat = ({ chat }: { chat: ChatType }) => {
 
     const pathname = usePathname();
+    const isOnChatPage = pathname.startsWith("/dashboard/chats/");
     const segments = pathname.split('/');
     const chatId = segments[segments.length - 1];
 
@@ -94,7 +95,9 @@ const Chat = ({ chat }: { chat: ChatType }) => {
             setIsOpenDelete(false);
             setIsOpenOptions(false);
             setIsSubmittingDelete(false);
-            router.replace('/dashboard');
+            if (isOnChatPage) {
+                router.replace('/dashboard');
+            }
         }, 1000);
     }
 

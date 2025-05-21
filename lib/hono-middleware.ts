@@ -1,8 +1,10 @@
-import { deleteCookie, getCookie, setCookie } from "hono/cookie";
+import 'server-only';
 import { createMiddleware } from "hono/factory";
 import { createJWT, decodeJWT, verifyJWT } from "./session";
 import { SessionPayload } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
+import { cookies } from 'next/headers';
+import { getCookie } from 'hono/cookie';
 
 type MiddlewareContext = {
     Variables: {
@@ -35,34 +37,17 @@ export const userMiddleware = createMiddleware<MiddlewareContext>(
 
 export const sessionMiddleware = createMiddleware<MiddlewareContext>(
     async (c, next) => {
+            const cookieStore = await cookies();
         try {
             // Get the access and refresh tokens from the request
-            const accessToken = getCookie(c, 'accessToken') || '';
-            const refreshToken = getCookie(c, 'refreshToken') || '';
+            const accessToken = cookieStore?.get('accessToken')?.value || '';
+            const refreshToken = cookieStore?.get('refreshToken')?.value || '';
 
             if (!accessToken || !refreshToken) {
-                deleteCookie(c, 'accessToken');
-                deleteCookie(c, 'refreshToken');
+                cookieStore?.delete('accessToken');
+                cookieStore?.delete('refreshToken');
                 c.set('session', null);
                 return c.json({ error: 'Unauthorized' }, { status: 401 });
-            }
-
-            // Don't refresh the token in GET requests
-            if (c.req.method === 'GET') {
-                // If the request is a GET request, just decode the access token
-                // It is not state changing
-                // It can be cached, subsequent to a successful state changing request
-                // When during that, the access token expired
-                const decodedAccessToken = await decodeJWT(accessToken);
-                if (!decodedAccessToken) {
-                    deleteCookie(c, 'accessToken');
-                    deleteCookie(c, 'refreshToken');
-                    c.set('session', null);
-                    return c.json({ error: 'Unauthorized' }, { status: 401 });
-                }
-                c.set('session', decodedAccessToken);
-                await next();
-                return;
             }
 
             // Verify the access token
@@ -72,8 +57,8 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
 
                 // Verify the refresh token
                 if (!verifiedRefreshToken) {
-                    deleteCookie(c, 'accessToken');
-                    deleteCookie(c, 'refreshToken');
+                    cookieStore?.delete('accessToken');
+                    cookieStore?.delete('refreshToken');
                     c.set('session', null);
                     return c.json({ error: 'Unauthorized' }, { status: 401 });
                 }
@@ -96,8 +81,8 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
                     // Decode the access token payload
                     const decodedAccessToken = await decodeJWT(accessToken);
                     if (!decodedAccessToken) {
-                        deleteCookie(c, 'accessToken');
-                        deleteCookie(c, 'refreshToken');
+                        cookieStore?.delete('accessToken');
+                        cookieStore?.delete('refreshToken');
                         c.set('session', null);
                         return c.json({ error: 'Unauthorized' }, { status: 401 });
                     }
@@ -127,33 +112,34 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
                         }),
                     });
                     if (!refreshResponse.ok) {
-                        deleteCookie(c, 'accessToken');
-                        deleteCookie(c, 'refreshToken');
+                        cookieStore?.delete('accessToken');
+                        cookieStore?.delete('refreshToken');
                         c.set('session', null);
                         return c.json({ error: 'Unauthorized' }, { status: 401 });
                     }
                     const { success } = await refreshResponse.json();
                     if (!success) {
-                        deleteCookie(c, 'accessToken');
-                        deleteCookie(c, 'refreshToken');
+                        cookieStore?.delete('accessToken');
+                        cookieStore?.delete('refreshToken');
                         c.set('session', null);
                         return c.json({ error: 'Unauthorized' }, { status: 401 });
                     }
 
-                    setCookie(c, 'accessToken', newAccessToken, {
+                    cookieStore.set('accessToken', newAccessToken, {
                         httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
                         sameSite: 'lax',
                         maxAge: 60 * 60 * 24,
                         path: '/'
-                    });
-                    setCookie(c, 'refreshToken', newRefreshToken, {
+                    })
+                    cookieStore.set('refreshToken', newRefreshToken, {
                         httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
                         sameSite: 'lax',
                         maxAge: 60 * 60 * 24,
                         path: '/'
-                    });
+                    })
+
                     const verifiedNewAccessToken = await verifyJWT(newAccessToken);
                     c.set('session', verifiedNewAccessToken);
                     await next();
@@ -161,28 +147,28 @@ export const sessionMiddleware = createMiddleware<MiddlewareContext>(
             }
             else {
                 // Have to set the response cookies in case the access token hasn't expired
-                setCookie(c, 'accessToken', accessToken, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax',
-                    maxAge: 60 * 60 * 24,
-                    path: '/'
-                });
-                setCookie(c, 'refreshToken', refreshToken, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax',
-                    maxAge: 60 * 60 * 24,
-                    path: '/'
-                });
+                cookieStore.set('accessToken', accessToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'lax',
+                        maxAge: 60 * 60 * 24,
+                        path: '/'
+                    })
+                    cookieStore.set('refreshToken', refreshToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'lax',
+                        maxAge: 60 * 60 * 24,
+                        path: '/'
+                    })
                 c.set('session', verifiedAccessToken);
                 await next();
             }
         }
         catch (error) {
             console.error(error);
-            deleteCookie(c, 'accessToken');
-            deleteCookie(c, 'refreshToken');
+            cookieStore?.delete('accessToken');
+            cookieStore?.delete('refreshToken');
             c.set('session', null);
             return c.json({ error: 'Unauthorized' }, { status: 401 });
         }

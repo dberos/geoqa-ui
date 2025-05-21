@@ -248,7 +248,7 @@ const app = new Hono()
                 .delete(messagesTable)
                 .where(eq(messagesTable.id, messageId));
 
-                return c.json({ success: true });
+                return c.json({ chatId: message.chatId });
             }
             catch (error) {
                 console.error(error);

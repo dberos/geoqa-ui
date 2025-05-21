@@ -29,7 +29,7 @@ const app = new Hono()
                     question
                 }).returning()
 
-                return c.json({ chatId: chat.id, messageId: message.id });
+                return c.json({ chatId: chat.id, messageId: message.id, userId });
             }
             catch (error) {
                 console.error(error);
@@ -69,7 +69,7 @@ const app = new Hono()
                 .set({ name })
                 .where(eq(chatsTable.id, chatId));
 
-                return c.json({ success: true });
+                return c.json({ userId });
 
             }
             catch (error) {
@@ -107,7 +107,7 @@ const app = new Hono()
                 .delete(chatsTable)
                 .where(eq(chatsTable.id, chatId));
 
-                return c.json({ success: true });
+                return c.json({ userId });
             }
             catch (error) {
                 console.error(error);

@@ -21,8 +21,10 @@ export const useDeleteMessage = () => {
                 }
                 return await response.json();
             },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['messages'] });
+            onSuccess: (data) => {
+                if ('chatId' in data) {
+                    queryClient.invalidateQueries({ queryKey: ['messages', data.chatId] });
+                }
             }
         })
     return mutation;

@@ -19,8 +19,10 @@ export const usePostChat = () => {
                 }
                 return await response.json();
             },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['chats'] });
+            onSuccess: (data) => {
+                if ('userId' in data) {
+                    queryClient.invalidateQueries({ queryKey: ['chats', data.userId] });
+                }
             }
         })
     return mutation;

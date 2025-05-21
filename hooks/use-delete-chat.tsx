@@ -21,8 +21,10 @@ export const useDeleteChat = () => {
                 }
                 return await response.json();
             },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['chats'] });
+            onSuccess: (data) => {
+                if ('userId' in data) {
+                    queryClient.invalidateQueries({ queryKey: ['chats', data.userId] });
+                }   
             }
         })
     return mutation;

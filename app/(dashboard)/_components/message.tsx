@@ -33,11 +33,12 @@ const Message = ({ messageId }: { messageId: string }) => {
 
     const { data, isLoading, error } = usefindMessage(messageId);
     if (error) {
+        console.error('Error from message component');
         console.error(error);
         router.replace('/error');
     }
     
-    const message = useMemo(() => data?.message, [data?.message]);
+    const message = useMemo(() => data?.message && data.message, [data?.message]);
 
     const { parsedResults, columns } = useParseQueryResults(message);
 

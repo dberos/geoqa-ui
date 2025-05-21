@@ -37,7 +37,7 @@ const app = new Hono()
                     query
                 }).returning();
 
-                return c.json({ messageId: message.id });
+                return c.json({ messageId: message.id, chatId: message.chatId });
             }
             catch (error) {
                 console.error(error);
