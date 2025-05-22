@@ -54,9 +54,6 @@ const PersonalData = () => {
                    avatarUrl : { data?.user && data.user.avatarUrl }
                 </p>
             </CardContent>
-            {/* <CardFooter>
-                <p>Card Footer</p>
-            </CardFooter> */}
         </Card>
     );
 }
