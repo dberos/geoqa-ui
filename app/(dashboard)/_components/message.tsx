@@ -9,7 +9,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";  
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Map from "./map";
 import Carousel from "./carousel";
 import DataTable from "./data-table";
@@ -24,6 +24,7 @@ import { useParseQueryResults } from "@/hooks/use-parse-query-results";
 import { useFindWkts } from "@/hooks/use-find-wkt";
 import { usefindMessage } from "@/hooks/use-find-message";
 import { useQueryClient } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton"
 
 const Message = ({ messageId }: { messageId: string }) => {
 
@@ -133,9 +134,9 @@ const Message = ({ messageId }: { messageId: string }) => {
         <>
             {
                 (message?.isLoading || isLoading) ?
-                <div className="relative h-80 w-4/5 lg:h-72 xl:h-96 2k:h-[500px] 4k:h-[600px] 4k:w-3/5
-                rounded-md border border-muted-foreground/50 dark:border-border transition-all duration-500 flex items-center justify-center">
-                    <Loader2 className="size-10 text-muted-foreground animate-spin" />
+                <div className="relative w-4/5 h-80 lg:h-72 xl:h-96 2k:h-[500px] 4k:h-[600px] 4k:w-3/5">
+                    <Skeleton className="absolute -top-10 max-md:left-1/2 max-md:transform max-md:-translate-x-1/2 h-10 w-60" />
+                    <Skeleton className="rounded-md size-full" />
                 </div> :
                 <div
                 ref={messageRef}
