@@ -5,6 +5,7 @@ import google from './google';
 import refresh from './refresh';
 import signIn from './sign-in';
 import signOut from './sign-out';
+import legal from './legal';
 
 const app = new Hono()
     .route('/', root)
@@ -13,5 +14,6 @@ const app = new Hono()
     .route('/refresh', refresh)
     .route('/sign-in', signIn)
     .route('/sign-out', signOut)
+    .route('/legal', legal)
 
 export default app;

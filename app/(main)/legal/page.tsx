@@ -33,7 +33,7 @@ export default async function LegalPage() {
                         </h2>
                         <p className="mt-2 max-w-7xl 2k:text-lg 4k:text-xl 4k:max-w-[2000px]">
                             When you visit our application, we automatically collect certain information about your GitHub or Google profile
-                            that you used to sign in. This information includes your provided name, username, email address and profile picture.
+                            that you used to sign in. This information includes your provided name if present or set as your username or email if not, GitHub or Google Id and profile picture.
                             This information is used to personalize your experience and enabling core functionalities of the application.
                             
                         </p>
@@ -66,8 +66,8 @@ export default async function LegalPage() {
                         <ul className="list-disc ml-8 mt-2 space-y-1">
                             <li>
                                 You have the right to access your personal data,&nbsp; 
-                                <Link href='/' className="underline text-blue-500">
-                                    from this form.
+                                <Link href='/legal/personal-data' className="underline text-blue-500">
+                                    from this page.
                                 </Link>
                                  
                             </li>

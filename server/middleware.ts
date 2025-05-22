@@ -27,7 +27,8 @@ class MiddlewareResponse {
 
         // Set configuration
         this.isProtectedRoute = [
-            '/dashboard(.*)'
+            '/dashboard(.*)',
+            '/legal/personal-data'
         ];
         // Redirect URL can't be a protected route
         // Or it gets endless loop

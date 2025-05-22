@@ -20,7 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useSignOut } from "@/hooks/use-sign-out";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const NavDesktop = () => {
     
@@ -33,6 +33,8 @@ const NavDesktop = () => {
     const { mutate } = useSignOut();
 
     const router = useRouter();
+    const pathname = usePathname();
+    const isOnLegalPage = pathname.startsWith("/legal");
 
     const handleSignOut = () => {
         mutate({},
@@ -73,14 +75,25 @@ const NavDesktop = () => {
                 </Link>
                 <ul className="flex items-center space-x-10 ml-8">
                     <li>
-                        <Button variant="link" size="sm" className='cursor-pointer'>
+                        <Button 
+                        variant="link" 
+                        size="sm" 
+                        className='cursor-pointer'
+                        >
                             <Link href='/dashboard'>
                                 Dashboard
                             </Link>
                         </Button>
                     </li>
                     <li>
-                        <Button variant="link" size="sm" className='cursor-pointer'>
+                        <Button 
+                        variant="link" 
+                        size="sm" 
+                        className={cn(
+                            'cursor-pointer',
+                            isOnLegalPage && 'text-muted-foreground'
+                        )}
+                        >
                             <Link href='/legal'>
                                 Legal
                             </Link>

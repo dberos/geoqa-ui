@@ -33,7 +33,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSignOut } from "@/hooks/use-sign-out";
 import gitHub from "../../../public/github.svg";
 import linkedin from "../../../public/linkedin.png";
@@ -52,6 +52,9 @@ const NavMobile = () => {
     const { mutate } = useSignOut();
 
     const router = useRouter();
+    const pathname = usePathname();
+    const isOnLegalPage = pathname.startsWith("/legal");
+    //bg-neutral-300 dark:bg-neutral-700
     
     const handleSignOut = () => {
         mutate({},
@@ -151,10 +154,12 @@ const NavMobile = () => {
                         </div>
                     </SheetTitle>
                     </SheetHeader>
-                    <div className="mt-10 p-4 flex flex-col">
+                    <div className="mt-10 p-0 flex flex-col">
                         <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="dashboard">
-                                <AccordionTrigger>Dashboard</AccordionTrigger>
+                                <AccordionTrigger className="px-6">
+                                    Dashboard
+                                </AccordionTrigger>
                                 <AccordionContent>
                                 <Button variant="link" size="sm" className='cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
                                     <Link href="/dashboard">
@@ -163,8 +168,15 @@ const NavMobile = () => {
                                 </Button>
                                 </AccordionContent>
                             </AccordionItem>
-                            <AccordionItem value="legal">
-                                <AccordionTrigger>Legal</AccordionTrigger>
+                            <AccordionItem 
+                            value="legal" 
+                            className={cn(
+                                isOnLegalPage && 'bg-neutral-300 dark:bg-neutral-700'
+                            )}
+                            >
+                                <AccordionTrigger className="px-6">
+                                    Legal
+                                </AccordionTrigger>
                                 <AccordionContent>
                                 <ul>
                                     <li>
@@ -185,7 +197,9 @@ const NavMobile = () => {
                                 </AccordionContent>
                             </AccordionItem>
                             <AccordionItem value="contact">
-                                <AccordionTrigger>Contact</AccordionTrigger>
+                                <AccordionTrigger className="px-6">
+                                    Contact
+                                </AccordionTrigger>
                                 <AccordionContent>
                                 <ul>
                                     <li>
@@ -206,7 +220,9 @@ const NavMobile = () => {
                                 </AccordionContent>
                             </AccordionItem>
                             <AccordionItem value="about">
-                                <AccordionTrigger>About Us</AccordionTrigger>
+                                <AccordionTrigger className="px-6">
+                                    About Us
+                                </AccordionTrigger>
                                 <AccordionContent>
                                 <ul className="flex justify-around">
                                     <li>
