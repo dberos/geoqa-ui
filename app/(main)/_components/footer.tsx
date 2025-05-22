@@ -34,12 +34,16 @@ const Footer = () => {
                     <ul className="mt-1 md:mt-4">
                         <li>
                             <Button variant="link" size="sm" className='cursor-pointer'>
-                                Privacy Policy
+                                <Link href='/legal#privacy-policy'>
+                                    Privacy Policy
+                                </Link>
                             </Button>
                         </li>
                         <li>
                             <Button variant="link" size="sm" className='cursor-pointer'>
-                                Cookie Policy
+                                <Link href='/legal#cookie-policy'>
+                                    Cookie Policy
+                                </Link>
                             </Button>
                         </li>
                     </ul>

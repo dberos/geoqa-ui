@@ -81,7 +81,9 @@ const NavDesktop = () => {
                     </li>
                     <li>
                         <Button variant="link" size="sm" className='cursor-pointer'>
-                            Legal
+                            <Link href='/legal'>
+                                Legal
+                            </Link>
                         </Button>
                     </li>
                 </ul>

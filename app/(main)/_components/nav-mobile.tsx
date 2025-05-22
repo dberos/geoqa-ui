@@ -168,13 +168,17 @@ const NavMobile = () => {
                                 <AccordionContent>
                                 <ul>
                                     <li>
-                                        <Button variant="link" size="sm" className='cursor-pointer'>
-                                            Privacy Policy
+                                        <Button variant="link" size="sm" className='cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
+                                            <Link href='/legal#privacy-policy'>
+                                                Privacy Policy
+                                            </Link>
                                         </Button>
                                     </li>
                                     <li>
-                                        <Button variant="link" size="sm" className='cursor-pointer'>
-                                            Cookie Policy
+                                        <Button variant="link" size="sm" className='cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
+                                            <Link href='/legal#cookie-policy'>
+                                                Cookie Policy
+                                            </Link>
                                         </Button>
                                     </li>
                                 </ul>
