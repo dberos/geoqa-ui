@@ -18,6 +18,9 @@ class MiddlewareResponse {
     private chain: Promise<void>;
 
     public constructor(request: NextRequest) {
+        // Set custom header for not-found page
+        request.headers.set('x-current-path', request.nextUrl.pathname);
+
         this.request = request;
         this.response = NextResponse.next({
             request: {
@@ -30,6 +33,7 @@ class MiddlewareResponse {
             '/dashboard(.*)',
             '/legal/personal-data'
         ];
+
         // Redirect URL can't be a protected route
         // Or it gets endless loop
         this.redirectUrl = '/auth/sign-in';
