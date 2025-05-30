@@ -83,6 +83,7 @@ const Query = ({ query }: { query: string | undefined | null }) => {
                 variant='secondary' 
                 className="2xl:hidden"
                 onClick={form.handleSubmit(onSubmit)}
+                disabled={isSubmitting}
                 >
                     {
                         isSubmitting ?
