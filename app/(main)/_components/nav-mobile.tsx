@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useWindowScroll } from "react-use";
-import { Globe, Menu, SquarePen, User } from "lucide-react";
+import { Globe, Loader2, Menu, SquarePen, User } from "lucide-react";
 import {
     Sheet,
     SheetContent,
@@ -37,6 +37,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSignOut } from "@/hooks/use-sign-out";
 import gitHub from "../../../public/github.svg";
 import linkedin from "../../../public/linkedin.png";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useDeleteUser } from "@/hooks/use-delete-user";
+import { useState } from "react";
 
 const NavMobile = () => {
 
@@ -47,17 +58,52 @@ const NavMobile = () => {
 
     const { isAboveHero } = useNavbarStyle("homeHeroId", "mainNavbarMobileId");
 
-    const { data } = useSession();
-
-    const { mutate } = useSignOut();
-
     const router = useRouter();
     const pathname = usePathname();
     const isOnLegalPage = pathname.startsWith("/legal");
-    //bg-neutral-300 dark:bg-neutral-700
+
+    const { data } = useSession();
+
+    const { mutate: signOutMutate } = useSignOut();
+    const { mutate: deleteMutate } = useDeleteUser();
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isOpenAvatar, setIsOpenAvatar] = useState(false);
+
+    const handleCancel = () => {
+        setIsOpenAvatar(false);
+    }
+
+    const handleDelete = () => {
+        setIsSubmitting(true);
+        setTimeout(() => {
+            deleteMutate({ param: { userId: data?.session?.id || "" } },
+                {
+                    onSuccess: () => {
+                        setIsSubmitting(false);
+                        setIsOpenAvatar(false);
+                        setIsOpen(false);
+                        // Use window instead of router
+                        // When signing out, the cookies are cleared from the api
+                        // But the set-cookie is already present from middleware
+                        // So it needs a full page reload
+                        window.location.replace('/');
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        setIsSubmitting(false);
+                        setIsOpenAvatar(false);
+                        setIsOpen(false);
+                        router.push('/error');
+                    }
+                }
+            )
+        }, 1000)
+    }
+    
     
     const handleSignOut = () => {
-        mutate({},
+        signOutMutate({},
             {
                 onSuccess: () => {
                     // Use window instead of router
@@ -105,7 +151,7 @@ const NavMobile = () => {
                                 </Link>
                                 {
                                     data?.session ?
-                                    <DropdownMenu>
+                                    <DropdownMenu open={isOpenAvatar} onOpenChange={setIsOpenAvatar}>
                                     <DropdownMenuTrigger asChild>
                                         <Avatar className="cursor-pointer">
                                             <AvatarImage src={data?.session.avatarUrl} />
@@ -119,6 +165,41 @@ const NavMobile = () => {
                                             {data?.session.name}
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />
+                                        <DropdownMenuItem onSelect={e => e.preventDefault()}>
+                                            <Dialog>
+                                            <DialogTrigger>
+                                                Delete Account
+                                            </DialogTrigger>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                <DialogTitle>
+                                                    Are you absolutely sure?
+                                                </DialogTitle>
+                                                <DialogDescription>
+                                                    This action cannot be undone. This will permanently delete your account
+                                                    and remove your data from our servers.
+                                                </DialogDescription>
+                                                </DialogHeader>
+                                                <DialogFooter>
+                                                    <Button variant='secondary' onClick={handleCancel} disabled={isSubmitting}>
+                                                        Cancel
+                                                    </Button>
+                                                    <Button onClick={handleDelete} disabled={isSubmitting}>
+                                                        {
+                                                            isSubmitting ?
+                                                            <>
+                                                                <Loader2 className="text-muted-foreground size-4 animate-spin" />
+                                                                Deleting...
+                                                            </> :
+                                                            <>
+                                                                Confirm
+                                                            </>
+                                                        }
+                                                    </Button>
+                                                </DialogFooter>
+                                            </DialogContent>
+                                            </Dialog>
+                                        </DropdownMenuItem>
                                         <DropdownMenuItem onClick={handleSignOut}>
                                             Sign Out
                                         </DropdownMenuItem>

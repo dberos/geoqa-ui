@@ -12,6 +12,11 @@ const SignIn = ({ redirect }: { redirect?: string }) => {
             // Since i can't add another searchParam in the OAuth link
             window.localStorage.setItem('redirect', redirect);
         }
+        else {
+            // Have to delete also in case user had redirect searchParam but canceled
+            // And then went to normally sign in without redirect
+            window.localStorage?.removeItem('redirect');
+        }
     }, [redirect]);
     return ( 
         <div className="size-full flex items-center justify-center">

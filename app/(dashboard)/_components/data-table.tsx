@@ -105,7 +105,7 @@ const DataTable = <TData, TValue> ({
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </Button>
                             </HoverCardTrigger>
-                            <HoverCardContent className="w-64 md:w-96 break-all 2k:text-lg 4k:text-xl">
+                            <HoverCardContent className="max-h-64 overflow-y-auto overflow-x-hidden w-64 md:w-96 break-all 2k:text-lg 4k:text-xl">
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </HoverCardContent>
                             </HoverCard> :
@@ -123,7 +123,7 @@ const DataTable = <TData, TValue> ({
                                 <DialogTitle className="text-lg font-semibold">
                                     {cell.column.columnDef.header as string}
                                 </DialogTitle>
-                                <DialogDescription className="break-all flex items-center justify-center">
+                                <DialogDescription className="max-h-64 overflow-y-auto overflow-x-hidden break-all flex items-center justify-center">
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </DialogDescription>
                               </DialogHeader>

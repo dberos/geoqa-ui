@@ -13,40 +13,93 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useSession } from "@/hooks/use-session";
 import { useSignOut } from "@/hooks/use-sign-out";
-import { SquarePen, User } from "lucide-react";
+import { Loader2, SquarePen, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMedia } from "react-use";
 import logo from '../../../public/logo.png';
 import Image from "next/image";
 import { useDashboardMobileMenuStore } from "@/hooks/use-mobile-menu-store";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { useDeleteUser } from "@/hooks/use-delete-user";
 
 const Toolbar = () => {
+
+    const { data: session } = useSession();
 
     const isMobile = useMedia("(max-width: 1024px)", false);
 
     const isOpen = useDashboardMobileMenuStore((state) => state.isOpen);
     const setIsOpen = useDashboardMobileMenuStore((state) => state.setIsOpen);
 
-    const { mutate } = useSignOut();
+    const [isOpenAvatar, setIsOpenAvatar] = useState(false);
+
+    const { mutate: signOutMutate } = useSignOut();
+    const { mutate: deleteMutate } = useDeleteUser();
     
     const { data } = useSession();
     
     const router = useRouter();
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleCancel = () => {
+        setIsOpenAvatar(false);
+    }
+
+    const handleDelete = () => {
+        setIsSubmitting(true);
+        setTimeout(() => {
+            deleteMutate({ param: { userId: session?.session?.id || "" } },
+                {
+                    onSuccess: () => {
+                        setIsSubmitting(false);
+                        setIsOpenAvatar(false);
+                        setIsOpen(false);
+                        // Use window instead of router
+                        // When signing out, the cookies are cleared from the api
+                        // But the set-cookie is already present from middleware
+                        // So it needs a full page reload
+                        window.location.replace('/');
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        setIsSubmitting(false);
+                        setIsOpenAvatar(false);
+                        setIsOpen(false);
+                        router.push('/error');
+                    }
+                }
+            )
+        }, 1000)
+    }
+
     const handleSignOut = () => {
-        mutate({},
+        signOutMutate({},
             {
                 onSuccess: () => {
+                    setIsOpenAvatar(false);
+                    setIsOpen(false);
                     // Use window instead of router
                     // When signing out, the cookies are cleared from the api
                     // But the set-cookie is already present from middleware
                     // So it needs a full page reload
                     window.location.replace('/');
-                    setIsOpen(false);
+                    
                 },
                 onError: (error) => {
                     console.error(error);
+                    setIsOpenAvatar(false);
+                    setIsOpen(false);
                     router.push('/error');
                 }
             }
@@ -73,7 +126,7 @@ const Toolbar = () => {
                 </Link>
                 {
                     data?.session &&
-                    <DropdownMenu>
+                    <DropdownMenu open={isOpenAvatar} onOpenChange={setIsOpenAvatar}>
                     <DropdownMenuTrigger asChild>
                         <Avatar className="cursor-pointer">
                             <AvatarImage src={data?.session.avatarUrl} />
@@ -87,6 +140,41 @@ const Toolbar = () => {
                             {data?.session.name}
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem onSelect={e => e.preventDefault()}>
+                            <Dialog>
+                            <DialogTrigger>
+                                Delete Account
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                <DialogTitle>
+                                    Are you absolutely sure?
+                                </DialogTitle>
+                                <DialogDescription>
+                                    This action cannot be undone. This will permanently delete your account
+                                    and remove your data from our servers.
+                                </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <Button variant='secondary' onClick={handleCancel} disabled={isSubmitting}>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={handleDelete} disabled={isSubmitting}>
+                                        {
+                                            isSubmitting ?
+                                            <>
+                                                <Loader2 className="text-muted-foreground size-4 animate-spin" />
+                                                Deleting...
+                                            </> :
+                                            <>
+                                                Confirm
+                                            </>
+                                        }
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                            </Dialog>
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleSignOut}>
                             Sign Out
                         </DropdownMenuItem>
