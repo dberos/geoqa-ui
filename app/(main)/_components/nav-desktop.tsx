@@ -182,7 +182,7 @@ const NavDesktop = () => {
                                         <Button variant='secondary' onClick={handleCancel} disabled={isSubmitting}>
                                             Cancel
                                         </Button>
-                                        <Button onClick={handleDelete} disabled={isSubmitting}>
+                                        <Button variant='destructive' onClick={handleDelete} disabled={isSubmitting}>
                                             {
                                                 isSubmitting ?
                                                 <>
