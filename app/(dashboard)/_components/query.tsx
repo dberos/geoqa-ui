@@ -111,7 +111,7 @@ const Query = ({ query }: { query: string | undefined | null }) => {
                                     <Textarea
                                     spellCheck='false'
                                     disabled={isSubmitting}
-                                    className="resize-none disabled:cursor-text 2xl:text-lg
+                                    className="bg-neutral-100 dark:bg-neutral-900 resize-none disabled:cursor-text 2xl:text-lg
                                     max-h-54 lg:max-h-42 xl:max-h-61 2xl:max-h-66 2k:max-h-88 4k:max-h-112
                                     overflow-hidden overflow-y-auto whitespace-pre-wrap break-words
                                     text-left text-base 2k:text-lg 4k:text-xl"
