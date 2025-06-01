@@ -152,7 +152,7 @@ export default async function LegalPage() {
                         </h2>
                         <p className="mt-2 max-w-7xl 2k:text-lg 4k:text-xl 4k:max-w-[2000px]">
                             Because our application uses only essential cookies, they cannot be disabled through cookie settings.
-                            If you wish to stop using these cookies, please do not use our application
+                            If you wish to stop using these cookies, please do not use our application.
                         </p>
                     </li>
                     <li className="mb-20">
