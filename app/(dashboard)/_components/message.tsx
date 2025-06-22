@@ -103,7 +103,11 @@ const Message = ({ messageId }: { messageId: string }) => {
                                     <div className="flex items-start">
                                         <div className="ml-1 flex-1">
                                             <p className="mt-1 text-sm text-muted-foreground">
-                                                Failed to generate an answer for your request.
+                                                {
+                                                    message.errorMessage === 'GeoQA is currently unavailable' ?
+                                                    'GeoQA is currently unavailable.' :
+                                                    'Failed to generate an answer for your request.'
+                                                }
                                             </p>
                                         </div>
                                     </div>

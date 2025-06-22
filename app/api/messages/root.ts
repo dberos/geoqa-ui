@@ -198,6 +198,16 @@ const app = new Hono()
             }
             catch (error) {
                 console.error(error);
+                let errorMsg = 'Failed to generate answer'; 
+                if (error instanceof Error) {
+                    const cause = error.cause;
+                    const code = (typeof cause === 'object' && cause !== null && 'code' in cause)
+                        ? (cause as { code?: unknown }).code
+                        : undefined;
+                    if (code === 'ECONNREFUSED') {
+                        errorMsg = 'GeoQA is currently unavailable';
+                    }
+                }
 
                 const messageId = c.req.param('messageId');
                 if (!messageId) {
@@ -206,7 +216,7 @@ const app = new Hono()
 
                 const [updatedMessage] = await db
                 .update(messagesTable)
-                .set({ errorMessage: 'Failed to generate answer' })
+                .set({ errorMessage: errorMsg })
                 .where(eq(messagesTable.id, messageId))
                 .returning();
 
