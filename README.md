@@ -1,7 +1,7 @@
 
 # GeoQA UI
 
-BSc Thesis: GeoQA UI, Department of Informatics & Telecommunications, National and Kapodistrian University of Athens (UoA), 2025
+UI for the GeoQA research project by the AI team of Department of Informatics & Telecommunications, National and Kapodistrian University of Athens (UoA)
 
 ## Getting Started
 
