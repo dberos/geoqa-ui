@@ -5,7 +5,7 @@ import nonExperts from "../../../public/home_personas_non_experts.svg";
 const Personas = () => {
     return ( 
         <>
-        <div className="h-10 w-full bg-gradient-to-b from-neutral-400 to-transparent backdrop-blur-xs
+        <div className="h-10 2k:h-16 4k:h-22 w-full bg-gradient-to-b from-neutral-400 to-transparent backdrop-blur-xs
          dark:backdrop-blur-none dark:bg-gradient-to-b dark:from-neutral-800 dark:to-neutral-950" 
          />
             <div className="h-20 lg:h-32 w-full flex items-center justify-center lg:justify-start">

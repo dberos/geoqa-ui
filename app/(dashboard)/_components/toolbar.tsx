@@ -107,8 +107,8 @@ const Toolbar = () => {
     }
 
     return ( 
-        <div className="w-full h-30 md:h-36 lg:h-40 2k:h-52 4k:h-60 grid grid-rows-2 grid-cols-1">
-            <div className="size-full relative flex items-center justify-between p-4 2k:p-6 border-b-1">
+        <div className="w-full h-30 md:h-36 lg:h-40 2k:h-60 4k:h-80 grid grid-rows-2 grid-cols-1">
+            <div className="size-full relative flex items-center justify-between p-4 2k:p-8 4k:p-14 border-b-1">
                 <Link href='/' onClick={() => setIsOpen(!isOpen)}>
                 {
                     isMobile ?
@@ -119,7 +119,7 @@ const Toolbar = () => {
                     height={100}
                     className="object-contain size-12 -mt-3"
                     /> :
-                    <p className="text-2xl font-semibold text-muted-foreground">
+                    <p className="text-2xl 2k:text-3xl 4k:text-4xl font-semibold text-muted-foreground">
                         GeoQA
                     </p>
                 }

@@ -12,7 +12,7 @@ const Sidebar = () => {
     if (!isMounted) return null;
     
     return ( 
-        <aside className="h-screen w-[350px] 2k:w-[450px] 4k:w-[600px] flex flex-col border-r-1 bg-neutral-100 dark:bg-neutral-900">
+        <aside className="h-screen w-[350px] 2k:w-[500px] 4k:w-[650px] flex flex-col border-r-1 bg-neutral-100 dark:bg-neutral-900">
             <Toolbar />
             <div className="flex flex-col flex-1 min-h-0">
                 <Chats />

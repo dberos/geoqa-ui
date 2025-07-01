@@ -102,29 +102,29 @@ const NavDesktop = () => {
         <nav 
         id="mainNavbarDesktopId" 
         className={cn(
-            "h-20 w-full p-8 flex items-center justify-between fixed z-50",
+            "h-20 2k:h-28 4k:h-36 w-full p-8 flex items-center justify-between fixed z-50",
             y > 20 && "shadow-sm dark:shadow-neutral-700",
             isAboveHero ? "bg-inherit backdrop-blur-xs" : "bg-background backdrop-blur-none"
         )}>
             <div className="flex items-center justify-center flex-row">
-                <Link href='/'>
+                <Link href='/' className="4k:ml-6">
                     <Image
                     src={logo}
                     alt='logo'
                     priority
                     height={100}
                     width={100}
-                    className="size-14 object-contain pointer-events-none"
+                    className="size-14 2k:size-18 4k:size-24 object-contain pointer-events-none"
                     />
                 </Link>
-                <ul className="flex items-center space-x-10 ml-8">
+                <ul className="flex items-center space-x-10 2k:space-x-12 ml-8 2k:ml-20">
                     <li>
                         <Button 
                         variant="link" 
                         size="sm" 
                         className='cursor-pointer'
                         >
-                            <Link href='/dashboard'>
+                            <Link href='/dashboard' className="2k:text-lg 4k:text-xl">
                                 Dashboard
                             </Link>
                         </Button>
@@ -138,14 +138,14 @@ const NavDesktop = () => {
                             isOnLegalPage && 'text-muted-foreground'
                         )}
                         >
-                            <Link href='/legal'>
+                            <Link href='/legal' className="2k:text-lg 4k:text-xl">
                                 Legal
                             </Link>
                         </Button>
                     </li>
                 </ul>
             </div>
-            <div className="flex items-center justify-center gap-x-6">
+            <div className="flex items-center justify-center gap-x-6 2k:gap-x-12">
                 <ThemeToggle />
                 {
                     data?.session ? 
@@ -204,10 +204,10 @@ const NavDesktop = () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                      :
-                    <Button className='cursor-pointer'>
-                        <Link href="/auth/sign-in" className="flex items-center justify-center gap-x-2">
+                    <Button className='cursor-pointer 2k:py-5 4k:py-6'>
+                        <Link href="/auth/sign-in" className="flex items-center justify-center gap-x-2 2k:text-lg 4k:text-xl">
                             Sign In
-                            <LogIn className="size-4" />
+                            <LogIn className="size-4 2k:size-5 4k:size-6" />
                         </Link>
                     </Button>
                 }

@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Services = () => {
     return ( 
-        <div className="mt-10 mb-14 lg:mt-20 w-full h-[800px] md:h-[700px] lg:h-[400px] 4k:h-[600px] 4k:pl-96 4k:pr-96 grid grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
+        <div className="mt-10 mb-14 lg:mt-20 2k:mt-24 4k:mt-32 w-full h-[800px] md:h-[700px] lg:h-[400px] 4k:h-[600px] 4k:pl-64 4k:pr-64 grid grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
             <div className="flex items-center flex-col">
                 <h2 className="text-xl lg:text-2xl 4k:text-3xl h-14 border-2 rounded-sm border-neutral-600 border-dashed p-3 flex items-center bg-neutral-200 dark:bg-neutral-900">
                     We bring you topographical results

@@ -106,23 +106,23 @@ function SearchCommandInput({
   return (
     <div
       data-slot="command-input-wrapper"
-      className="flex h-12 4k:h-20 items-center gap-2 px-3 bg-neutral-100 dark:bg-neutral-900"
+      className="flex h-12 2k:h-14 4k:h-22 items-center gap-2 px-3 bg-neutral-100 dark:bg-neutral-900"
     >
       {
         props.value && !isSelected ?
-        <X className="size-4 shrink-0 opacity-50 cursor-pointer" onClick={() => select('')}/> :
-        <SearchIcon className="size-4 shrink-0 opacity-50" />
+        <X className="size-4 4k:size-6 shrink-0 opacity-50 cursor-pointer 2k:ml-2 4k:ml-4" onClick={() => select('')}/> :
+        <SearchIcon className="size-4 4k:size-6 shrink-0 opacity-50 2k:ml-2 4k:ml-4" />
       }
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          "placeholder:text-muted-foreground flex h-12 4k:h-20 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          "placeholder:text-muted-foreground 4k:text-2xl flex h-12 2k:h-14 4k:h-22 w-full rounded-md bg-transparent py-3 2k:px-2 4k:px-4 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         {...props}
       />
       <SendHorizonal className={cn(
-        "size-4 shrink-0 opacity-50",
+        "size-4 4k:size-6 shrink-0 opacity-50 2k:mr-2 4k:mr-4",
         props.value && 'cursor-pointer'
         )} 
         onClick={() => {

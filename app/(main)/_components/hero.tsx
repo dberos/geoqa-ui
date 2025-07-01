@@ -13,7 +13,7 @@ const Hero = () => {
         <div
         id='homeHeroId' 
         className={cn(
-            `h-screen w-full flex items-center justify-center flex-col gap-y-6 relative 
+            `h-screen w-full flex items-center justify-center flex-col gap-y-6 4k:gap-y-8 relative 
             bg-[url('/home_hero.jpg')] bg-cover bg-fixed bg-neutral-400 bg-blend-multiply`,
             !isMobile ? 'bg-center' : 'bg-right'
         )}>
@@ -23,14 +23,14 @@ const Hero = () => {
             <h2 className="text-3xl lg:text-4xl 2k:text-5xl font-semibold text-white max-w-xs md:max-w-md lg:max-w-xl 2k:max-w-2xl text-center">
                 AI powered QnA engine for geospatial data
             </h2>
-            <Button className="cursor-pointer">
-                <Link href="/dashboard" className="flex items-center justify-center gap-x-2">
+            <Button className="cursor-pointer 4k:py-8 4k:px-6 4k:rounded-xl">
+                <Link href="/dashboard" className="flex items-center justify-center gap-x-2 4k:text-xl">
                     Get Started
-                    <ArrowRight className="size-4" />
+                    <ArrowRight className="size-4 4k:size-6" />
                 </Link>
                 
             </Button>
-            <div className="absolute bottom-0 w-full h-10 bg-gradient-to-t from-neutral-400/50 to-transparent backdrop-blur-xs" />
+            <div className="absolute bottom-0 w-full h-10 2k:h-16 4k:h-22 bg-gradient-to-t from-neutral-400/50 to-transparent backdrop-blur-xs" />
         </div>
     );
 }
