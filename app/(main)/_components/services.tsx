@@ -5,22 +5,19 @@ import Image from "next/image";
 
 const Services = () => {
     return ( 
-        <div className="mt-10 mb-14 lg:mt-20 2k:mt-24 4k:mt-32 w-full h-[800px] md:h-[700px] lg:h-[400px] 4k:h-[600px] 4k:pl-64 4k:pr-64 grid grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
+        <div className="mt-10 mb-14 lg:mt-20 2k:mt-24 4k:mt-32 w-full h-[600px] md:h-[550px] lg:h-[400px] 4k:h-[600px] 4k:pl-64 4k:pr-64 grid grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
             <div className="flex items-center flex-col">
-                <h2 className="text-xl lg:text-2xl 4k:text-3xl h-14 border-2 rounded-sm border-neutral-600 border-dashed p-3 flex items-center bg-neutral-200 dark:bg-neutral-900">
+                <h2 className="text-xl lg:text-2xl 4k:text-3xl 4k:mt-10 h-14 border-2 rounded-sm border-neutral-600 border-dashed p-3 flex items-center bg-neutral-200 dark:bg-neutral-900">
                     We bring you topographical results
                 </h2>
                 <h3 className="mt-2 text-lg lg:text-xl 4k:text-2xl text-muted-foreground">
                     Map based - Images - Plain data
                 </h3>
-                <p className="p-6 xl:p-0 text-base lg:text-lg 4k:text-2xl mt:2 lg:mt-10 max-w-lg 4k:max-w-xl text-start">
-                    For every question you can choose how you want to view the results.
-                </p>
-                <p className="p-6 xl:p-0 text-base lg:text-lg 4k:text-2xl lg:mt-5 max-w-lg 4k:max-w-3xl text-center">
-                    Every question has its answer. You decide how you want to view it.
-                    GeoQA aims to answer any earth - related question whilst allowing
-                    users to view it in their preferred format such as data on a map, 
-                    satellite images, plain data or text.
+                <p className="p-6 xl:p-0 text-base lg:text-lg 4k:text-2xl lg:mt-7 xl:mt-15 4k:mt-20 max-w-lg 4k:max-w-3xl text-center">
+                    Explore spatial insights, satellite imagery, textual answers and table data with ease.
+                    <br />
+                    Just remember, the engine doesn&apos;t keep track of your requests,
+                    so it can&apos;t answer follow-up questions.
                 </p>
             </div>
             <div className="flex items-center justify-center 4k:justify-start 4k:items-start">
