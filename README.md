@@ -56,9 +56,8 @@ POSTGRES_PASSWORD=
 POSTGRES_DB=
 
 # Replace ${param} with their actual values from above
-# e.g postgresql://test_user...
+# e.g postgresql://geoqa_ui_user...
 # npx drizzle-kit push will render it as a string
-# For e.g test_user with test password you may need to configure them in your 
 DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?schema=public
 
 # Add anything to these fields
