@@ -24,6 +24,21 @@ Make sure you have the latest *node.js*, *npm*, *docker*, *docker-compose* and d
 7. Add to **Authorized JavaScript origins** http://localhost:3000
 8. Add to **Authorized redirect URIs** http://localhost:3000/auth/google/callback
 
+### PostgreSQL Setup
+
+Before running the application, you may need to set up the PostgreSQL user and database locally. e.g for `geoqa_ui_user` with `geoqa_ui_password` and `geoqa_ui_db` database:
+
+```bash
+# Create the PostgreSQL user
+psql -U postgres -c "CREATE USER geoqa_ui_user WITH PASSWORD 'geoqa_ui_password';"
+
+# Create the database owned by the user
+psql -U postgres -c "CREATE DATABASE geoqa_ui_db OWNER geoqa_ui_user;"
+
+# Grant all privileges to the user
+psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE geoqa_ui_db TO geoqa_ui_user;"
+```
+
 ### Configuration
 
 Create a `.env` file at the root of your project:
@@ -43,6 +58,7 @@ POSTGRES_DB=
 # Replace ${param} with their actual values from above
 # e.g postgresql://test_user...
 # npx drizzle-kit push will render it as a string
+# For e.g test_user with test password you may need to configure them in your 
 DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?schema=public
 
 # Add anything to these fields
